@@ -177,17 +177,28 @@ namespace TDS
 								Vec4 localPosition = transformComponent->getLocalPosition(parent);
 								Vec3 localPositionVec3 = localPosition;
 								ImguiInput("Position", localPositionVec3);
-								transformComponent->setLocalPosition(parent, Vec4(localPositionVec3, localPosition.w));
+
+								if (localPositionVec3 - Vec3(localPosition) != Vec3(0.f, 0.f, 0.f))
+								{
+									transformComponent->setLocalPosition(parent, Vec4(localPositionVec3, localPosition.w));
+								}
 
 								Vec3 parentScale = parentTransformComponent->GetScale();
 								Vec3 reflectedScale = oldScale - parentScale;
 								ImguiInput("Scale", reflectedScale);
-								transformComponent->SetScale(reflectedScale + parentScale);
+								if (reflectedScale != Vec3(0.f, 0.f, 0.f))
+								{
+									transformComponent->SetScale(reflectedScale + parentScale);
+								}
 
 								Vec3 parentRotation = parentTransformComponent->GetRotation();
 								Vec3 reflectedRotation = oldRotation - parentRotation;
 								ImguiInput("Rotation", reflectedRotation);
-								transformComponent->SetRotation(reflectedRotation + parentRotation);
+
+								if (reflectedRotation != Vec3(0.f, 0.f, 0.f))
+								{
+									transformComponent->SetRotation(reflectedRotation + parentRotation);
+								}
 							}
 							else
 							{
@@ -813,6 +824,18 @@ namespace TDS
 					if (!GetGraphicsComponent(selectedEntity) && ImGui::Selectable("Graphics Component"))
 					{
 						addComponentByName("Graphics Component", selectedEntity);
+					}
+					if (!GetDirLightComponent(selectedEntity) && ImGui::Selectable("DirectionalLight"))
+					{
+						addComponentByName("DirectionalLight", selectedEntity);
+					}
+					if (!GetSpotLightComponent(selectedEntity) && ImGui::Selectable("SpotLight"))
+					{
+						addComponentByName("SpotLight", selectedEntity);
+					}
+					if (!GetPointLightComponent(selectedEntity) && ImGui::Selectable("PointLight"))
+					{
+						addComponentByName("PointLight", selectedEntity);
 					}
 
 					break;

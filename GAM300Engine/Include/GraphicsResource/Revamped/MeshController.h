@@ -45,6 +45,7 @@ namespace TDS
 		std::unordered_map<std::string, std::uint32_t>		m_MeshIDMap;
 
 	public:
+		std::set<std::uint32_t>								m_EntityList;
 		Modelpack* m_ModelPack = nullptr;
 
 	public:

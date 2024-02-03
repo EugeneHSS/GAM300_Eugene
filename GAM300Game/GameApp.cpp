@@ -166,9 +166,9 @@ namespace TDS
             std::uint32_t frame = GraphicsManager::getInstance().GetSwapchainRenderer().getFrameIndex();
             
 
-            GraphicsManager::getInstance().getRenderPass().beginRenderPass(commandBuffer, &GraphicsManager::getInstance().getFrameBuffer());
+            /*GraphicsManager::getInstance().getRenderPass().beginRenderPass(commandBuffer, &GraphicsManager::getInstance().getFrameBuffer());*/
 
-            skyboxrender.RenderSkyBox(commandBuffer, frame);
+           /* skyboxrender.RenderSkyBox(commandBuffer, frame);*/
 
             FixedUpdate();
             ecs.runSystems(1, DeltaTime); // Other systems
@@ -177,11 +177,10 @@ namespace TDS
             ecs.runSystems(2, DeltaTime); // Event handler
             ecs.runSystems(3, DeltaTime); // Graphics
 
-          
+            GraphicsManager::getInstance().DrawFrame();
             //// event handling systems 
-            GraphicsManager::getInstance().getRenderPass().endRenderPass(commandBuffer);
+            /*GraphicsManager::getInstance().getRenderPass().endRenderPass(commandBuffer);*/
 
-            //GraphicsManager::getInstance().getObjectPicker().Update(commandBuffer, frame, Vec2(Input::getMousePosition().x, Input::getMousePosition().y));
            
 
             GraphicsManager::getInstance().GetSwapchainRenderer().BeginSwapChainRenderPass(commandBuffer);
@@ -196,7 +195,7 @@ namespace TDS
         AssetManager::GetInstance()->ShutDown();
         //vkDeviceWaitIdle(GraphicsManager::getInstance().getVkInstance().getVkLogicalDevice());
         ecs.destroy();
-        skyboxrender.ShutDown();
+      /*  skyboxrender.ShutDown();*/
         GraphicsManager::getInstance().ShutDown();
     }
 

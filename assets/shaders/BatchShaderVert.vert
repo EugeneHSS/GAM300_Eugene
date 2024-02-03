@@ -11,22 +11,19 @@ layout(location = 7) in vec4 Weights;
 layout(location = 8) in vec2 meshID;
 
 
+/*
 struct PointLight{
     vec4 Position;
     vec4 Color;
     vec4 pad[2];
 };
+*/
 
-
-layout(set = 0, binding = 0) uniform GlobalUBO
+layout(set = 0, binding = 5) uniform SceneUBO
 {
     mat4 proj;
-    mat4 view;
-    vec4 ambientlightcolor;
-    PointLight pointlights[50];
-    int activelights;
-    vec4 pad[15];    
-}PL;
+    mat4 view;  
+}Scene3D;
 
 struct BatchData
 {
@@ -63,12 +60,6 @@ struct Material
 };
 
 
-//If we got duplicates of the same mesh, we need to offset the meshID
-layout (push_constant) uniform Push
-{
-    uint IDOffset;
-}push;
-
 
 /*
     layout(std140, binding = 16) readonly buffer MaterialBuffer
@@ -84,12 +75,13 @@ layout(location = 3) out vec3 fragNormalWorld;
 layout(location = 4) out flat uint id;
 layout(location = 5) out vec4 clipspacepos;
 layout(location = 6) out flat uint texID;
+layout(location = 7) out float linearDepth;
 
 void main() 
 {
 
-
-    BatchData batchData = batch[IDOffset + uint(meshID.x)];
+    
+    BatchData batchData = batch[uint(meshID.x)];
 
     uint materialID = batchData.matID;
     uint textureID = batchData.textureID;
@@ -110,7 +102,7 @@ void main()
     
     id = batchData.entityID;
 
-    vec4 clipspacepos = PL.proj * PL.view * position_in_world;
+    vec4 clipspacepos = Scene3D.proj * Scene3D.view * position_in_world;
     gl_Position = clipspacepos;
     
     vec3 normal = mat3(transpose(inverse(accumulated))) * vNormals;
@@ -122,5 +114,7 @@ void main()
     fragPosWorld = position_in_world.xyz;
     texID = textureID;
     fragColor = vColor;
-   
+    linearDepth = -(Scene3D.view * position_in_world).z;
+    
+
 }

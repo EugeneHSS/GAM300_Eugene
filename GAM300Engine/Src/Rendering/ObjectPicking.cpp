@@ -1,6 +1,8 @@
 #include "Rendering/ObjectPicking.h"
 #include "Rendering/GraphicsManager.h"
 #include "vulkanTools/Renderer.h"
+#include "Rendering/Revamped/DeferredController.h"
+#include "Rendering/Revamped/FrameBuffers/G_Buffer.h"
 namespace TDS
 {
 	
@@ -45,8 +47,10 @@ namespace TDS
 	void ObjectPick::Update(VkCommandBuffer commandBuffer, uint32_t frameIndex, Vec2 mousePosition)
 	{
 
+		auto GBuffer = GraphicsManager::getInstance().GetDeferredController()->GetFrameBuffer(RENDER_PASS::RENDER_G_BUFFER);
+		auto pickTarget = GBuffer->GetTargets().at(1);
 		Synchronization m_ReadSync2{ SYNCTYPE::GRAPHIC2COMPUTE,VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-		m_ReadSync2.addImageBarrier(SYNCATTACHMENT::COLOR, GraphicsManager::getInstance().getPickImage().getImage(), GraphicsManager::getInstance().getPickImage().getImageSubResourceRange(),
+		m_ReadSync2.addImageBarrier(SYNCATTACHMENT::COLOR, pickTarget->getImage(), pickTarget->getImageSubResourceRange(),
 			VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_GENERAL, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT);
 		m_ReadSync2.syncBarrier(commandBuffer);
 		float mX = GraphicsManager::getInstance().getViewportScreen().x;
@@ -67,7 +71,7 @@ namespace TDS
 		pickubo.Projection.m[1][1] *= -1;
 		
 
-		VkDescriptorImageInfo pickAttachment = GraphicsManager::getInstance().getPickImage().getImageInfoDescriptor();
+		VkDescriptorImageInfo pickAttachment = pickTarget->getImageInfoDescriptor();
 		
 		m_PickPipeline->SetCommandBuffer(commandBuffer);
 		m_PickPipeline->BindComputePipeline();

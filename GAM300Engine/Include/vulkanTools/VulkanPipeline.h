@@ -40,7 +40,7 @@ namespace TDS
 	{
 		std::unordered_map<std::string, std::uint32_t>							m_LocalBufferNames;
 		std::unordered_map<std::uint32_t, std::vector<std::shared_ptr<UBO>>>	m_UpdateBufferFrames;
-		std::unordered_map<std::uint32_t, std::vector<std::shared_ptr<UBO>>>	m_StaticBuffers; //Only update here when u need to
+		std::unordered_map<std::uint32_t, std::vector<std::shared_ptr<UBO>>>	m_StaticBuffers;
 		std::unordered_map<std::uint32_t, VkWriteDescriptorSet>					m_WriteSetFrames;
 		std::vector<VkDescriptorSet>											m_DescriptorSets;
 		std::vector<VkDescriptorSet>											m_TextureOrBindless;
@@ -67,14 +67,13 @@ namespace TDS
 		std::unordered_map<SHADER_FLAG, VkShaderModule>     m_ShaderModules;
 	};
 
-	class FrameBuffer;
+	class FBO;
 	struct PipelineCreateEntry
 	{
 		PipelineConfig								m_PipelineConfig;
 		ShaderInputs								m_ShaderInputs;
-
-		std::vector<std::shared_ptr<FrameBuffer>>	m_FBTarget;
 		std::int32_t								m_NumDescriptorSets = 1;
+		FBO*										m_FBTarget = nullptr;
 
 		std::string									m_PipelineName = "";
 		bool										m_EnableDoubleBuffering = true;
@@ -99,7 +98,7 @@ namespace TDS
 		bool									SavePipelineCache(std::string_view fileName, VkPrimitiveTopology drawMode);
 
 		void									CreateDescriptors(ShaderInputs& shaderInputs, std::uint32_t numDescriptorSets);
-		void									Draw(VMABuffer& vertexBuffer, std::uint32_t frameIndex = 0);
+		void									Draw(std::uint32_t vertexCnt, std::uint32_t frameIndex = 0, std::uint32_t instanceCnt = 1, std::uint32_t firstVertex = 0, std::uint32_t firstInstance = 0);
 		void									DrawIndexed(VMABuffer& vertexBuffer, VMABuffer& indexBuffer, std::uint32_t frameIndex = 0);
 		void									DrawInstanced(VMABuffer& vertexBuffer, std::uint32_t instance = 1, std::uint32_t frameIndex = 0);
 		void									DrawInstancedIndexed(VMABuffer& vertexBuffer, VMABuffer& indexBuffer, std::uint32_t instance = 1, std::uint32_t frameIndex = 0);
@@ -133,6 +132,7 @@ namespace TDS
 		void									CreateUniformBuffers(ShaderInputs& shader, VulkanPipelineDescriptor& descriptor);
 		void									CreateSamplerDescriptors(ShaderInputs& shader, VulkanPipelineDescriptor& descriptor);
 		void									UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint);
+		void									UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint, std::uint32_t frame);
 		VkDescriptorSetLayout					GetLayout() const;
 		const std::vector<VkDescriptorSet>&		GetDescriptorSets() const;
 		void									SetRenderTarget(VkRenderPass renderTarget);

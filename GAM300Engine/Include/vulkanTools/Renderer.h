@@ -28,6 +28,8 @@ namespace TDS {
 		Renderer& operator=(const Renderer&) = delete;
 
 		void						ShutDown();
+		void						RegisterEvent();
+
 		//Getters
 		VkRenderPass				getSwapChainRenderPass() const { return m_SwapChain->getRenderPass(); }
 		float						getAspectRatio() const { return m_SwapChain->extentAspectRatio(); }
@@ -39,7 +41,8 @@ namespace TDS {
 			return m_vCommandBuffers[m_currentFrameIndex];
 		}
 
-		int							getFrameIndex() const {
+		int							getFrameIndex() const 
+		{
 			assert(m_isFrameStarted && "Cannot get Frame index when frame not in progress");
 			return m_currentFrameIndex;
 		}
@@ -55,11 +58,12 @@ namespace TDS {
 		void BeginSwapChainRenderPass(VkCommandBuffer commandbuffer);
 		void EndSwapChainRenderPass(VkCommandBuffer commandbuffer);
 		VulkanSwapChain& getSwapchain();
-	private:
 		//helper functions
 		void createCommandBuffers();
 		void freeCommandBuffers();
 		void recreateSwapChain();
+	private:
+
 
 		WindowsWin& m_Window;
 		VulkanInstance& m_Instance;

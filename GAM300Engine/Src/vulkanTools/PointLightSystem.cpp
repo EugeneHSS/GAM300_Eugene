@@ -98,10 +98,6 @@ namespace TDS {
 	}
 	VulkanPipeline& PointLightSystem::GetPipeline() 
 	{
-		if (m_Pipeline == nullptr)
-		{
-			std::cout << "Why" << std::endl;
-		}
 		return *m_Pipeline;
 	}
 	void PointLightSystem::newupdate(GlobalUBO& UBO, const std::vector<EntityID>& Entities, Transform* xform, GraphicsComponent* Gp) {

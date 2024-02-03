@@ -8,6 +8,7 @@
 #include "vulkanTools/GlobalBufferPool.h"
 #include "vulkanTools/VulkanTexture.h"
 #include "Rendering/renderPass.h"
+#include "Rendering/Revamped/FrameBuffers/FrameBufferObject.h"
 namespace TDS
 {
 	VulkanPipeline::VulkanPipeline()
@@ -43,10 +44,6 @@ namespace TDS
 
 		GraphicsManager& mgr = GraphicsManager::getInstance();
 
-		if (m_RenderTarget == nullptr)
-		{
-			m_RenderTarget = GraphicsManager::getInstance().getRenderPass().getRenderPass();
-		}
 
 		/*m_RenderTarget = GraphicsManager::getInstance().GetSwapchainRenderer().getSwapChainRenderPass();*/
 
@@ -116,11 +113,23 @@ namespace TDS
 
 		std::uint32_t count = 0;
 		std::vector<VkPipelineColorBlendAttachmentState> blendAttachmentState;
+
+		if (m_PipelineEntry.m_FBTarget == nullptr && m_PipelineEntry.m_UseSwapchain == false)
+		{
+			TDS_ERROR("Something is wrong here? You are not rendering to swapchain but also dont have an framebuffer object?");
+			__debugbreak();
+		}
+
+
+
 		if (m_PipelineEntry.m_UseSwapchain == false)
 		{
+
+			m_PipelineEntry.m_FBTarget->GetBlendAttachments(blendAttachmentState, m_PipelineEntry);
+			m_RenderTarget = m_PipelineEntry.m_FBTarget->GetRenderPass()->getRenderPass();
 			count = 2;
 
-			blendAttachmentState.resize(count);
+			/*blendAttachmentState.resize(count);
 			for (int i{ 0 }; i < blendAttachmentState.size(); ++i)
 			{
 				blendAttachmentState[i].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -139,10 +148,12 @@ namespace TDS
 				blendAttachmentState[i].dstAlphaBlendFactor = m_PipelineEntry.m_PipelineConfig.m_DstAlphaBlend;
 				blendAttachmentState[i].alphaBlendOp = m_PipelineEntry.m_PipelineConfig.m_AlphaBlend;
 
-			}
+			}*/
 		}
 		else
 		{
+			
+			
 			count = 1;
 			blendAttachmentState.resize(count);
 			for (int i{ 0 }; i < blendAttachmentState.size(); ++i)
@@ -158,9 +169,17 @@ namespace TDS
 
 			}
 		}
+		if (m_RenderTarget == nullptr)
+		{
+			TDS_ERROR("U have no renderpass?");
+			__debugbreak();
+
+		}
+
 		VkPipelineColorBlendStateCreateInfo colorBlendState = { VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO };
 		colorBlendState.attachmentCount = static_cast<uint32_t>(blendAttachmentState.size());
 		colorBlendState.pAttachments = blendAttachmentState.data();
+
 
 		VkPipelineViewportStateCreateInfo viewportState = { VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO };
 		viewportState.viewportCount = 1;
@@ -446,25 +465,32 @@ namespace TDS
 
 
 	}
-	void VulkanPipeline::Draw(VMABuffer& vertexBuffer, std::uint32_t frameIndex)
+
+	void VulkanPipeline::Draw(std::uint32_t vertexCnt, std::uint32_t frameIndex, std::uint32_t instanceCnt, std::uint32_t firstVertex, std::uint32_t firstInstance)
 	{
+		(frameIndex);
 		/*vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_PipelineLayout, 0, 1, &m_PipelineDescriptor.m_DescriptorSets[frameIndex], 0, nullptr);*/
-		vkCmdDraw(m_CommandBuffer, vertexBuffer.getDataCount(), 1, 0, 0);
+		vkCmdDraw(m_CommandBuffer, vertexCnt, instanceCnt, firstVertex, firstInstance);
 	}
 	void VulkanPipeline::DrawIndexed(VMABuffer& vertexBuffer, VMABuffer& indexBuffer, std::uint32_t frameIndex)
 	{
+		(vertexBuffer);
+		(frameIndex);
 		/*vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_PipelineLayout, 0, 1, &m_PipelineDescriptor.m_DescriptorSets[frameIndex], 0, nullptr);*/
 		vkCmdDrawIndexed(m_CommandBuffer, indexBuffer.getDataCount(), 1, 0, 0, 1);
 	}
 
 	void VulkanPipeline::DrawInstanced(VMABuffer& vertexBuffer, std::uint32_t instance, std::uint32_t frameIndex)
 	{
+		(vertexBuffer);
+		(frameIndex);
 		/*vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_PipelineLayout, 0, 1, &m_PipelineDescriptor.m_DescriptorSets[frameIndex], 0, nullptr);*/
 		vkCmdDraw(m_CommandBuffer, vertexBuffer.getDataCount(), instance, 0, 0);
 	}
 
 	void VulkanPipeline::DrawInstancedIndexed(VMABuffer& vertexBuffer, VMABuffer& indexBuffer, std::uint32_t instance, std::uint32_t frameIndex)
 	{
+		(vertexBuffer);
 		vkCmdDrawIndexed(m_CommandBuffer, indexBuffer.getDataCount(), instance, 0, 0, 0);
 	}
 
@@ -496,7 +522,7 @@ namespace TDS
 				findItr->second.at(frameIndex)->m_Buffer->ReadData(data, size, offset);
 			return;
 		}
-		TDS_WARN("Buffer binding: %d , doesnt exist!", binding);
+		TDS_WARN("Buffer binding: {} , doesnt exist!", binding);
 
 
 
@@ -1154,6 +1180,22 @@ namespace TDS
 	void VulkanPipeline::UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint)
 	{
 		std::int32_t frame = GraphicsManager::getInstance().GetSwapchainRenderer().getFrameIndex();
+		auto findItr = m_PipelineDescriptor.m_WriteSetFrames.find(bindingPoint);
+		if (findItr != m_PipelineDescriptor.m_WriteSetFrames.end())
+		{
+			findItr->second.dstSet = m_PipelineDescriptor.m_DescriptorSets[frame];
+			findItr->second.descriptorType = type;
+			findItr->second.dstBinding = bindingPoint;
+			findItr->second.dstArrayElement = 0;
+			findItr->second.descriptorCount = 1;
+			findItr->second.pImageInfo = &imageInfo;
+
+			vkUpdateDescriptorSets(GraphicsManager::getInstance().getInstance().getVkInstance().getVkLogicalDevice()
+				, 1, &findItr->second, 0, 0);
+		}
+	}
+	void VulkanPipeline::UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint, std::uint32_t frame)
+	{
 		auto findItr = m_PipelineDescriptor.m_WriteSetFrames.find(bindingPoint);
 		if (findItr != m_PipelineDescriptor.m_WriteSetFrames.end())
 		{

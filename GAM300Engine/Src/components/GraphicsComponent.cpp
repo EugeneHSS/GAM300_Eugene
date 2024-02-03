@@ -11,7 +11,7 @@ RTTR_REGISTRATION
 		.property("TextureName", &GraphicsComponent::m_TextureName)
 		.method("IsDebugOn", &GraphicsComponent::IsDebugOn)
 		.method("ToggleDebug", &GraphicsComponent::ToggleDebug)
-		.property("Mesh Renderer", &GraphicsComponent::m_ShowMesh)
+		.property("Show Mesh", &GraphicsComponent::m_ShowMesh)
 		.property("Debug", &GraphicsComponent::m_Debug)
 		//.method("SetTextureName", &GraphicsComponent::SetTextureName)
 		//.property("TextureName", &GraphicsComponent::m_TextureName, rttr::select_overload<void(std::string)>(&GraphicsComponent::SetTextureName))
@@ -22,7 +22,8 @@ RTTR_REGISTRATION
 		.method("SetColor", rttr::select_overload<void(float, float, float, float)>(&GraphicsComponent::SetColor))
 		.method("GetColor", &GraphicsComponent::GetColor)
 		.property("Color", &GraphicsComponent::m_Color)
-		.property("Used In 2D", &GraphicsComponent::m_UsedIn2D);
+		.property("Used In 2D", &GraphicsComponent::m_UsedIn2D)
+		.property("Model UID", &GraphicsComponent::m_modelUID);
 	//.property("Color", &GraphicsComponent::GetColor, rttr::select_overload<void(Vec4)>(&GraphicsComponent::SetColor));
 }
 

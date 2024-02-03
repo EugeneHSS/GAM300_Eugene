@@ -207,6 +207,7 @@ namespace TDS
 
 	void OmniShadowPass::GetBlendAttachments(BlendContainer& blendCont, PipelineCreateEntry& createEntry)
 	{
+		
 	}
 
 }

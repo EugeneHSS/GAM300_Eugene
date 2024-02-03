@@ -26,7 +26,8 @@ RTTR_REGISTRATION
 		.property("OldRotation", &Transform::mOldRotation)
 		.property("OldFakePosition", &Transform::mOldFakePosition)
 		.property("OldFakeScale", &Transform::mOldFakeScale)
-		.property("OldFakeRotation", &Transform::mOldFakeRotation);
+		.property("OldFakeRotation", &Transform::mOldFakeRotation)
+		.property("ParentPosition", &Transform::mParentPosition);
 
 }
 
@@ -52,7 +53,7 @@ namespace TDS
 	Initializes the Transform component when created, given another Transform
 	component to move (for ECS)
 	****************************************************************************/
-	Transform::Transform(Transform&& toMove) noexcept : 
+	Transform::Transform(Transform&& toMove) noexcept :
 		mPosition(toMove.mPosition),
 		mScale(toMove.mScale),
 		mRotation(toMove.mRotation),
@@ -65,17 +66,16 @@ namespace TDS
 
 	Vec4 Transform::getLocalPosition(EntityID parent)
 	{
-		if (parent)
-		{
-			Mat4 parentTransformationMatrix = GetTransform(parent)->GenerateTransform().inverse();
-			Vec4 localPosition = parentTransformationMatrix * Vec4(mPosition, 1.f);
 
-			localPosition.x /= localPosition.w;
-			localPosition.y /= localPosition.w;
-			localPosition.z /= localPosition.w;
+		Mat4 parentTransformationMatrix = GetTransform(parent)->GenerateTransform().inverse();
+		Vec4 localPosition = parentTransformationMatrix * Vec4(mPosition, 1.f);
 
-			return localPosition;
-		}
+		localPosition.x /= localPosition.w;
+		localPosition.y /= localPosition.w;
+		localPosition.z /= localPosition.w;
+
+		return localPosition;
+
 
 		return mPosition;
 	}
@@ -88,7 +88,7 @@ namespace TDS
 
 		Vec3 newPosition = GetTransform(parent)->GenerateTransform() * localPosition;
 		SetPosition(newPosition);
-		//mPosition = GetTransform(parent)->GenerateTransform() * localPosition;
+		/*mPosition = GetTransform(parent)->GenerateTransform() * localPosition;*/
 		//mFakePosition = GetTransform(parent)->GenerateFakeTransform() * localPosition;
 	}
 
@@ -111,7 +111,7 @@ namespace TDS
 
 		Vec3 newPosition = GetTransform(parent)->GenerateTransform() * localScale;
 		SetPosition(newPosition);
-		/*mPosition = GetTransform(parent)->GenerateTransform() * localScale;*/
+		//mPosition = GetTransform(parent)->GenerateTransform() * localScale;
 	}
 
 	Vec4 Transform::getLocalRotation(EntityID parent)
@@ -133,18 +133,63 @@ namespace TDS
 
 		Vec3 newPosition = GetTransform(parent)->GenerateTransform() * localRotation;
 		SetPosition(newPosition);
-		/*mPosition = GetTransform(parent)->GenerateTransform() * localRotation;*/
 	}
+
+
 
 	DLL_API Mat4 Transform::GenerateFakeTransform()
 	{
+		Vec3 offsetFromFakeToReal = mPosition - mFakePosition;
 		Quat qRot = Quat(mFakeRotation);
-		Mat4 scaleM4 = Mat4::Scale(mFakeScale);
-		Mat4 rotM4 = Mat4(Quat::toMat4(qRot));
-		Mat4 transM4 = Mat4::Translate(mFakePosition);
-		mFakeTransform = transM4 * rotM4 * scaleM4;
+		Mat4 scaleMatrix = Mat4::Scale(mFakeScale);
+		Mat4 rotationMatrix = Mat4(Quat::toMat4(qRot));
+		Mat4 translationMatrix = Mat4::Translate(mFakePosition);
+
+		Mat4 transform = translationMatrix * rotationMatrix * scaleMatrix;
+		mFakeTransform = transform;
+		mFakePosition = transform.GetPosition();
+		Vec3 newOffset = mPosition - mFakePosition;
+
+		if (newOffset != offsetFromFakeToReal)
+		{
+			mPosition += newOffset;
+		}
+
+
+		mIsDirty = false;
 		return mFakeTransform;
-		
+
+	}
+
+	DLL_API Mat4 Transform::GenerateChildFakeTransform()
+	{
+		Vec3 offsetFromFakeToReal = mPosition - mFakePosition;
+		Vec3 offsetToOrigin = mPosition - mParentPosition;
+		Mat4 translateToOrigin = Mat4::Translate(offsetToOrigin);
+
+		Quat qRot = Quat(mFakeRotation);
+		Mat4 scaleMatrix = Mat4::Scale(mFakeScale);
+		Mat4 rotationMatrix = Mat4(Quat::toMat4(qRot));
+		Mat4 translationMatrix = Mat4::Translate(mFakePosition);
+
+		Mat4 transform = translationMatrix * rotationMatrix * scaleMatrix;
+
+
+		Vec3 offsetBackToParent = mParentPosition - mPosition;
+		Mat4 translateBackToParent = Mat4::Translate(offsetBackToParent);
+
+		mFakeTransform =  translateBackToParent * transform * translateToOrigin;
+		//mFakePosition = mFakeTransform.GetPosition();
+
+		//Vec3 newOffset = mPosition - mFakePosition;
+		//Vec3 position = mPosition;
+		//if (newOffset != offsetFromFakeToReal)
+		//{
+		//	position += newOffset;
+		//}
+		//SetPosition(position);
+		mIsDirty = false;
+		return mFakeTransform;
 	}
 
 	Transform* GetTransform(EntityID entityID)

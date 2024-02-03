@@ -87,9 +87,7 @@ namespace TDS
 				return m_SpriteTexture;
 			}
 			void DLL_API ShutDown();
-			static std::shared_ptr<Renderer2D> DLL_API GetInstance();
 		private:
-			inline static std::shared_ptr<Renderer2D> m_Instance = nullptr;
 			std::shared_ptr<VulkanPipeline> m_Pipeline = nullptr;
 			SpriteBatch m_BatchList{};
 			RenderedSprite m_SpriteTexture{};

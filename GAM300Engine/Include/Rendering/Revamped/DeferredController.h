@@ -7,9 +7,10 @@ namespace TDS
 		STAGE_G_BUFFER_BATCH = 0,
 		STAGE_G_BUFFER_INSTANCE,
 		STAGE_LIGTHING,
-		STAGE_SHADOW,
-		STAGE_DEPTH_SHADOW,
-		STAGE_SHADOW_OMNI,
+		//STAGE_SHADOW,
+		//STAGE_DEPTH_SHADOW,
+		//STAGE_SHADOW_OMNI,
+
 		STAGE_COMPOSITION,
 		STAGE_MAX
 
@@ -18,14 +19,14 @@ namespace TDS
 	enum RENDER_PASS
 	{
 		RENDER_G_BUFFER = 0,
-		RENDER_SHADOW_MAPPING,
-		RENDER_SHADOW_OMNI,
+		//RENDER_SHADOW_MAPPING,
+		//RENDER_SHADOW_OMNI,
 		RENDER_LIGTHING,
-		RENDER_POST,
+		//RENDER_POST,
+
 		RENDER_COMPOSITION,
 		RENDER_TOTAL
 	};
-
 
 
 	class VulkanPipeline;
@@ -40,11 +41,13 @@ namespace TDS
 
 	static constexpr int MAX_INSTANCE_BUFFER = 10000;
 	static constexpr int MAX_POSSIBLE_BATCH = 10000;
-
+	static constexpr int MAX_POINT_LIGHTS = 100;
+	static constexpr int MAX_DIR_LIGHTS = 100;
+	static constexpr int MAX_SPOT_LIGHTS = 100;
 
 	struct Transform;
 
-	//1. Put ur update data here
+
 
 
 
@@ -123,20 +126,104 @@ namespace TDS
 	};
 
 
+	struct alignas(16) SceneCamera
+	{
+		Mat4 view;
+		Mat4 projection;
+		Vec4 cameraPos;
+	};
 
 
+	struct alignas(16) LightingPushConstant
+	{
+		Vec4 ambientlightcolor = { 1.f, 1.f, 1.f, 0.02f };
+		int activepointlights;
+		int activeDirLights;
+		int activeSpotLights;
+		int toggleDebugLight = 1;
+	};
+
+	struct alignas(16) SpotLight
+	{
+		Vec4 Position;
+		Vec4 direction;
+		Vec4 Color;
+		Vec4 attenuation;
+		float cutoff;
+		float outerCutoff;
+		float padding[2] = { 0.f, 0.f };
+
+		//float radius;
+		//float padding;
+	};
+	struct alignas(16) Pointlight
+	{
+		Vec4 Position;
+		Vec4 Color;
+		Vec4 attenuation;
+
+		//float radius;
+		//float padding[3];
+	};
+
+	struct alignas(16) DirectionalLight
+	{
+		Vec4 direction = { 0.f, 0.f, -1.f, 0.f };
+		Vec4 Color;
+	};
+
+	struct LightBuffers
+	{
+		std::array<Pointlight, 100>			m_PointLights;
+		std::array<SpotLight, 100>			m_SpotLights;
+		std::array<DirectionalLight, 100>	m_DirectionalLight;
+	};
+	struct alignas(16) LightSourceProperties
+	{
+		Vec4 Position;  
+		Vec4 Color;     
+		float Radius;   
+		float padding[3]; 
+	};
+
+
+
+	struct SceneUniform
+	{
+		Mat4 m_Proj = Mat4(1.f);
+		Mat4 m_View = Mat4(1.f);
+	};
+
+
+
+
+	class FBO;
+	class PointLightComponent;
+	class DirectionalLightComponent;
+	class SpotLightComponent;
 
 	class DeferredController
 	{
 	public:
 		typedef std::array<std::shared_ptr<VulkanPipeline>, DEFERRED_STAGE::STAGE_MAX>			PIPELINE_LIST;
 
-		void											Init();
+		void											Init(std::uint32_t w, std::uint32_t h);
 		void											CreatePipelines();
 		void											CreateFrameBuffers(std::uint32_t width, std::uint32_t height);
 		void											Resize(std::uint32_t width, std::uint32_t height);
-		void											G_BufferPass();
-		void											G_BufferInstanced();
+		void											UpdateDeferredTextures();
+		//GBuffers
+		void											G_BufferPassBatch(VkCommandBuffer commandBuffer, std::uint32_t frameIndex);
+		void											G_BufferInstanced(VkCommandBuffer commandBuffer, std::uint32_t frameIndex);
+		void											G_BufferPass(VkCommandBuffer commandBuffer, std::uint32_t frameIndex);
+		//LightingPass
+		void											LightingPass(VkCommandBuffer commandBuffer, std::uint32_t frameIndex);
+
+		//Composition
+		void											CombinationPass(VkCommandBuffer commandBuffer, std::uint32_t frameIndex);
+		void											SubmitPointLight(std::uint32_t entityID, PointLightComponent* graphComp, Transform* transformComp);
+		void											SubmitDirectionalLight(std::uint32_t entityID, DirectionalLightComponent* graphComp, Transform* transformComp);
+		void											SubmitSpotLight(std::uint32_t entityID, SpotLightComponent* graphComp, Transform* transformComp);
 
 		void											ClearBatchSubmission();
 		void											SubmitMesh(std::uint32_t entityID, GraphicsComponent* graphComp, Transform* transformComp);
@@ -144,16 +231,32 @@ namespace TDS
 		void											SubmitInstance(std::uint32_t entityID, int TextureID, Transform* transformComp, GraphicsComponent* graphComp);
 		std::shared_ptr<VulkanPipeline>					GetDeferredPipeline(DEFERRED_STAGE stage);
 		void											ShutDown();
+		void											SetClearColour(Vec4 clearColor);
+		void											UpdateClearColur();
+		FBO*											GetFrameBuffer(RENDER_PASS renderpassType);
+
+		SceneUniform&									GetSceneUniform();
+
 
 	public:
 		GlobalUBO globalUBO{}; //Temp for testing
 
 	private:
+
+		//Lighting pass data
+		std::uint32_t									m_LightSrcInstance = 0;
+		
+		LightingPushConstant							m_LightingPushConstant;
+		LightBuffers									m_LightUBOs;
+
+		std::array<LightSourceProperties, 1000>			m_LightSourceBuffers;
+		SceneCamera										m_SceneCamera;
+		SceneUniform									m_SceneUBO;
 		Batch3D											m_Batch3D;
 		Instance3D										m_Instance3D;
 		PIPELINE_LIST									m_DeferredPipelines;
-
-
+		std::unique_ptr<VulkanPipeline>					m_LightSource;
+		std::array<FBO*, RENDER_TOTAL>					m_FrameBuffers;
 
 
 

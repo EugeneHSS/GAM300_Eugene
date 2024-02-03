@@ -95,8 +95,8 @@ namespace TDS
 			NameTag* mainRoot = reinterpret_cast<NameTag*>(getComponentByName("Name Tag", rootEntity));
 			mainRoot->SetName(ModelAssetName.data());
 			GraphicsComponent* graphComponent = reinterpret_cast<GraphicsComponent*>(getComponentByName("Graphics Component", rootEntity));
-			graphComponent->m_MeshName = ModelAssetName;
-			graphComponent->m_MeshNodeName = ModelAssetName;
+			//graphComponent->m_MeshName = ModelAssetName;
+			//graphComponent->m_MeshNodeName = ModelAssetName;
 
 
 			for (auto& rootNodes : meshcontroller->GetRoots())
@@ -136,8 +136,8 @@ namespace TDS
 					//set initial transform position,
 
 					transformComp->SetRealPosition(rootNodes.second.m_SceneTranslation);
-					transformComp->SetRealScale(rootNodes.second.m_SceneScale);
-					transformComp->SetRealRotate(rootNodes.second.m_SceneRotation);
+					//transformComp->SetRealScale(rootNodes.second.m_SceneScale);
+					//transformComp->SetRealRotate(rootNodes.second.m_SceneRotation);
 					// push this entity into the main root
 
 				}
@@ -175,8 +175,8 @@ namespace TDS
 						childGrapComp->m_MeshNodeName = rootNodes.first;
 						//Set initial transform positions
 						childTransformComp->SetRealPosition(rootNodes.second.m_SceneTranslation);
-						childTransformComp->SetRealScale(rootNodes.second.m_SceneScale);
-						childTransformComp->SetRealRotate(rootNodes.second.m_SceneRotation);
+				/*		childTransformComp->SetRealScale(rootNodes.second.m_SceneScale);
+						childTransformComp->SetRealRotate(rootNodes.second.m_SceneRotation);*/
 						//childTransformComp->SetScale(Vec3(1.f, 1.f, 1.f));
 						//childTransformComp->SetRotation(Vec3(0.f, 0.f, 0.f));
 						//If entity validity check

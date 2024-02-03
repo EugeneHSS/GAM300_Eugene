@@ -154,8 +154,9 @@ namespace TDS
 				}
 				else if (CurrController.m_Instancing == false)
 				{
+
 					UniqueUID uid;
-					outName += "_" + std::to_string(uid.GetID());
+					outName += std::to_string(uid.GetID());
 					LoadNewModelWithNewName(path, outName);
 					fileName = outName;
 				}
@@ -188,33 +189,74 @@ namespace TDS
 			}
 		}
 
+		//MeshController* GetMeshController(std::string_view modelName, TypeReference<MeshController>& model)
+		//{
+		//	auto itr = m_ModelIndices.find(modelName.data());
+		//	if (itr != m_ModelIndices.end())
+		//	{
+		//		if (model.m_ResourcePtr != nullptr && model.m_ResourcePtr->m_Instancing == false)
+		//		{
+
+		//			UniqueUID uid;
+		//			std::string newName = itr->first + "_" + std::to_string(uid.GetID());
+		//			std::string Path = MODEL_PATH;
+		//			Path += itr->first;
+		//			LoadNewModelWithNewName(Path, newName);
+		//			model.m_AssetName = modelName;
+		//			model.m_ResourcePtr = &m_MeshControllers[m_CurrentIndex];
+
+		//		}
+		//		else
+		//		{
+		//			UnloadReference(model);
+
+		//			model.m_AssetName = modelName;
+		//			model.m_ResourcePtr = &m_MeshControllers[itr->second];
+		//			++m_ReferenceCnt[modelName.data()];
+		//			return model.m_ResourcePtr;
+		//		}
+		//	}
+
+		//	return nullptr;
+		//	TDS_WARN("Model doesnt exist!");
+		//}
 		MeshController* GetMeshController(std::string_view modelName, TypeReference<MeshController>& model)
 		{
 			auto itr = m_ModelIndices.find(modelName.data());
 			if (itr != m_ModelIndices.end())
 			{
-				if (model.m_ResourcePtr != nullptr && model.m_ResourcePtr->m_Instancing == false)
+				UnloadReference(model);
+
+				model.m_AssetName = modelName;
+				model.m_ResourcePtr = &m_MeshControllers[itr->second];
+				++m_ReferenceCnt[modelName.data()];
+				return model.m_ResourcePtr;
+
+			}
+			else
+			{
+				auto GetBaseName = [](std::string_view baseName)
 				{
-					UniqueUID uid;
-					std::string newName = itr->first + "_" + std::to_string(uid.GetID());
+					auto it = std::find_if(baseName.begin(), baseName.end(), [](unsigned char c) { return std::isdigit(c); });
+					return std::string(baseName.begin(), it);
+				};
+
+				std::string BaseName = GetBaseName(modelName);
+
+				auto itr = m_ModelIndices.find(BaseName);
+
+				if (itr != m_ModelIndices.end())
+				{
+					UnloadReference(model);
 					std::string Path = MODEL_PATH;
 					Path += itr->first;
-					LoadNewModelWithNewName(Path, newName);
-					model.m_AssetName = newName;
-					model.m_ResourcePtr = &m_MeshControllers[m_CurrentIndex];
-					++m_ReferenceCnt[newName];
-
-				}
-				else
-				{
-					if (model.m_AssetName.empty() == false)
-						UnloadReference(model);
-
+					LoadNewModelWithNewName(Path, modelName);
 					model.m_AssetName = modelName;
-					model.m_ResourcePtr = &m_MeshControllers[itr->second];
-					++m_ReferenceCnt[modelName.data()];
-					return model.m_ResourcePtr;
+					model.m_ResourcePtr = &m_MeshControllers[m_CurrentIndex];
 				}
+
+
+
 			}
 			return nullptr;
 			TDS_WARN("Model doesnt exist!");

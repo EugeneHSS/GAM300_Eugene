@@ -415,9 +415,9 @@ namespace TDS
 			aiVector3D pos;
 			AccumulatedTransform.DecomposeNoScaling(currRotation, pos);
 
-			aiMatrix4x4 translateMat = GetTranslationMatrix(AccumulatedTransform);
-			aiMatrix4x4 rotationMat = GetRotationMatrix(AccumulatedTransform);
-			aiMatrix4x4 scaleMat = GetScaleMatrix(AccumulatedTransform);
+			aiMatrix4x4 translateMat = GetTranslationMatrix(Node.mTransformation);
+			aiMatrix4x4 rotationMat = GetRotationMatrix(Node.mTransformation);
+			aiMatrix4x4 scaleMat = GetScaleMatrix(Node.mTransformation);
 
 			aiMatrix4x4 identity;
 
@@ -434,8 +434,8 @@ namespace TDS
 			rawMesh.m_MeshName = std::string(mesh.mName.C_Str());
 
 
-			aiVector3D aMin = AccumulatedTransform * mesh.mAABB.mMin;
-			aiVector3D aMax = AccumulatedTransform * mesh.mAABB.mMax;
+			aiVector3D aMin = mesh.mAABB.mMin;
+			aiVector3D aMax = mesh.mAABB.mMax;
 
 			aMin = translateMat * aMin;
 			aMax = translateMat * aMax;

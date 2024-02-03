@@ -9,6 +9,9 @@
 #include "vulkanTools/Renderer.h"
 #include "Physics/CollisionSystem.h"
 #include "Rendering/Revamped/DeferredController.h"
+#include "components/PointLightComponent.h"
+#include "components/DirLightComponent.h"
+#include "components/SpotLightComponent.h"
 namespace TDS
 {
 #define _OLD
@@ -34,7 +37,7 @@ namespace TDS
 	void RendererSystem::OnUpdate(const float dt, const std::vector<EntityID>& entities, Transform* _TransformComponent, GraphicsComponent* _Graphics)
 	{
 		//Update point lights
-		GraphicsManager::getInstance().m_PointLightRenderer->newupdate(ubo, entities, _TransformComponent, _Graphics);
+		//GraphicsManager::getInstance().m_PointLightRenderer->newupdate(ubo, entities, _TransformComponent, _Graphics);
 
 
 #ifdef _OLD
@@ -57,23 +60,33 @@ namespace TDS
 
 		auto& graphmgr = GraphicsManager::getInstance();
 
-		graphmgr.m_PointLightRenderer->newupdate(ubo, entities, _TransComponent, _Graphics);
+		//graphmgr.m_PointLightRenderer->newupdate(ubo, entities, _TransComponent, _Graphics);
 
 		auto deferredController = graphmgr.GetDeferredController();
 		auto& debugRenderer = graphmgr.GetDebugRenderer();
 		deferredController->ClearBatchSubmission();
 		deferredController->globalUBO = ubo;
+		deferredController->GetSceneUniform().m_View = GraphicsManager::getInstance().GetCamera().GetViewMatrix();
+		deferredController->GetSceneUniform().m_Proj = Mat4::Perspective(GraphicsManager::getInstance().GetCamera().m_Fov * Mathf::Deg2Rad,
+			GraphicsManager::getInstance().GetSwapchainRenderer().getAspectRatio(), 0.1f, 1000000.f);
+
+		deferredController->GetSceneUniform().m_Proj.m[1][1] *= -1;
 		for (size_t i = 0; i < entities.size(); ++i)
 		{
 
-			if (Vec3 Scale = _TransComponent[i].GetScale(); Scale.x < 0.0001f || Scale.y < 0.0001f || Scale.z < 0.0001f)
+			if (Vec3 Scale = _TransComponent[i].GetScale(); Scale.x < FLT_MIN || Scale.y < FLT_MIN || Scale.z < FLT_MIN)
 			{
 
 			}
 			else
 			{
 				_TransComponent[i].GenerateTransform();
-				_TransComponent[i].GenerateFakeTransform();
+
+
+				if (_TransComponent[i].isDirty())
+				{
+					_TransComponent[i].GenerateChildFakeTransform();
+				}
 
 			}
 
@@ -91,13 +104,25 @@ namespace TDS
 					continue;
 			}
 
+			SpotLightComponent* spotlight = ecs.getComponent<SpotLightComponent>(entities[i]);
+			DirectionalLightComponent* dirLight = ecs.getComponent<DirectionalLightComponent>(entities[i]);
+			PointLightComponent* pointLight = ecs.getComponent<PointLightComponent>(entities[i]);
 
-			if (_Graphics[i].IsPointLight())
+			//An entity CANNOT BE BOTH A LIGHT AND A OBJECT
+			if (spotlight || dirLight || pointLight)
 			{
-				GraphicsManager::getInstance().m_PointLightRenderer->GetPipeline().SetCommandBuffer(commandBuffer);
-				graphmgr.m_PointLightRenderer->GetPipeline().BindDescriptor(frame, 1);
-				graphmgr.m_PointLightRenderer->GetPipeline().UpdateUBO(&ubo, sizeof(GlobalUBO), 1, frame);
-				graphmgr.m_PointLightRenderer->render(&_Graphics[i], &_TransComponent[i]);
+				if (spotlight)
+					deferredController->SubmitSpotLight(entities[i], spotlight, &_TransComponent[i]);
+				
+
+				if (dirLight)
+					deferredController->SubmitDirectionalLight(entities[i], dirLight, &_TransComponent[i]);
+				
+
+				if (pointLight)
+					deferredController->SubmitPointLight(entities[i], pointLight, &_TransComponent[i]);
+				
+				
 			}
 			else
 			{
@@ -109,23 +134,6 @@ namespace TDS
 
 
 		}
-
-
-		{
-			deferredController->G_BufferPass();
-
-			deferredController->G_BufferInstanced();
-		}
-
-
-		//Composition pass
-		{
-			if (CollisionSystem::m_RenderDebugDrawing)
-			{
-				debugRenderer.Render();
-			}
-		}
-
 
 	}
 
@@ -354,7 +362,7 @@ namespace TDS
 				}
 				else {
 					_TransformComponent[i].GenerateTransform();
-					_TransformComponent[i].GenerateFakeTransform();
+					_TransformComponent[i].GenerateChildFakeTransform();
 
 					if (_TransformComponent[i].GetPosition() == _TransformComponent[i].GetFakePosition() &&
 						_TransformComponent[i].GetScale() == _TransformComponent[i].GetFakeScale()
@@ -440,28 +448,7 @@ namespace TDS
 		}
 	}
 
-	void RendererSystem::UpdateGraphicsData(GraphicsComponent* _Graphics)
-	{
-		if (_Graphics->m_ModelName != _Graphics->m_AssetReference.m_AssetName)
-		{
-			//AssetModel* pModel = AssetManager::GetInstance()->GetModelFactory().GetModel(_Graphics[i].m_ModelName, _Graphics[i].m_AssetReference);
 
-
-			MeshController* pMeshController = AssetManager::GetInstance()->GetMeshFactory().GetMeshController(_Graphics->m_ModelName, _Graphics->m_MeshControllerRef);
-
-			if (pMeshController == nullptr)
-			{
-				//TDS_WARN("No such model called {}", _Graphics[i].m_AssetReference.m_AssetName);
-			}
-			else
-			{
-				_Graphics->m_MeshControllerRef.m_AssetName = _Graphics->m_ModelName;
-				_Graphics->m_MeshControllerRef.m_ResourcePtr = pMeshController;
-
-			}
-
-		}
-	}
 
 
 

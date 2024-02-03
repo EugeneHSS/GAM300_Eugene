@@ -14,7 +14,7 @@ namespace TDS
 		// To change child transformation when parent moves
 		static void childTransformationHandlerInit();
 		static void childTransformationHandlerUpdate(const float dt, const std::vector<EntityID>& entities, Transform* transform);
-		static void changeChildTransformation(EntityID childEntity, Vec3& positionChange,  Vec3& scaleChange,  Vec3& rotationChange);
+		static void changeChildTransformation(EntityID childEntity, EntityID parent, Vec3& positionChange,  Vec3& scaleChange,  Vec3& rotationChange);
 		static void TransformChildSubMesh(EntityID childEntity, EntityID parentEntity, Vec3& positionChange, Vec3& scaleChange, Vec3& rotationChange, Mat4& parentTransform);
 		DLL_API static void postChildTransformationEvent(EntityID entityID, Vec3 oldPosition, Vec3 oldScale, Vec3 oldRotation);
 

@@ -79,7 +79,7 @@ namespace TDS
 		DLL_API		void	DestroyPipeline();
 		DebugRenderer(const DebugRenderer&) = delete;
 		DebugRenderer& operator=(const DebugRenderer&) = delete;
-		DLL_API		void	Render();
+		DLL_API		void	Render(VkCommandBuffer commandBuffer, std::uint32_t frameIndex);
 		DLL_API VulkanPipeline& GetPipeline();
 		DLL_API		bool	Init();
 		DLL_API		void	ToggleDebug(bool condition);

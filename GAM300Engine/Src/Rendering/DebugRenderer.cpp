@@ -4,6 +4,7 @@
 #include "vulkanTools/Renderer.h"
 #include "Physics/CollisionSystem.h"
 #include "AssetManagement/AssetManager.h"
+#include "Rendering/Revamped/DeferredController.h"
 namespace TDS
 {
 
@@ -24,22 +25,19 @@ namespace TDS
 		m_Pipeline->ShutDown();
 	}
 
-	void DebugRenderer::Render()
+	void DebugRenderer::Render(VkCommandBuffer commandBuffer, std::uint32_t frameIndex)
 	{
 
-		VkCommandBuffer& cmdBuffer = GraphicsManager::getInstance().getCommandBuffer();
-		auto frameIndx = GraphicsManager::getInstance().GetSwapchainRenderer().getFrameIndex();
-		m_Pipeline->SetCommandBuffer(cmdBuffer);
-
 		m_DebugInstance.BuildAllGroups();
+		m_Pipeline->SetCommandBuffer(commandBuffer);
 		m_SceneInfo.View = GraphicsManager::getInstance().GetCamera().GetViewMatrix();
 
 		m_SceneInfo.Proj = Mat4::Perspective(GraphicsManager::getInstance().GetCamera().m_Fov * Mathf::Deg2Rad,
 			GraphicsManager::getInstance().GetSwapchainRenderer().getAspectRatio(), 0.1f, 1000000.f);
 		m_SceneInfo.Proj.m[1][1] *= -1;
 
-		m_Pipeline->UpdateUBO(&m_SceneInfo, sizeof(SceneInfo), 5, frameIndx);
-		m_Pipeline->UpdateUBO(m_DebugInstance.m_DebugInstanceBuffer.data(), sizeof(DebugInstanceBuffer) * m_DebugInstance.m_InstanceCnt, 15, frameIndx);
+		m_Pipeline->UpdateUBO(&m_SceneInfo, sizeof(SceneInfo), 5, frameIndex);
+		m_Pipeline->UpdateUBO(m_DebugInstance.m_DebugInstanceBuffer.data(), sizeof(DebugInstanceBuffer) * m_DebugInstance.m_InstanceCnt, 15, frameIndex);
 
 		for (std::uint32_t i = 0; i < m_DebugInstance.m_TotalGroup; ++i)
 		{
@@ -48,9 +46,9 @@ namespace TDS
 			m_Pipeline->BindPipeline(VK_PRIMITIVE_TOPOLOGY_LINE_LIST);
 			m_Pipeline->BindVertexBuffer(*instanceReq.m_pBuffer->m_VertexBuffer);
 			m_Pipeline->BindIndexBuffer(*instanceReq.m_pBuffer->m_IndexBuffer);
-			m_Pipeline->BindDescriptor(frameIndx, 1);
+			m_Pipeline->BindDescriptor(frameIndex, 1);
 			m_Pipeline->SubmitPushConstant(&instanceReq.m_Offset, sizeof(std::uint32_t), SHADER_FLAG::VERTEX);
-			m_Pipeline->DrawInstancedIndexed(*instanceReq.m_pBuffer->m_VertexBuffer, *instanceReq.m_pBuffer->m_IndexBuffer, instanceReq.m_Instance, frameIndx);
+			m_Pipeline->DrawInstancedIndexed(*instanceReq.m_pBuffer->m_VertexBuffer, *instanceReq.m_pBuffer->m_IndexBuffer, instanceReq.m_Instance, frameIndex);
 			instanceReq.m_Offset = 0;
 			instanceReq.m_Instance = 0;
 		}
@@ -162,6 +160,10 @@ namespace TDS
 
 		entry.m_ShaderInputs.m_InputVertex.push_back(VertexBufferInfo(false, layout, sizeof(Vec3)));
 		m_Pipeline = std::make_unique<VulkanPipeline>();
+		auto deferredController = GraphicsManager::getInstance().GetDeferredController();
+
+		auto frameBuffer = deferredController->GetFrameBuffer(RENDER_G_BUFFER);
+		entry.m_FBTarget = frameBuffer;
 		return m_Pipeline->Create(entry);
 	}
 	void DebugRenderer::ToggleDebug(bool condition)

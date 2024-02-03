@@ -10,23 +10,19 @@ layout(location = 6) in vec4 BoneIDs;
 layout(location = 7) in vec4 Weights;
 layout(location = 8) in vec2 meshID;
 
-
-struct PointLight{
-    vec4 Position;
-    vec4 Color;
-    vec4 pad[2];
-};
-
+/*
+    struct PointLight{
+        vec4 Position;
+        vec4 Color;
+        vec4 pad[2];
+    };
+*/
 //for the scene
-layout(set = 0, binding = 0) uniform GlobalUBO
+layout(set = 0, binding = 5) uniform SceneUBO
 {
     mat4 proj;
     mat4 view;
-    vec4 ambientlightcolor;
-    PointLight pointlights[50];
-    int activelights;
-    vec4 pad[15];    
-}PL;
+}Scene3D;
 
 struct InstanceData
 {
@@ -80,6 +76,7 @@ layout(location = 3) out vec3 fragNormalWorld;
 layout(location = 4) out flat uint id;
 layout(location = 5) out vec4 clipspacepos;
 layout(location = 6) out flat uint texID;
+layout(location = 7) out float linearDepth;
 
 void main() 
 {
@@ -95,7 +92,7 @@ void main()
 
     if (animatedMesh != 0)
     {
-        //Empty now, but xin xiang, put ur animation here and update the skinMat
+        //Empty now, but xing xiang, put ur animation here and update the skinMat
     }
 
     mat4 accumulated = modelMatrix * skinMat;
@@ -105,7 +102,7 @@ void main()
     
     id = instance.entityID;
 
-    vec4 clipspacepos = PL.proj * PL.view * position_in_world;
+    vec4 clipspacepos = Scene3D.proj * Scene3D.view * position_in_world;
     gl_Position = clipspacepos;
     
     vec3 normal = mat3(transpose(inverse(accumulated))) * vNormals;
@@ -119,4 +116,5 @@ void main()
 
     fragColor = vColor;
    
+    linearDepth = -(Scene3D.view * position_in_world).z;
 }

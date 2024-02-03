@@ -176,7 +176,7 @@ namespace TDS
             m_ModelPack = nullptr;
         }
         m_RootNodes.clear();
-        //m_MeshData.clear();
+        m_MeshIDMap.clear();
         //m_MeshIndexMap.clear();
         m_Loaded = false;
 

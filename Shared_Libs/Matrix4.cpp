@@ -134,7 +134,7 @@ namespace TDS
         float m02 = m[0][2]; float m12 = m[1][2]; float m22 = m[2][2]; float m32 = m[3][2];
         float m03 = m[0][3]; float m13 = m[1][3]; float m23 = m[2][3]; float m33 = m[3][3];
         float det = determinant();
-        if (det == 0.0f) throw std::invalid_argument("Matrix is not invertible.");
+        if (det < FLT_EPSILON) throw std::invalid_argument("Matrix is not invertible.");
         float invDet = 1.0f / det;
         return Mat4((m12 * m23 * m31 - m13 * m22 * m31 + m13 * m21 * m32 - m11 * m23 * m32 - m12 * m21 * m33 + m11 * m22 * m33) * invDet,
                     (m03 * m22 * m31 - m02 * m23 * m31 - m03 * m21 * m32 + m01 * m23 * m32 + m02 * m21 * m33 - m01 * m22 * m33) * invDet,

@@ -3,6 +3,7 @@
 #include "vulkanTools/Renderer.h"
 #include "vulkanTools/VulkanTexture.h"
 #include "Rendering/GraphicsManager.h"
+#include "Rendering/Revamped/DeferredController.h"
 namespace TDS
 {
 	void SkyBoxRenderer::Init()
@@ -38,15 +39,20 @@ namespace TDS
 		m_CubeMapIndexBuffer->CreateIndexBuffer(modelPack->m_ModelHandle.m_Indices.size() * sizeof(uint32_t), true, modelPack->m_ModelHandle.m_Indices.data());
 		m_CubeMapIndexBuffer->SetDataCnt(static_cast<uint32_t>(modelPack->m_ModelHandle.m_Indices.size()));
 
+		auto deferredController = GraphicsManager::getInstance().GetDeferredController();
 
+		auto frameBuffer = deferredController->GetFrameBuffer(RENDER_G_BUFFER);
+		
 		PipelineCreateEntry skyboxCE{};
 		skyboxCE.m_NumDescriptorSets = 1;
 		skyboxCE.m_PipelineConfig.m_CullMode = VK_CULL_MODE_FRONT_BIT;
 		skyboxCE.m_ShaderInputs.m_Shaders.insert(std::make_pair(SHADER_FLAG::VERTEX, "../assets/shaders/skybox.spv"));
 		skyboxCE.m_ShaderInputs.m_Shaders.insert(std::make_pair(SHADER_FLAG::FRAGMENT, "../assets/shaders/skyboxfrag.spv"));
 		VertexLayout layout{ VertexBufferElement(VAR_TYPE::VEC3, "inPos") };
+		skyboxCE.m_PipelineConfig.m_EnableDepthTest = false;
+		skyboxCE.m_PipelineConfig.m_EnableDepthWrite = false;
 		skyboxCE.m_ShaderInputs.m_InputVertex.push_back(VertexBufferInfo(false, layout, sizeof(SkyBoxVertexData)));
-
+		skyboxCE.m_FBTarget = frameBuffer;
 		m_SkyBoxPipeline->Create(skyboxCE);
 		
 	}

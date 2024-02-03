@@ -1,0 +1,14 @@
+#pragma once
+
+#define RTTR_REGISTER(COMPONENT_TYPE)\
+        rttr::registration::class_<COMPONENT_TYPE>(#COMPONENT_TYPE)
+
+#define RTTR_REGISTER_WITH_NAME(COMPONENT_TYPE, NAME)\
+        rttr::registration::class_<COMPONENT_TYPE>(NAME)
+
+
+#define RTTR_REGISTER_PROPERTY(CLASS_NAME, MEMBER_VAR)\
+        .property(#MEMBER_VAR, &CLASS_NAME::m_##MEMBER_VAR)
+
+#define RTTR_REGISTER_PROPERTY_WITH_NAME(CLASS_NAME, MEMBER_VAR, NAME)\
+        .property(NAME, &CLASS_NAME::MEMBER_VAR)

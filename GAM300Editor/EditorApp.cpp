@@ -34,7 +34,7 @@
 #include "Physics/PhysicsSystem.h"
 #include "Rendering/ObjectPicking.h"
 #include "Input/InputSystem.h"
-
+#include "MessagingSystem/MessageSystem.h"
 bool isPlaying = false;
 bool startPlaying = false;
 
@@ -70,11 +70,22 @@ namespace TDS
         case WM_PAINT:
             ValidateRect(m_window.getWindowHandler(), NULL);
             break;
-        case WM_SIZE: //for resize of window may need it for fullscreen?
+        case WM_SIZE:
+        { //for resize of window may need it for fullscreen?
             m_window.setWidth(LOWORD(lParam));
             m_window.setHeight(HIWORD(lParam));
+
             m_window.WindowIsResizing(true);
-            break;
+            if (wParam == SIZE_MINIMIZED)
+            {
+                BROADCAST_MESSAGE("Stop Rendering");
+            }
+            else
+            {
+                BROADCAST_MESSAGE("Continue Rendering");
+
+            }
+        }break;
         case WM_LBUTTONDOWN:
         case WM_LBUTTONUP:
         case WM_RBUTTONDOWN:
@@ -139,8 +150,10 @@ namespace TDS
         ShaderReflector::GetInstance()->Init(SHADER_DIRECTORY, REFLECTED_BIN);
         GraphicsManager::getInstance().Init(&m_window);
         AssetManager::GetInstance()->PreloadAssets();
-        skyboxrender.Init();
+        //skyboxrender.Init();
         GraphicsManager::getInstance().GetDebugRenderer().Init();
+        GraphicsManager::getInstance().InitSkyBox();
+
         //InputSystem::get()->addListener(this);
     }
 
@@ -189,8 +202,12 @@ namespace TDS
                 "ToggleScriptViaName"
             );
 
+
+        GraphicsManager::getInstance().m_EditorRender = &imguiHelper::Draw;
+
         initImgui();
         float lightx = 0.f;
+
 
         while (m_window.processInputEvent())
         {
@@ -225,20 +242,19 @@ namespace TDS
             Vec3 m_windowdimension{ static_cast<float>(m_window.getWidth()), static_cast<float>(m_window.getHeight()), 1.f };
             if (GraphicsManager::getInstance().getFrameBuffer().getDimensions() != m_windowdimension && m_windowdimension.x >0 && m_windowdimension.y > 0)
             {
-                GraphicsManager::getInstance().getFrameBuffer().resize(m_windowdimension, GraphicsManager::getInstance().getRenderPass().getRenderPass());
+                BROADCAST_MESSAGE("Resize Event", m_window.getWidth(), m_window.getHeight());
+                /*GraphicsManager::getInstance().getFrameBuffer().resize(m_windowdimension, GraphicsManager::getInstance().getRenderPass().getRenderPass());*/
                 std::shared_ptr<EditorScene> pScene = static_pointer_cast<EditorScene>(LevelEditorManager::GetInstance()->panels[SCENE]);
                 pScene->Resize();
 
                 std::shared_ptr<GamePlayScene> pGamePlatScene = static_pointer_cast<GamePlayScene>(LevelEditorManager::GetInstance()->panels[GAMEPLAYSCENE]);
                 pGamePlatScene->Resize();
-            }
-            GraphicsManager::getInstance().StartFrame();
-            VkCommandBuffer commandBuffer = GraphicsManager::getInstance().getCommandBuffer();
-            std::uint32_t frame = GraphicsManager::getInstance().GetSwapchainRenderer().getFrameIndex();
 
-            GraphicsManager::getInstance().getRenderPass().beginRenderPass(commandBuffer, &GraphicsManager::getInstance().getFrameBuffer());
-            if (GraphicsManager::getInstance().IsViewingFrom2D() == false)
-                skyboxrender.RenderSkyBox(commandBuffer, frame);
+                
+            }
+            
+ 
+            //GraphicsManager::getInstance().getRenderPass().beginRenderPass(commandBuffer, &GraphicsManager::getInstance().getFrameBuffer());
            
             if (isPlaying)
             {
@@ -264,21 +280,36 @@ namespace TDS
                     CameraSystem::SetIsPlaying(false);
                 }
             }
-            ecs.runSystems(2, DeltaTime); // Event handler
-            ecs.runSystems(3, DeltaTime); // Graphics
-         
-            imguiHelper::Update();
+            ecs.runSystems(2, DeltaTime); 
 
-            // event handling systems 
-            GraphicsManager::getInstance().getRenderPass().endRenderPass(commandBuffer);
 
-           GraphicsManager::getInstance().getObjectPicker().Update(commandBuffer, frame, Vec2( Input::getMousePosition().x, Input::getMousePosition().y ));
-            GraphicsManager::getInstance().GetSwapchainRenderer().BeginSwapChainRenderPass(commandBuffer);
 
-            imguiHelper::Draw(commandBuffer);
+            if (GraphicsManager::getInstance().IsRenderOn())
+            {
+                GraphicsManager::getInstance().StartFrame();
 
-            GraphicsManager::getInstance().GetSwapchainRenderer().EndSwapChainRenderPass(commandBuffer);
-            GraphicsManager::getInstance().EndFrame();
+
+                ecs.runSystems(3, DeltaTime);
+
+                imguiHelper::Update();
+
+                // event handling systems 
+                //GraphicsManager::getInstance().getRenderPass().endRenderPass(commandBuffer);
+
+
+
+                //VkCommandBuffer commandBuffer = GraphicsManager::getInstance().getCommandBuffer();
+                //std::uint32_t frame = GraphicsManager::getInstance().GetSwapchainRenderer().getFrameIndex();
+     /*           GraphicsManager::getInstance().getObjectPicker().Update(commandBuffer, frame, Vec2( Input::getMousePosition().x, Input::getMousePosition().y ));*/
+               /* GraphicsManager::getInstance().GetSwapchainRenderer().BeginSwapChainRenderPass(commandBuffer);*/
+
+          /*      imguiHelper::Draw(commandBuffer);*/
+
+                GraphicsManager::getInstance().DrawFrame();
+
+                /*GraphicsManager::getInstance().GetSwapchainRenderer().EndSwapChainRenderPass(commandBuffer);*/
+                GraphicsManager::getInstance().EndFrame();
+            }
             // Reloading
             if (GetKeyState(VK_F5) & 0x8000)
             {
@@ -306,7 +337,6 @@ namespace TDS
         imguiHelper::Exit();
         ecs.destroy();
         
-        skyboxrender.ShutDown();
         GraphicsManager::getInstance().ShutDown();
         DDSConverter::Destroy();
 

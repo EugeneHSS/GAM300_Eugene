@@ -16,7 +16,24 @@
 #include "vulkanTools/FrameBuffer.h"
 #include "Rendering/Renderer2D.h"
 #include "Rendering/FontRenderer.h"
+#include "MessagingSystem/MessageSystem.h"
 #include "Rendering/Revamped/DeferredController.h"
+#include "Rendering/Revamped/FrameBuffers/FrameBufferObject.h"
+#include "Rendering/FontRenderer.h"
+#include "Rendering/Skybox.h"
+#undef BROADCAST_MESSAGE
+
+
+#define BROADCAST_MESSAGE(MSG_CONTEXT, ...)\
+	m_MessagingSystem->BroadCastMessage(##MSG_CONTEXT, __VA_ARGS__);
+
+
+#undef REGISTER_MESSAGE
+
+#define REGISTER_MESSAGE(MSG_CONTEXT, LISTENER, FUNC)\
+	m_MessagingSystem->RegisterMessage(##MSG_CONTEXT,LISTENER, FUNC);
+
+
 
 namespace TDS
 {
@@ -29,6 +46,8 @@ namespace TDS
 	void GraphicsManager::Init(WindowsWin* window)
 	{
 		m_pWindow = window;
+		m_MessagingSystem = std::make_unique<MessageSystem>();
+		
 		m_MainVkContext = std::make_shared<VulkanInstance>(*m_pWindow);
 		m_CommandManager = std::make_shared<CommandManager>();
 		ShaderLoader::GetInstance()->DeserializeShaderReflection(REFLECTED_BIN);
@@ -36,6 +55,8 @@ namespace TDS
 		m_CommandManager->Init();
 		m_DeferredController = std::make_shared<DeferredController>();
 		m_SwapchainRenderer = std::make_shared<Renderer>(*m_pWindow, *m_MainVkContext);
+		m_Renderer2D = std::make_shared<Renderer2D>();
+		m_FontRenderer = std::make_shared<FontRenderer>();
 		DefaultTextures::GetInstance().Init();
 
 
@@ -91,19 +112,234 @@ namespace TDS
 		m_Framebuffer = new FrameBuffer(m_MainVkContext->getVkLogicalDevice(), m_Renderpass->getRenderPass(), attachments);
 
 		m_ViewingFrom2D = true;
-		m_DeferredController->CreatePipelines();
+		m_SkyBoxRenderer = std::make_shared<SkyBoxRenderer>();
 
-		Renderer2D::GetInstance()->Init();
-		FontRenderer::GetInstance()->Init();
-		m_PointLightRenderer = std::make_unique<PointLightSystem>(*m_MainVkContext);
+;
+		m_DeferredController->Init(window->getWidth(), window->getHeight());
+
+		REGISTER_MESSAGE("Resize Event", this, &GraphicsManager::ResizeEvent);
+		REGISTER_MESSAGE("Stop Rendering", this, &GraphicsManager::StopAllRender);
+		REGISTER_MESSAGE("Continue Rendering", this, &GraphicsManager::StartAllRender);
+
+		CreateFullScreen();
+
+		m_Renderer2D->Init();
+		m_FontRenderer->Init();
+		//m_PointLightRenderer = std::make_unique<PointLightSystem>(*m_MainVkContext);
 		m_DebugRenderer = std::make_unique<DebugRenderer>(*m_MainVkContext);
 
 		m_ObjectPicking = std::make_shared<ObjectPick>(m_MainVkContext, size);
+
+
+
+
+
+	}
+	void GraphicsManager::InitSkyBox()
+	{
+		m_SkyBoxRenderer->Init();
+	}
+	void GraphicsManager::InitDebugRenderers()
+	{
+		m_DebugRenderer->Init();
+	}
+	void GraphicsManager::SetClearColor(Vec4 clearColor)
+	{
+		m_CurrClearColor = clearColor;
+	}
+	void GraphicsManager::ToggleViewFrom2D(bool condition)
+	{
+		m_ViewingFrom2D = condition;
+	}
+	void GraphicsManager::StartFrame()
+	{
+		m_FrameHasBegin = true;
+		currentCommand = m_SwapchainRenderer->BeginFrame();
+
+	}
+
+	void GraphicsManager::DrawFrame()
+	{
+		if (currentCommand == nullptr) return;
+
+		auto currFrame = m_SwapchainRenderer->getFrameIndex();
+		m_DeferredController->G_BufferPass(currentCommand, currFrame);
+		m_DeferredController->LightingPass(currentCommand, currFrame);
+		m_DeferredController->CombinationPass(currentCommand, currFrame);
+
+		m_ObjectPicking->Update(currentCommand, currFrame, Vec2(Input::getMousePosition().x, Input::getMousePosition().y));
+
+		m_SwapchainRenderer->BeginSwapChainRenderPass(currentCommand);
+		{
+			if (m_EditorRender)
+			{
+				m_EditorRender(currentCommand);
+			}
+			else
+			{
+				RenderFullScreen();
+			}
+
+
+		}
+		m_SwapchainRenderer->EndSwapChainRenderPass(currentCommand);
+
+	}
+
+	bool GraphicsManager::IsViewingFrom2D()
+	{
+		return m_ViewingFrom2D;
+	}
+
+	void GraphicsManager::StopAllRender()
+	{
+		m_StartRender = false;
+	}
+
+	void GraphicsManager::StartAllRender()
+	{
+		m_StartRender = true;
+	}
+
+	bool GraphicsManager::IsRenderOn()
+	{
+		return m_StartRender;
+	}
+
+
+
+	void GraphicsManager::AddRenderLayer(RenderLayer* layer)
+	{
+		m_RenderLayer.push_back(layer);
+	}
+
+	void GraphicsManager::EndFrame()
+	{
 		for (auto& renderLayer : m_RenderLayer)
 		{
-			renderLayer->Setup(m_pWindow);
-			renderLayer->Init();
+			renderLayer->StartFrame();
+			renderLayer->Render();
 		}
+		m_SwapchainRenderer->EndFrame();
+		m_FrameHasBegin = false;
+
+	}
+	void GraphicsManager::ShutDown()
+	{
+
+		vkDeviceWaitIdle(m_MainVkContext->getVkLogicalDevice());
+
+		for (auto& renderlayer : m_RenderLayer)
+		{
+			renderlayer->ShutDown();
+		}
+		m_SkyBoxRenderer->ShutDown();
+		m_Renderer2D->ShutDown();
+		m_DebugRenderer->DestroyPipeline();
+		m_DeferredController->ShutDown();
+		m_DebugRenderer->DestroyPipeline();
+		m_FontRenderer->ShutDown();
+		m_ObjectPicking->Shutdown();
+		m_FinalQuad->ShutDown();
+		m_FinalQuadVertexBuffer->DestroyBuffer();
+		m_FinalQuadIndexBuffer->DestroyBuffer();
+
+		GlobalBufferPool::GetInstance()->Destroy();
+		m_RenderingAttachment->~RenderTarget();
+		m_RenderingDepthAttachment->~RenderTarget();
+		m_Renderpass->~RenderPass();
+		m_Framebuffer->~FrameBuffer();
+		DefaultTextures::GetInstance().DestroyDefaultTextures();
+		m_SwapchainRenderer->ShutDown();
+		m_CommandManager->Shutdown();
+
+		RendererDataManager::Destroy();
+		GraphicsAllocator::GetInstance().ShutDown();
+
+
+		m_MainVkContext->ShutDown();
+	}
+
+	void GraphicsManager::UpdateClearColor()
+	{
+		/*std::vector<VkClearAttachment> clearAttachments(2);
+
+		clearAttachments[0].clearValue = { {m_CurrClearColor.x,  m_CurrClearColor.y,  m_CurrClearColor.z,  m_CurrClearColor.w} };
+		clearAttachments[0].aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		clearAttachments[0].colorAttachment = 0;
+
+		clearAttachments[1].clearValue = { {m_CurrClearColor.x,  m_CurrClearColor.y,  m_CurrClearColor.z,  m_CurrClearColor.w} };
+		clearAttachments[1].aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		clearAttachments[1].colorAttachment = 3;
+
+		VkClearRect clearRect{};
+		clearRect.layerCount = 1;
+		clearRect.baseArrayLayer = 0;
+		clearRect.rect.offset = { 0, 0 };
+		clearRect.rect.extent = { static_cast<std::uint32_t>(m_Framebuffer->getDimensions().x), static_cast<std::uint32_t>(m_Framebuffer->getDimensions().y) };
+		vkCmdClearAttachments(this->currentCommand, static_cast<uint32_t>(clearAttachments.size()), clearAttachments.data(), 1, &clearRect);*/
+
+		
+
+	}
+	void GraphicsManager::ResizeEvent(std::uint32_t width, std::uint32_t height)
+	{
+		/*m_SwapchainRenderer->recreateSwapChain();*/
+		m_DeferredController->Resize(width, height);
+
+		auto compositionFBO = m_DeferredController->GetFrameBuffer(RENDER_COMPOSITION);
+		auto RenderTarget = compositionFBO->GetTargets();
+
+		m_FinalIamgeInfo.imageLayout = RenderTarget[0]->getImageLayout();
+		m_FinalIamgeInfo.imageView = RenderTarget[0]->getImageView();
+		m_FinalIamgeInfo.sampler = RenderTarget[0]->getSampler();
+		m_FinalQuad->UpdateDescriptor(m_FinalIamgeInfo, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 12, 0);
+		m_FinalQuad->UpdateDescriptor(m_FinalIamgeInfo, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 12, 1);
+	}
+	void GraphicsManager::setCamera(TDSCamera& camera)
+	{
+		m_Camera = &camera;
+	}
+	WindowsWin* GraphicsManager::GetWindow()
+	{
+		return m_pWindow;
+	}
+	std::uint32_t GraphicsManager::PickedObject()
+	{
+		return m_ObjectPicking->getActiveObject();
+	}
+	void GraphicsManager::SetLayerToRender(int ID)
+	{
+		m_LayerID = ID;
+	}
+	bool GraphicsManager::RenderAllLayer()
+	{
+		return m_RenderAllLayer;
+	}
+	void GraphicsManager::ToggleRenderAllLayer(bool condition)
+	{
+		m_RenderAllLayer = condition;
+	}
+	int GraphicsManager::LayerToRender()
+	{
+		return m_LayerID;
+	}
+	void GraphicsManager::RenderFullScreen()
+	{
+		int frame = m_SwapchainRenderer->getFrameIndex();
+
+		m_FinalQuad->SetCommandBuffer(currentCommand);
+		GraphicsManager::getInstance().GetSwapchainRenderer().BeginSwapChainRenderPass(currentCommand);
+		GraphicsManager::getInstance().RenderFullScreen();
+		GraphicsManager::getInstance().GetSwapchainRenderer().EndSwapChainRenderPass(currentCommand);
+		m_FinalQuad->BindPipeline();
+		m_FinalQuad->BindVertexBuffer(*m_FinalQuadVertexBuffer);
+		m_FinalQuad->BindIndexBuffer(*m_FinalQuadIndexBuffer);
+		m_FinalQuad->BindDescriptor(frame, 1);
+		m_FinalQuad->DrawIndexed(*m_FinalQuadVertexBuffer, *m_FinalQuadIndexBuffer, frame);
+	}
+	void GraphicsManager::CreateFullScreen()
+	{
 
 
 		std::vector<FullScreenVertex> fullScreen{};
@@ -157,152 +393,16 @@ namespace TDS
 
 
 	}
-	void GraphicsManager::InitDebugRenderers()
+	void GraphicsManager::UpdateFullScreen()
 	{
-		m_DebugRenderer->Init();
-	}
-	void GraphicsManager::SetClearColor(Vec4 clearColor)
-	{
-		m_CurrClearColor = clearColor;
-	}
-	void GraphicsManager::ToggleViewFrom2D(bool condition)
-	{
-		m_ViewingFrom2D = condition;
-	}
-	void GraphicsManager::StartFrame()
-	{
-		m_FrameHasBegin = true;
-		for (auto& renderLayer : m_RenderLayer)
-		{
-			renderLayer->StartFrame();
-		}
-		currentCommand = m_SwapchainRenderer->BeginFrame();
+		auto compositionFBO = m_DeferredController->GetFrameBuffer(RENDER_COMPOSITION);
+		auto RenderTarget = compositionFBO->GetTargets();
 
-	}
-
-	bool GraphicsManager::IsViewingFrom2D()
-	{
-		return m_ViewingFrom2D;
-	}
-
-	void GraphicsManager::AddRenderLayer(RenderLayer* layer)
-	{
-		m_RenderLayer.push_back(layer);
-	}
-
-	void GraphicsManager::EndFrame()
-	{
-		for (auto& renderLayer : m_RenderLayer)
-		{
-			renderLayer->StartFrame();
-			renderLayer->Render();
-		}
-		m_SwapchainRenderer->EndFrame();
-		m_FrameHasBegin = false;
-
-	}
-	void GraphicsManager::ShutDown()
-	{
-
-		vkDeviceWaitIdle(m_MainVkContext->getVkLogicalDevice());
-
-		for (auto& renderlayer : m_RenderLayer)
-		{
-			renderlayer->ShutDown();
-		}
-		Renderer2D::GetInstance()->ShutDown();
-		m_DebugRenderer->DestroyPipeline();
-		m_DeferredController->ShutDown();
-		m_DebugRenderer->DestroyPipeline();
-		FontRenderer::GetInstance()->ShutDown();
-		m_ObjectPicking->Shutdown();
-		m_FinalQuad->ShutDown();
-		m_FinalQuadVertexBuffer->DestroyBuffer();
-		m_FinalQuadIndexBuffer->DestroyBuffer();
-
-		GlobalBufferPool::GetInstance()->Destroy();
-		m_RenderingAttachment->~RenderTarget();
-		m_RenderingDepthAttachment->~RenderTarget();
-		m_Renderpass->~RenderPass();
-		m_Framebuffer->~FrameBuffer();
-		DefaultTextures::GetInstance().DestroyDefaultTextures();
-		m_SwapchainRenderer->ShutDown();
-		m_CommandManager->Shutdown();
-
-		RendererDataManager::Destroy();
-		GraphicsAllocator::GetInstance().ShutDown();
-
-
-		m_MainVkContext->ShutDown();
-	}
-	void GraphicsManager::ResizeFrameBuffer(std::uint32_t width, std::uint32_t height)
-	{
-	}
-
-	void GraphicsManager::UpdateClearColor()
-	{
-		std::vector<VkClearAttachment> clearAttachments(2);
-
-		clearAttachments[0].clearValue = { {m_CurrClearColor.x,  m_CurrClearColor.y,  m_CurrClearColor.z,  m_CurrClearColor.w} };
-		clearAttachments[0].aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		clearAttachments[0].colorAttachment = 0;
-
-		clearAttachments[1].clearValue = { {m_CurrClearColor.x,  m_CurrClearColor.y,  m_CurrClearColor.z,  m_CurrClearColor.w} };
-		clearAttachments[1].aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		clearAttachments[1].colorAttachment = 3;
-
-		VkClearRect clearRect{};
-		clearRect.layerCount = 1;
-		clearRect.baseArrayLayer = 0;
-		clearRect.rect.offset = { 0, 0 };
-		clearRect.rect.extent = { static_cast<std::uint32_t>(m_Framebuffer->getDimensions().x), static_cast<std::uint32_t>(m_Framebuffer->getDimensions().y) };
-		vkCmdClearAttachments(this->currentCommand, static_cast<uint32_t>(clearAttachments.size()), clearAttachments.data(), 1, &clearRect);
-
-	}
-	void GraphicsManager::setCamera(TDSCamera& camera)
-	{
-		m_Camera = &camera;
-	}
-	WindowsWin* GraphicsManager::GetWindow()
-	{
-		return m_pWindow;
-	}
-	std::uint32_t GraphicsManager::PickedObject()
-	{
-		return m_ObjectPicking->getActiveObject();
-	}
-	void GraphicsManager::SetLayerToRender(int ID)
-	{
-		m_LayerID = ID;
-	}
-	bool GraphicsManager::RenderAllLayer()
-	{
-		return m_RenderAllLayer;
-	}
-	void GraphicsManager::ToggleRenderAllLayer(bool condition)
-	{
-		m_RenderAllLayer = condition;
-	}
-	int GraphicsManager::LayerToRender()
-	{
-		return m_LayerID;
-	}
-	void GraphicsManager::RenderFullScreen()
-	{
-		static bool firstRender = false;
-		m_FinalIamgeInfo.imageLayout = m_RenderingAttachment->getImageLayout();
-		m_FinalIamgeInfo.imageView = m_RenderingAttachment->getImageView();
-		m_FinalIamgeInfo.sampler = m_RenderingAttachment->getSampler();
+		m_FinalIamgeInfo.imageLayout = RenderTarget[0]->getImageLayout();
+		m_FinalIamgeInfo.imageView = RenderTarget[0]->getImageView();
+		m_FinalIamgeInfo.sampler = RenderTarget[0]->getSampler();
 
 		m_FinalQuad->UpdateDescriptor(m_FinalIamgeInfo, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 12);
-		int frame = m_SwapchainRenderer->getFrameIndex();
-		m_FinalQuad->SetCommandBuffer(currentCommand);
-
-		m_FinalQuad->BindPipeline();
-		m_FinalQuad->BindVertexBuffer(*m_FinalQuadVertexBuffer);
-		m_FinalQuad->BindIndexBuffer(*m_FinalQuadIndexBuffer);
-		m_FinalQuad->BindDescriptor(frame, 1);
-		m_FinalQuad->DrawIndexed(*m_FinalQuadVertexBuffer, *m_FinalQuadIndexBuffer, frame);
 	}
 	TDSCamera& GraphicsManager::GetCamera()
 	{
@@ -320,6 +420,10 @@ namespace TDS
 	{
 		return *m_SwapchainRenderer;
 	}
+	RenderTarget& GraphicsManager::getFinalImage()
+	{
+		return *m_DeferredController->GetFrameBuffer(RENDER_PASS::RENDER_COMPOSITION)->GetTargets().at(0);
+	}
 	CommandManager& GraphicsManager::getCommandManager()
 	{
 		return *m_CommandManager;
@@ -336,6 +440,14 @@ namespace TDS
 	{
 		return m_DeferredController;
 	}
+	std::shared_ptr<Renderer2D> GraphicsManager::GetRenderer2D()
+	{
+		return m_Renderer2D;
+	}
+	std::shared_ptr<FontRenderer> GraphicsManager::GetFontRenderer()
+	{
+		return m_FontRenderer;
+	}
 	GraphicsManager& GraphicsManager::getInstance()
 	{
 		if (m_Instance == nullptr)
@@ -344,9 +456,18 @@ namespace TDS
 		}
 		return *m_Instance;
 	}
+	std::shared_ptr<SkyBoxRenderer> GraphicsManager::GetSkyBox()
+	{
+		return m_SkyBoxRenderer;
+	}
 	ObjectPick& GraphicsManager::getObjectPicker()
 	{
 		return *this->m_ObjectPicking;
+	}
+
+	MessageSystem& GraphicsManager::GetMessageSystem()
+	{
+		return *m_MessagingSystem;
 	}
 
 	float getScreenWidth()

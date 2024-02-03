@@ -21,7 +21,7 @@ namespace TDS
 	class FrameBuffer;
 	class PointLightSystem;
 	class DeferredController;
-
+	class Renderer2D;
 
 	struct FullScreenVertex
 	{
@@ -29,16 +29,25 @@ namespace TDS
 		Vec2 m_UV{};
 	};
 
-
+	class MessageSystem;
+	class SkyBoxRenderer;
+	class FontRenderer;
 	class DLL_API GraphicsManager
 	{
+	public:
+		typedef std::function<void(VkCommandBuffer)> EditorRenderFunc;
+		EditorRenderFunc						m_EditorRender = nullptr;
 	private:
-		std::shared_ptr<VulkanInstance>			m_MainVkContext;
-		std::shared_ptr<Renderer>				m_SwapchainRenderer;
-		std::shared_ptr<CommandManager>			m_CommandManager;
+		std::shared_ptr<VulkanInstance>			m_MainVkContext = nullptr;
+		std::shared_ptr<Renderer>				m_SwapchainRenderer = nullptr;
+		std::shared_ptr<SkyBoxRenderer>			m_SkyBoxRenderer = nullptr;
+		std::shared_ptr<CommandManager>			m_CommandManager = nullptr;
 		std::shared_ptr<ObjectPick>				m_ObjectPicking = nullptr;
+		std::shared_ptr<Renderer2D>				m_Renderer2D = nullptr;
+		std::shared_ptr<FontRenderer>			m_FontRenderer = nullptr;
 		std::vector<RenderLayer*>				m_RenderLayer;
-
+		
+		
 
 
 		TDSCamera* m_Camera = nullptr;
@@ -49,6 +58,7 @@ namespace TDS
 		RenderTarget* m_PickAttachment{ nullptr };
 		RenderPass* m_Renderpass{ nullptr };
 		FrameBuffer* m_Framebuffer{ nullptr };
+		std::unique_ptr<MessageSystem>			m_MessagingSystem = nullptr;
 		std::shared_ptr<DeferredController>		m_DeferredController {nullptr};
 
 
@@ -56,7 +66,7 @@ namespace TDS
 		bool									m_RenderAllLayer = true;
 		bool									m_ViewingFrom2D = false;
 		bool									m_FrameHasBegin = false;
-
+		bool									m_StartRender = true;
 		Vec4									m_CurrClearColor;
 		float									m_TabOffset{};
 		Vec4									m_ViewportScreen{};
@@ -70,21 +80,30 @@ namespace TDS
 		void								SetClearColor(Vec4 clearColor);
 		void								ToggleViewFrom2D(bool condition);
 		bool								IsViewingFrom2D();
+		void								StopAllRender();
+		void								StartAllRender();
+		bool								IsRenderOn();
 		inline bool							IfFrameHasBegin()
 		{
 			return m_FrameHasBegin;
 		}
 		void								AddRenderLayer(RenderLayer* layer);
 		void								Init(WindowsWin* window);
+		void								InitSkyBox();
 		void								InitDebugRenderers();
 		void								StartFrame();
+		void								DrawFrame();
 		void								EndFrame();
 		void								ShutDown();
-		void								ResizeFrameBuffer(std::uint32_t width, std::uint32_t height);
+		
 		void								UpdateClearColor();
+		void								ResizeEvent(std::uint32_t width, std::uint32_t height);
 		void								setCamera(TDSCamera& camera);
 		std::shared_ptr<VulkanInstance>		getVkInstancePtr();
 		std::shared_ptr<DeferredController>	GetDeferredController();
+		std::shared_ptr<Renderer2D>			GetRenderer2D();
+		std::shared_ptr<FontRenderer>		GetFontRenderer();
+
 		WindowsWin* GetWindow();
 
 		void								SetLayerToRender(int ID);
@@ -95,6 +114,9 @@ namespace TDS
 
 
 		void								RenderFullScreen();
+		void								CreateFullScreen();
+		void								UpdateFullScreen();
+	
 		std::shared_ptr<VulkanPipeline>		m_FinalQuad = nullptr;
 		std::shared_ptr<VMABuffer>			m_FinalQuadVertexBuffer = nullptr;
 		std::shared_ptr<VMABuffer>			m_FinalQuadIndexBuffer = nullptr;
@@ -108,15 +130,22 @@ namespace TDS
 		VulkanInstance& getVkInstance();
 		CommandManager& getCommandManager();
 		static GraphicsManager& getInstance();
-		RenderTarget& getFinalImage() { return *m_RenderingAttachment; }
+		/*RenderTarget& getFinalImage() { return *m_RenderingAttachment; }*/
+
+		RenderTarget& getFinalImage();
 		RenderTarget& getPickImage() { return *m_PickAttachment; }
 		RenderTarget& getFinalDepthAttachment() { return *m_RenderingDepthAttachment; }
 		FrameBuffer& getFrameBuffer() { return *m_Framebuffer; }
 		RenderPass& getRenderPass() { return *m_Renderpass; }
+		std::shared_ptr<SkyBoxRenderer> GetSkyBox();
 		inline DebugRenderer& GetDebugRenderer() { return *m_DebugRenderer; }
 		std::unique_ptr<PointLightSystem> m_PointLightRenderer;
 		std::unique_ptr<DebugRenderer> m_DebugRenderer;
+		
+
 		ObjectPick& getObjectPicker();
+
+		MessageSystem& GetMessageSystem();
 
 		WindowsWin* getWindow() const { return m_pWindow; }
 		Vec4& getViewportScreen() { return m_ViewportScreen; }

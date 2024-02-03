@@ -26,3 +26,16 @@ namespace TDS
 
 
 }
+namespace std
+{
+
+	template <>
+	struct hash<TDS::UniqueUID>
+	{
+		std::size_t operator()(const TDS::UniqueUID& uuid) const
+		{
+			return hash<uint64_t>()((uint64_t)uuid.GetID());
+		}
+	};
+
+}

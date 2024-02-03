@@ -57,7 +57,7 @@ namespace TDS
 	class FontRenderer
 	{
 	private:
-		inline static std::shared_ptr<FontRenderer> m_Instance = nullptr;
+
 		std::shared_ptr<VulkanPipeline> m_Pipeline = nullptr;
 		std::shared_ptr<FrameBuffer>	m_pFrameBuffer = nullptr;
 		std::array<InstanceFont, MAX_CHARACTERS> m_CharacterInstance;
@@ -67,10 +67,9 @@ namespace TDS
 	public:
 		bool m_UpdateInstance = true;
 	public:
-		DLL_API static std::shared_ptr<FontRenderer> GetInstance();
 		DLL_API void Init();
 		DLL_API void ShutDown();
-		void DLL_API Draw(VkCommandBuffer commandBuffer, int Frame, Vec4 ClearColor = { 0.f, 0.f, 0.f, 1.f });
+		void DLL_API Draw(VkCommandBuffer commandBuffer, int Frame);
 		void DLL_API Update(VkCommandBuffer commandBuffer, int Frame);
 		inline FontBatch& GetBatchList()
 		{

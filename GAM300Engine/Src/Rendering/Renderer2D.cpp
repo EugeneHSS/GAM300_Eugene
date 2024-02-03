@@ -5,6 +5,7 @@
 #include "Rendering/GraphicsManager.h"
 #include "vulkanTools/vulkanInstance.h"
 #include "AssetManagement/AssetManager.h"
+#include "Rendering/Revamped/DeferredController.h"
 #include "vulkanTools/Renderer.h"
 #include "windowswindow.h"
 namespace TDS
@@ -136,6 +137,10 @@ namespace TDS
 		entry.m_ShaderInputs.m_InputBuffers[10] = Buffer;
 		entry.m_ShaderInputs.m_InputVertex.push_back(VertexBufferInfo(false, layout, sizeof(Renderer2DVertex)));
 
+		auto deferredController = GraphicsManager::getInstance().GetDeferredController();
+
+		auto frameBuffer = deferredController->GetFrameBuffer(RENDER_COMPOSITION);
+		entry.m_FBTarget = frameBuffer;
 		m_Pipeline->Create(entry);
 
 
@@ -144,6 +149,7 @@ namespace TDS
 
 	void Renderer2D::Draw(VkCommandBuffer commandBuffer, int Frame)
 	{
+		m_Pipeline->BindPipeline();
 		if (m_BatchList.m_InstanceCnt > 0)
 		{
 			/*for (std::uint32_t i = 0; i < 12; ++i)
@@ -194,7 +200,7 @@ namespace TDS
 		//		m_AssetModel.m_ResourcePtr->CreateBuffers();
 		//}
 		m_Pipeline->SetCommandBuffer(commandBuffer);
-		m_Pipeline->BindPipeline();
+		
 		m_SceneUBO.ViewingFrom2D = 1;
 
 		if (m_SceneUBO.ViewingFrom2D == false)
@@ -244,15 +250,10 @@ namespace TDS
 		delete m_FrameBuffer.m_RenderingDepthAttachment;
 		delete m_FrameBuffer.m_Renderpass;
 	}
-	std::shared_ptr<Renderer2D> Renderer2D::GetInstance()
-	{
-		if (m_Instance == nullptr)
-			m_Instance = std::make_shared<Renderer2D>();
-		return m_Instance;
-	}
 
 	void SpriteBatch::AddToBatch(void* component, Transform* transform, std::uint32_t entity)
 	{
+		auto Renderer2D = GraphicsManager::getInstance().GetRenderer2D();
 		UISprite* componentSprite = reinterpret_cast<UISprite*>(component);
 
 		m_InstanceInfo[m_InstanceCnt].m_LayerID = componentSprite->m_LayerID > 12 ? 12 : (std::uint32_t)componentSprite->m_LayerID;
@@ -272,7 +273,7 @@ namespace TDS
 
 		if (componentSprite->m_IsDirty)
 		{
-			Renderer2D::GetInstance()->GetRenderedSprite().m_Update = true;
+			Renderer2D->GetRenderedSprite().m_Update = true;
 			componentSprite->m_IsDirty = false;
 		}
 

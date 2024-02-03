@@ -18,21 +18,24 @@ namespace TDS
 			Transform* parentComp = ecs.getComponent<Transform>(event->id);
 			std::shared_ptr<ChildTransformationEvent> currentEvent = static_pointer_cast<ChildTransformationEvent>(event);
 			
-
+			
 			for (auto childID : nameTagComponent->GetHierarchyChildren())
 			{
-				changeChildTransformation(childID, currentEvent->positionChange, currentEvent->scaleChange, currentEvent->rotationChange);
+				changeChildTransformation(childID, event->id, currentEvent->positionChange, currentEvent->scaleChange, currentEvent->rotationChange);
 			}
 			
 
 		}
 		eventManager.clearQueue(EventTypes::CHILD_TRANSFORMATION);
 	}
-	void EventHandler::changeChildTransformation(EntityID childEntity,  Vec3& positionChange,  Vec3& scaleChange,  Vec3& rotationChange)
+	void EventHandler::changeChildTransformation(EntityID childEntity,  EntityID parent, Vec3& positionChange,  Vec3& scaleChange,  Vec3& rotationChange)
 	{
 		Transform* childTransform = GetTransform(childEntity);
+		Transform* parentTransform = GetTransform(parent);
 
-		Vec3 newPosition = childTransform->GetPosition();
+		childTransform->SetParentPosition(parentTransform->GetPosition());
+	
+;		Vec3 newPosition = childTransform->GetPosition();
 		Vec3 newScale = childTransform->GetScale();
 		Vec3 newRotation = childTransform->GetRotation();
 
@@ -44,11 +47,15 @@ namespace TDS
 		childTransform->SetScale(newScale);
 		childTransform->SetRotation(newRotation);
 
+		childTransform->GenerateTransform();
+		childTransform->GenerateFakeTransform();
+
+
 		NameTag* childNameTag = GetNameTag(childEntity);
 
 		for (auto childID : childNameTag->GetHierarchyChildren())
 		{
-			changeChildTransformation(childID, positionChange, scaleChange, rotationChange);
+			changeChildTransformation(childID, parent, positionChange, scaleChange, rotationChange);
 		}
 	}
 	void EventHandler::TransformChildSubMesh(EntityID childEntity, EntityID parentEntity, Vec3& positionChange, Vec3& scaleChange, Vec3& rotationChange, Mat4& parentTransform)

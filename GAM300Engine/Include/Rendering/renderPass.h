@@ -20,6 +20,8 @@ namespace TDS {
 		VkAttachmentStoreOp stencilStoreOP;
 		AttachmentClearColor clear = AttachmentClearColor{};
 	};
+
+
 	class RenderPass
 	{
 	public:

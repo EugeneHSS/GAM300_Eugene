@@ -6,16 +6,7 @@ namespace TDS
 	class AssetModel;
 	class Texture;
 	class MeshController;
-
-
-
-	typedef enum 
-	{
-		MAIN_ROOT,
-		CHILD_ROOT,
-		CHILD,
-		NOT_CHILD_MESH
-	}MESH_NODE_TYPE;
+	class Modelpack;
 
 	class GraphicsComponent : public IComponent
 	{
@@ -62,10 +53,12 @@ namespace TDS
 		TypeReference<AssetModel> 		m_AssetReference;
 		TypeReference<Texture>			m_TextureReference;
 		TypeReference<MeshController>	m_MeshControllerRef;
+		TypeReference<Modelpack>		m_ModelPack;
 		std::string						m_ModelName = "";
 		std::string						m_MeshName = "";
 		std::string						m_MeshNodeName = "";
 		std::string						m_TextureName = "";
+		std::uint64_t					m_modelUID; //For duplicates;
 		bool							m_UsedIn2D{ false };
 		
 

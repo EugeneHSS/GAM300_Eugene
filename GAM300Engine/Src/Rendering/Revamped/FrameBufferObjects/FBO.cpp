@@ -11,12 +11,7 @@ namespace TDS
 	{
 		m_VKRenderPass->endRenderPass(commandBuffer);
 	}
-	bool FrameBufferObject::Resize(std::uint32_t width, std::uint32_t height)
-	{
-		if (RecreateFunc != nullptr)
-			return RecreateFunc(width, height);
 
-	}
 	void FrameBufferObject::SetClearColour(const Vec4& color)
 	{
 		if (m_VKRenderPass)

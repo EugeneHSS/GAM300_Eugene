@@ -14,13 +14,20 @@
 #include "FontFactory.h"
 #include "Revamped/MeshFactory.h"
 #include "dotnet/ImportExport.h"
-
+#include "Identifier/UniqueID.h"
 
 namespace TDS
 {
 
+
+
 	class AssetManager
 	{
+	private:
+		inline static std::shared_ptr<AssetManager> m_Instance = nullptr;
+		AssetFactory<Texture>						m_TextureFactory;
+		AssetFactory<FontAtlas>						m_FontFactory;
+		AssetFactory<MeshController>				m_MeshFactory;
 	public:
 		DLL_API AssetManager();
 		DLL_API ~AssetManager();
@@ -34,11 +41,6 @@ namespace TDS
 		static DLL_API std::shared_ptr<AssetManager> GetInstance();
 
 
-	private:
-		inline static std::shared_ptr<AssetManager> m_Instance = nullptr;
-		AssetFactory<Texture>						m_TextureFactory;
-		AssetFactory<FontAtlas>						m_FontFactory;
-		AssetFactory<MeshController>				m_MeshFactory;
 
 	};
 }
