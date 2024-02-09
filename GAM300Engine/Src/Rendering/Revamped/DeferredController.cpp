@@ -282,7 +282,20 @@ namespace TDS
 			{
 				m_GBufferBatch3D.m_BatchBuffers[updates.m_MeshID].m_EntityID = updates.m_EntityID;
 				m_GBufferBatch3D.m_BatchBuffers[updates.m_MeshID].m_IsRender = updates.m_ShowMesh;
-				m_GBufferBatch3D.m_BatchBuffers[updates.m_MeshID].m_modelMatrix = updates.m_pTransform->GetFakeTransform();
+				Mat4 temp{};
+				if (updates.m_pTransform->GetPosition() == updates.m_pTransform->GetFakePosition() &&
+					updates.m_pTransform->GetScale() == updates.m_pTransform->GetFakeScale()
+					&& updates.m_pTransform->GetRotation() == updates.m_pTransform->GetFakeRotation())
+				{
+					temp = updates.m_pTransform->GetTransformMatrix();
+				}
+				else
+				{
+
+					temp = updates.m_pTransform->GetFakeTransform();
+				}
+
+				m_GBufferBatch3D.m_BatchBuffers[updates.m_MeshID].m_modelMatrix = temp;
 				m_GBufferBatch3D.m_BatchBuffers[updates.m_MeshID].m_TextureID = updates.m_TextureID;
 			}
 			meshItr.second.m_MeshUpdates.clear();

@@ -42,7 +42,7 @@ namespace TDS
 		MeshBuffer											m_MeshBuffer;
 		std::uint32_t										m_MeshCnt = 0;
 		std::map<std::string, SceneNode>					m_RootNodes;
-		std::unordered_map<std::string, std::uint32_t>		m_MeshIDMap;
+		std::map<std::string, std::uint32_t>		m_MeshIDMap;
 
 	public:
 		std::set<std::uint32_t>								m_EntityList;

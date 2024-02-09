@@ -45,10 +45,6 @@ namespace TDS
 
 			CurrController.m_ModelPack = new Modelpack();
 
-			if (fileName == "bedside_lamp_Bin.bin")
-			{
-				std::cout << std::endl;
-			}
 
 			CurrController.m_ModelPack->LoadModelPack(path);
 
@@ -59,13 +55,14 @@ namespace TDS
 			}
 			else
 			{
-				m_TotalBatchMeshes += CurrController.m_ModelPack->m_TotalMeshCnt;
-
+			
 				std::uint32_t currOffset = m_TotalBatchMeshes;
 
 				CurrController.SetMeshOffset(currOffset);
 
 				CurrController.LoadBatchData();
+
+				m_TotalBatchMeshes += CurrController.m_ModelPack->m_TotalMeshCnt;
 			}
 			CurrController.BuildMeshTree();
 
@@ -100,13 +97,14 @@ namespace TDS
 			}
 			else
 			{
-				m_TotalBatchMeshes += CurrController.m_ModelPack->m_TotalMeshCnt;
-
+			
 				std::uint32_t currOffset = m_TotalBatchMeshes;
 
 				CurrController.SetMeshOffset(currOffset);
 
 				CurrController.LoadBatchData();
+
+				m_TotalBatchMeshes += CurrController.m_ModelPack->m_TotalMeshCnt;
 			}
 			CurrController.BuildMeshTree();
 
@@ -148,15 +146,18 @@ namespace TDS
 					}
 					else
 					{
-
-						m_TotalBatchMeshes += CurrController.m_ModelPack->m_TotalMeshCnt;
-
 						std::uint32_t currOffset = m_TotalBatchMeshes;
+
 						CurrController.SetMeshOffset(currOffset);
 
 						CurrController.LoadBatchData();
 
 						CurrController.BuildMeshTree();
+
+						m_TotalBatchMeshes += CurrController.m_ModelPack->m_TotalMeshCnt;
+
+						
+
 					}
 					CurrController.m_ModelPack->m_ModelName = fileName;
 				}
