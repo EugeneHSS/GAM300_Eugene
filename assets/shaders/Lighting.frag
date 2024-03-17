@@ -97,7 +97,10 @@ void main()
     for (int i=0;i< activepointlights; ++i)
     {
         PointLight currentlight = PL_Buffer.pointLights[i];
+
+        //lightdir
         vec3 directiontolight = currentlight.Position.xyz - fragPosWorld.xyz;
+
         float distance = length(directiontolight);
         directiontolight = normalize(directiontolight);
         
@@ -110,7 +113,13 @@ void main()
         float diff = max(dot(SurfaceNormal, directiontolight),0.0);
         vec3 diffuse = (currentlight.Color.xyz * currentlight.Color.w) * (diff * attenuation);
         
-        result += diffuse;
+         // Blinn-Phong specular reflection
+        //vec3 viewDir = -normalize(camera.cameraPos.xyz - fragPosWorld.xyz); //-normalize(directiontolight); 
+        //vec3 halfwayDir = normalize(directiontolight + viewDir);
+        //float spec = pow(max(dot(SurfaceNormal, halfwayDir), 0.0), 10.0);
+        // vec3 specular = currentlight.Color.xyz  * spec * attenuation;
+
+        result += diffuse; //+ specular;
     }
     
     //sum of Directional light lighting
@@ -174,7 +183,15 @@ void main()
         // float epsilon = currentlight.outerCutoff - currentlight.cutoff;
         // float intensity = smoothstep(epsilon, currentlight.outerCutoff, theta);
         float intensity = smoothstep(cos(currentlight.angle), 1.0, theta);
-        result += diffuse * intensity;
+
+         // Blinn-Phong specular reflection
+        //vec3 viewDir = normalize(currentlight.direction.xyz);
+        //vec3 halfwayDir = normalize(LightDirection + viewDir);
+        //float spec = pow(max(dot(fragNormalWorld.xyz, halfwayDir), 0.0), 30.0); // Adjust the shininess value as needed
+        //vec3 specular = currentlight.Color.xyz * currentlight.Color.w * spec * attenuation;
+
+
+        result += diffuse * intensity; //+ specular * intensity;
     }
 
     outColor = albedo * vec4((ambientlight + result), 1.0);
