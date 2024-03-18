@@ -34,7 +34,7 @@ namespace TDS {
 		EmitterComputeEntry.m_ShaderInputs.m_Shaders.insert(std::make_pair(SHADER_FLAG::COMPUTE_SHADER, "../assets/shaders/ParticleEmitter.spv"));
 
 		GlobalBufferPool::GetInstance()->AddToGlobalPool(MAX_PARTICLES * sizeof(Particle), 31, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, "v_ParticleOut");
-		GlobalBufferPool::GetInstance()->AddToGlobalPool((MAX_PARTICLES+1) * sizeof(int), 32, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, "FreeList");
+		GlobalBufferPool::GetInstance()->AddToGlobalPool((MAX_PARTICLES + 1) * sizeof(int), 32, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, "FreeList");
 
 		m_EmitterPipeline->Create(EmitterComputeEntry);
 
@@ -70,7 +70,7 @@ namespace TDS {
 		/*VertexLayout layout = VertexLayout({
 			VertexBufferElement(VAR_TYPE::VEC2, "in_Position")
 			});*/
-		//ParticleRenderEntry.m_ShaderInputs.m_InputVertex.push_back(VertexBufferInfo(false, layout, sizeof(Vec2)));
+			//ParticleRenderEntry.m_ShaderInputs.m_InputVertex.push_back(VertexBufferInfo(false, layout, sizeof(Vec2)));
 
 		MeshRenderBuffers[CUBE].m_MeshReference.m_ResourcePtr = AssetManager::GetInstance()->GetMeshFactory().GetMeshController("cube_Bin.bin", MeshRenderBuffers[CUBE].m_MeshReference);
 
@@ -92,7 +92,7 @@ namespace TDS {
 
 
 		m_RenderPipeline->UpdateUBO(&initList, sizeof(FreeList), 32, 0);
-		
+
 		//creating index buffer for quad
 		std::vector<std::uint32_t> IndexQuad;
 		IndexQuad.push_back(0);
@@ -102,7 +102,7 @@ namespace TDS {
 		IndexQuad.push_back(2);
 		IndexQuad.push_back(3);
 		m_IndexQuad = std::make_shared<VMABuffer>();
-		m_IndexQuad->CreateIndexBuffer(IndexQuad.size() * sizeof(std::uint32_t),false, IndexQuad.data()) ;
+		m_IndexQuad->CreateIndexBuffer(IndexQuad.size() * sizeof(std::uint32_t), false, IndexQuad.data());
 
 	}
 
@@ -126,15 +126,18 @@ namespace TDS {
 
 			//currentEmitter.SetSpawnTimer(currentEmitter.GetSpawnTimer() + deltatime);
 
-			unsigned int SpawnAmt = currentEmitter.GetSpawnTimer() / currentEmitter.GetSpawnInterval();
+			int SpawnAmt = currentEmitter.GetSpawnTimer() / currentEmitter.GetSpawnInterval();
 
 			if (SpawnAmt <= 0)
 				continue;
 			currentEmitter.GetEmitter().Position = Xform[i].GetPosition();
-			Particle_Emitter_PushData GPUPush = {currentEmitter.GetEmitter(), SpawnAmt };
+			Particle_Emitter_PushData GPUPush = { currentEmitter.GetEmitter(),
+												std::min(SpawnAmt, currentEmitter.GetMaxParticles()),
+												currentEmitter.GetSpawnTimer()
+			};
 			m_EmitterPipeline->BindDescriptor(0, 1, 0, true);
 			m_EmitterPipeline->UpdateUBO(&GPUPush, sizeof(Particle_Emitter_PushData), 33, 0);
-			
+
 
 			ParticleInstanceGroup* group = (m_GroupCnt >= m_Group.size()) ? &m_Group.emplace_back() : &m_Group[m_GroupCnt];
 			m_GroupCnt++;
@@ -143,7 +146,7 @@ namespace TDS {
 			group->m_PRenderBuffers = &MeshRenderBuffers[EmitterList[i].GetMeshType()];
 
 
-			m_EmitterPipeline->DispatchCompute(ceil((SpawnAmt+ 64) / 64), 1, 1);
+			m_EmitterPipeline->DispatchCompute(ceil((SpawnAmt + 64) / 64), 1, 1);
 
 		}
 
@@ -156,7 +159,7 @@ namespace TDS {
 			0, 1, &memBarrier, 0, nullptr, 0, nullptr);
 
 		m_ComputePipeline->SetCommandBuffer(commandBuffer);
-		
+
 		float dt = TimeStep::GetDeltaTime();
 		m_ComputePipeline->BindComputePipeline();
 		for (unsigned int i{ 0 }; i < Entities.size(); ++i)
@@ -170,24 +173,24 @@ namespace TDS {
 		//m_ComputePipeline->UpdateUBO(test.data(), sizeof(Particle) * test.size(), 31, currentframe, 0, true);
 	}
 
-	void ParticleSystem::Render() 
+	void ParticleSystem::Render()
 	{
 		uint32_t currentframe = GraphicsManager::getInstance().GetSwapchainRenderer().getFrameIndex();
-		
+
 		//camera stuffy
 		TDSCamera cam = GraphicsManager::getInstance().GetCamera();
 		Mat4 view = cam.GetViewMatrix();
 		Mat4 proj = Mat4::Perspective(cam.m_Fov * Mathf::Deg2Rad,
 			GraphicsManager::getInstance().GetSwapchainRenderer().getAspectRatio(), 0.1f, 1000000.f);
 		proj.m[1][1] *= -1;
-		
+
 		//send data into vertex and fragment shader to render into scene
 		auto commandBuffer = GraphicsManager::getInstance().getCommandBuffer();
 		m_RenderPipeline->SetCommandBuffer(commandBuffer);
 		m_RenderPipeline->BindPipeline();
 		CameraUBO temp = { view, proj };
 		m_RenderPipeline->UpdateUBO(&temp, sizeof(CameraUBO), 5, currentframe);
-		
+
 
 		for (std::uint32_t i = 0; i < m_GroupCnt; ++i)
 		{

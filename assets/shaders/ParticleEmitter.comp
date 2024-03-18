@@ -24,51 +24,6 @@ struct ParticleEmitter{
     float min_Life, max_Life;
 };
 
-float seed(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233)))* 43758.5453);
-}
-
-float brownian(float randomseed){
-    float persistence = clamp(sin(gl_GlobalInvocationID.x *0.1), 0.1, 0.9);
-    float frequency = clamp(cos(gl_GlobalInvocationID.x * 0.1), 0.5,2.0);
-    int octaves = int (mod(gl_GlobalInvocationID.x, 10.0)+ 1.0);
-    float time = dot(gl_GlobalInvocationID.xy,gl_GlobalInvocationID.xy);
-
-    float total = 0.0;
-    float amp = 1.0;
-    float maxamp = 0.0;
-
-    for (int i = 0; i < octaves; i++){
-        total += seed(vec2(gl_GlobalInvocationID.xy+ time)* randomseed) * amp;
-        maxamp += amp;
-        amp *= persistence;
-        time *= frequency;
-    }
-    return total / maxamp;
-    
-}
-
-float rand(float Min, float Max, float randomseed){
-    // float range = abs(Max - Min);
-    // float shifted_min = Min - min(Max,Min);
-    // float shifted_max = Max - min(Max,Min);
-    // float mixed = mix(shifted_min, shifted_max, brownian());
-    // float randomsign =step(0.5, brownian())*2.0-1.0;
-    // return mixed * randomsign + min(Max,Min); 
-    return mix(Min, Max, brownian(randomseed));
-}
-
-vec3 randvec3(vec3 Min, vec3 Max){
-    vec3 randomvec3 = vec3(
-        rand(Min.x,Max.x,0.005),
-        rand(Min.y,Max.y,1.000),
-        rand(Min.z,Max.z,2.000)
-    );  
-    
-    return mix(Min, Max, randomvec3);
-    //return vec3(rand(min.x,max.x),rand(min.y,max.y),rand(min.z,max.z));
-}
-
 //writing the position of the particle out into a list to vertex buffer
 layout (std140, binding = 31) buffer ParticleBuffer {
     Particle List[];
@@ -84,7 +39,47 @@ layout (std140, binding = 33 ) buffer EmitterThingy
 {
     ParticleEmitter Emitter;
     int particleamount;
+    float EmitterLifeTime;
 }EmitterStuff;
+
+float seed(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233)))* 43758.5453);
+}
+
+float brownian(float randomseed){
+    float persistence = clamp(sin(gl_GlobalInvocationID.x *0.1), 0.1, 0.9);
+    float frequency = clamp(cos(gl_GlobalInvocationID.x * 0.1), 0.5,2.0);
+    int octaves = int (mod(gl_GlobalInvocationID.x, 10.0)+ 1.0);
+    float time = EmitterStuff.EmitterLifeTime* EmitterStuff.EmitterLifeTime;
+
+    float total = 0.0;
+    float amp = 1.0;
+    float maxamp = 0.0;
+
+    for (int i = 0; i < octaves; i++){
+        total += seed(vec2(gl_GlobalInvocationID.xy + time)* randomseed) * amp;
+        maxamp += amp;
+        amp *= persistence;
+        time *= frequency;
+    }
+    return total / maxamp;
+    
+}
+
+float rand(float Min, float Max, float randomseed){
+    return mix(Min, Max, fract(brownian(randomseed)));
+}
+
+vec3 randvec3(vec3 Min, vec3 Max){
+    float time = EmitterStuff.EmitterLifeTime;
+    vec3 randomvec3 = vec3(
+        rand(Min.x,Max.x,0.555 + sin(time)),
+        rand(Min.y,Max.y,0.222 + sin(time)),
+        rand(Min.z,Max.z,0.333 + cos(time))
+    );  
+    
+    return mix(Min, Max, randomvec3);
+}
 
 void MakeParticle(out Particle newparticle){
     //constant spawn point from emitter location

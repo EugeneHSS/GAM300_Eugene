@@ -25,6 +25,7 @@ namespace TDS {
 		{
 			InputRenderBuffers*			m_PRenderBuffers;
 			std::uint32_t				m_ParticleAmount;
+			float						m_EmitterLifetime;
 		};
 
 		struct CameraUBO 
