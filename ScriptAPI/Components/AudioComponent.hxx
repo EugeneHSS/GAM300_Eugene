@@ -54,11 +54,13 @@ namespace ScriptAPI
 
 		//Pass in the audio file name without the extensions
 		void play(System::String^ pathing);
+		void playAllPaused();
 
 		//play the queue of sound sequentially
 		void playQueue();
 		void clearQueue();
 		void pause(System::String^ pathing);
+		void pauseAll();
 		void stop(System::String^ pathing);
 		void stopAll();
 

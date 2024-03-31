@@ -62,7 +62,10 @@ namespace TDS
 		m_Color(toMove.m_Color),
 		m_PointLightID(toMove.m_PointLightID),
 		m_Pointlight(toMove.m_Pointlight),
-		m_Debug(toMove.m_Debug)
+		m_Debug(toMove.m_Debug),
+		m_IsAnimated(toMove.m_IsAnimated), 
+		m_UseMaterials(toMove.m_UseMaterials),
+		m_UsePreloadMaterials(toMove.m_UsePreloadMaterials)
 
 
 	{ }

@@ -90,6 +90,13 @@ void MakeParticle(out Particle newparticle){
     newparticle.Size =          vec4(randvec3(EmitterStuff.Emitter.min_Size.xyz, EmitterStuff.Emitter.max_Size.xyz), 0.0);
     newparticle.CurrentPosition = EmitterStuff.Emitter.Position + vec4(randvec3(EmitterStuff.Emitter.min_Spawnoffset.xyz, EmitterStuff.Emitter.max_Spawnoffset.xyz), 0.0);
 
+    vec3 centerdirection = normalize(EmitterStuff.Emitter.Position.xyz - newparticle.CurrentPosition.xyz);
+    
+    float accelerationMagnitude = length(newparticle.Acceleration.xyz);
+    newparticle.Acceleration.x = centerdirection.x* accelerationMagnitude;
+    newparticle.Acceleration.z = centerdirection.z* accelerationMagnitude;
+    newparticle.Acceleration.y = EmitterStuff.Emitter.min_Acceleration.y;
+
     newparticle.Rotation = vec4(0.0,0.0,0.0,0.0);
     newparticle.Color = EmitterStuff.Emitter.Color;
     newparticle.Active = 1;

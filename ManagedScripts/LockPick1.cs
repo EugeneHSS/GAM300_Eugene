@@ -129,15 +129,15 @@ public class LockPick1 : Script
         playerGuideVO[6] = "";
 
         Subtitles = new String[9];
-        Subtitles[0] = "Martin (Internal): Hopefully, I won\'t forget how to do this.";
-        Subtitles[1] = "Martin (Internal): Alright, looks like I\'m in.";
-        Subtitles[2] = "Martin (Internal): No turning back now.";
-        Subtitles[3] = "Martin (Internal): That was too loud... I better not screw up again.";
+        Subtitles[0] = "Hopefully, I won\'t forget how to do this.";
+        Subtitles[1] = "Alright, looks like I\'m in.";
+        Subtitles[2] = "No turning back now.";
+        Subtitles[3] = "That was too loud... I better not screw up again.";
         Subtitles[4] = "";
         Subtitles[5] = "Move [mouse] to adjust pick & Hold [E] to turn lock";
         Subtitles[6] = "Move [mouse] to adjust pick & Hold [E] to turn lock";
-        Subtitles[7] = "Martin (Internal): Find the right spot, and it should click...";
-        Subtitles[8] = "Martin (Internal): There, now to turn the lock.";
+        Subtitles[7] = "Find the right spot, and it should click...";
+        Subtitles[8] = "There, now to turn the lock.";
 
         counter = 0;
         savedNumOfTries = 0;

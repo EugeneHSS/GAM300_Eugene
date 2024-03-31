@@ -49,6 +49,7 @@ public class Door_Script : Script
 
     // basement door
     public bool basementDoor;
+    static public bool basementcheck = false;
     readonly string monsterChase = "monster chase music";
     AudioComponent audio;
     float toRadians(float degree)
@@ -96,7 +97,13 @@ public class Door_Script : Script
                             Vector3 rotation = playerGameObject.transform.GetRotation();
                             Quaternion quat = new Quaternion(rotation);
                             Vector3 rotationToVector = new Vector3(-Mathf.Sin(toRadians(rotation.Y)), 0.0f, Mathf.Cos(toRadians(rotation.Y))) * 200;
-                            playerGameObject.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(playerGameObject.transform.GetPosition() + rotationToVector, new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(1, 1, 1).Normalize(), new Vector3(1, 1, 1).Normalize());
+                            //playerGameObject.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(playerGameObject.transform.GetPosition() + rotationToVector, new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(1, 1, 1).Normalize(), new Vector3(1, 1, 1).Normalize());
+
+                            if (playerGameObject.GetComponent<TransformComponent>().GetPosition().Y != 90)
+                            {
+                                playerGameObject.GetComponent<TransformComponent>().SetPositionY(90);
+                            }
+                            playerGameObject.GetComponent<RigidBodyComponent>().SetPosition(playerGameObject.transform.GetPosition() + rotationToVector);
                         }
                         else if (fadeValue <= 0.0f && fadeIn == false && basementDoor == true)
                         {

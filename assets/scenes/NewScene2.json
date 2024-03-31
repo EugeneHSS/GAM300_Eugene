@@ -3,12 +3,12 @@
         "1100001000000010000": {
             "0": 136,
             "1": 384,
-            "6": 360,
+            "6": 1000,
             "14": 208
         }
     },
     "Entity Data": {
-        "8": {
+        "9": {
             "ArchetypeID": "1100001000000010000",
             "Enabled": true,
             "Name Tag": {
@@ -21,9 +21,9 @@
             },
             "Transform": {
                 "Position": {
-                    "x": -2.745741367340088,
-                    "y": -46.85905075073242,
-                    "z": -48.737701416015625
+                    "x": 7.315422058105469,
+                    "y": -3.0233654975891113,
+                    "z": 0.7469593286514282
                 },
                 "Scale": {
                     "x": 1.0,
@@ -36,9 +36,9 @@
                     "z": 0.0
                 },
                 "FakePosition": {
-                    "x": 84.12631225585938,
-                    "y": -280.69610595703125,
-                    "z": 327.19830322265625
+                    "x": 7.315422058105469,
+                    "y": -3.0233654975891113,
+                    "z": 0.7469593286514282
                 },
                 "FakeRotation": {
                     "x": 0.0,
@@ -51,9 +51,9 @@
                     "z": 1.0
                 },
                 "OldPosition": {
-                    "x": -2.745741367340088,
-                    "y": -46.85905075073242,
-                    "z": -48.737701416015625
+                    "x": 7.315422058105469,
+                    "y": -3.0233654975891113,
+                    "z": 0.7469593286514282
                 },
                 "OldScale": {
                     "x": 0.0,
@@ -66,9 +66,9 @@
                     "z": 1.0
                 },
                 "OldFakePosition": {
-                    "x": 84.12631225585938,
-                    "y": -280.69610595703125,
-                    "z": 327.19830322265625
+                    "x": 7.315422058105469,
+                    "y": -3.0233654975891113,
+                    "z": 0.7469593286514282
                 },
                 "OldFakeScale": {
                     "x": 1.0,
@@ -101,11 +101,64 @@
                     "w": 1.0
                 },
                 "Used In 2D": false,
-                "Model UID": 0
+                "Model UID": 0,
+                "m_UsePreloadAlbedo": false,
+                "use materials": false,
+                "MaterialAttributes": {
+                    "shading": "SHADING_NONE",
+                    "PBRAttributes": {
+                        "NormalTex": "",
+                        "RoughnessTex": "",
+                        "MetallicTex": "",
+                        "EmissiveTex": "",
+                        "AOTex": "",
+                        "Metalness": 0.0,
+                        "Roughness": 0.0,
+                        "Emissive": 0.0
+                    },
+                    "MaterialName": "",
+                    "phongBlinn": {
+                        "DiffuseTex": "",
+                        "SpecularTex": "",
+                        "AmbientTex": "",
+                        "EmissiveTex": "",
+                        "ShininessTex": "",
+                        "DiffuseColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "SpecularColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "EmissiveColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "AmbientColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Shininess": 0.0,
+                        "ShininessStrength": 0.0
+                    },
+                    "AlbedoTex": "",
+                    "Reflectivity": 0.0,
+                    "Reflectance": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "ReflectanceTexture": ""
+                }
             },
             "Particle Component": {
                 "MinLife": 0.10000000149011612,
-                "MaxLife": 1.0,
+                "MaxLife": 0.75,
                 "Min Spawn Offset": {
                     "x": -50.0,
                     "y": 0.0,
@@ -114,19 +167,19 @@
                 },
                 "Max Spawn Offset": {
                     "x": 50.0,
-                    "y": 5.0,
+                    "y": 0.0,
                     "z": 50.0,
                     "w": 0.0
                 },
                 "Min Velocity": {
                     "x": 0.0,
-                    "y": 4.0,
+                    "y": 10.0,
                     "z": 0.0,
                     "w": 0.0
                 },
                 "Max Velocity": {
                     "x": 0.0,
-                    "y": 12.0,
+                    "y": 150.0,
                     "z": 0.0,
                     "w": 0.0
                 },
@@ -155,22 +208,21 @@
                     "w": 0.0
                 },
                 "Color": {
-                    "x": 1.0,
-                    "y": 0.16666662693023682,
-                    "z": 0.0,
+                    "x": 0.0,
+                    "y": 1.0,
+                    "z": 1.0,
                     "w": 1.0
                 },
                 "ParticleMesh": "CUBE",
                 "SpawnInterval": 0.10000000149011612,
-                "SpawnTimer": 1211.8438720703125,
-                "MaxParticles": 100000
+                "MaxParticles": 5000
             }
         }
     },
     "Scripts": {
-        "8": {}
+        "9": {}
     },
     "Active Archetype": {
-        "8": "1100001000000010000"
+        "9": "1100001000000010000"
     }
 }

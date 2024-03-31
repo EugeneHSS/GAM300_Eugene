@@ -63,6 +63,7 @@ public class p06 : Script
         if (gameObject.GetComponent<RigidBodyComponent>().IsRayHit()&& !DropPainting)
         {
             Console.WriteLine("Painting");
+            if (!isPaintingCollected)
             InteractUI.isShow = true;
 
             if (Input.GetKeyDown(Keycode.E) && !isPaintingCollected)
@@ -80,6 +81,7 @@ public class p06 : Script
 
                 // Trigger Painting Event
                 GameplaySubtitles.counter = 27; //somethings diff..
+                InteractUI.isShow = false;
                 AudioPlayer.play("pc_somethingdiff");
 
                 gameObject.GetComponent<ColliderComponent>().SetEnabled(false);

@@ -24,7 +24,7 @@
 #include "vulkanTools/VulkanTexture.h"
 #include "Rendering/renderPass.h"
 #include "vulkanTools/FrameBuffer.h"
-
+#include "Rendering/Revamped/MaterialManager.h"
 
 #include "Physics/PhysicsSystem.h"
 #include "Rendering/ObjectPicking.h"
@@ -187,6 +187,7 @@ namespace TDS
     {
         GraphicsManager::getInstance().Init(&m_window);
         AssetManager::GetInstance()->PreloadAssets();
+        GraphicsManager::getInstance().GetMaterialManager().PreloadMaterialInfos();
         /*skyboxrender.Init();*/
         GraphicsManager::getInstance().GetDebugRenderer().Init();
         GraphicsManager::getInstance().InitSkyBox();

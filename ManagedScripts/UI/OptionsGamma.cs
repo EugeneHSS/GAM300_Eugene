@@ -47,7 +47,7 @@ public class OptionsGamma : Script
             buttonSfx.play(buttonSfxName);
         }
         gammaValue = Math.Clamp(gammaValue, 0.0f, 1.0f);
-        gammaText.GetComponent<UISpriteComponent>().SetFontMessage((Math.Round(gammaValue, 2)).ToString());
+        gammaText.GetComponent<UISpriteComponent>().SetFontMessage((Math.Round(gammaValue, 2)).ToString("F2"));
 
     }
 

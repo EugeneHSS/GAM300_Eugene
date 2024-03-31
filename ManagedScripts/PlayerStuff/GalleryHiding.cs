@@ -80,7 +80,7 @@ public class GalleryHiding : Script
         
         if (gameObject.GetComponent<RigidBodyComponent>().IsRayHit())
         {
-            _InteractUI.SetActive(true);
+            //_InteractUI.SetActive(true);
 
             if (Input.GetKeyDown(Keycode.E) && hiding == false)
             {
@@ -94,7 +94,7 @@ public class GalleryHiding : Script
         }
         else if (hiding)
         {
-            _InteractUI.SetActive(false);
+            //_InteractUI.SetActive(false);
 
             if (Input.GetKey(Keycode.E))
             {
@@ -121,7 +121,7 @@ public class GalleryHiding : Script
         }
         else
         {
-            _InteractUI.SetActive(false);
+            //_InteractUI.SetActive(false);
         }
     }
 

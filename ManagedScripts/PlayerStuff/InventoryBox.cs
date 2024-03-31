@@ -18,13 +18,19 @@ public class InventoryBox : Script
     public int BoxNumber;
     public string storedObjName;
     public string storedObjTexture;
-    
+
+    GameObject notesTitle;
+    GameObject itemsTitle;
+    GameObject objectivesTitle;
 
     //public Sprite emptyBox;
 
     public override void Awake()
     {
         //GetComponent<Button>().onClick.AddListener(AssignViewObjectString);
+        itemsTitle = GameObjectScriptFind("ItemsTitle");
+        notesTitle = GameObjectScriptFind("NotesTitle");
+        objectivesTitle = GameObjectScriptFind("ObjectivesTitle");
     }
 
     public override void Start()
@@ -51,18 +57,27 @@ public class InventoryBox : Script
             gameObject.GetComponent<UISpriteComponent>().SetTextureName(InventoryScript.itemsObjsImg[BoxNumber]);
             storedObjName = InventoryScript.itemObjsInInventory[BoxNumber];
             storedObjTexture = InventoryScript.itemsObjsImg[BoxNumber];
+            itemsTitle.SetActive(true);
+            notesTitle.SetActive(false);
+            objectivesTitle.SetActive(false);
         }
         else if (InventoryScript.currentTab == "Paintings")
         {
             gameObject.GetComponent<UISpriteComponent>().SetTextureName(InventoryScript.paintingsObjsImg[BoxNumber]);
             storedObjName = InventoryScript.paintingObjsInInventory[BoxNumber];
             storedObjTexture = InventoryScript.paintingsObjsImg[BoxNumber];
+            itemsTitle.SetActive(false);
+            notesTitle.SetActive(false);
+            objectivesTitle.SetActive(true);
         }
         else if (InventoryScript.currentTab == "Notes")
         {
             gameObject.GetComponent<UISpriteComponent>().SetTextureName(InventoryScript.notesObjsImg[BoxNumber]);
             storedObjName = InventoryScript.noteObjsInInventory[BoxNumber];
             storedObjTexture = InventoryScript.notesObjsImg[BoxNumber];
+            itemsTitle.SetActive(false);
+            notesTitle.SetActive(true);
+            objectivesTitle.SetActive(false);
         }
     }
 

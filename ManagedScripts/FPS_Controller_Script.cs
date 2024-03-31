@@ -7,6 +7,7 @@ public class FPS_Controller_Script : Script
 {
     public RigidBodyComponent rb;
     public string[] footStepSoundEffects;
+    string[] crouchstepSound;
     public static String[] backgroundMusic;
     private int currentFootStepPlaying;
     float audioTimer;
@@ -150,6 +151,14 @@ public class FPS_Controller_Script : Script
         footStepSoundEffects[7] = "pc_woodstep7";
         footStepSoundEffects[8] = "pc_woodstep8";
         footStepSoundEffects[9] = "creak3";
+        crouchstepSound = new string[7];
+        crouchstepSound[0] = "pc_crouchstep1";
+        crouchstepSound[1] = "pc_crouchstep2";
+        crouchstepSound[2] = "pc_crouchstep3";
+        crouchstepSound[3] = "pc_crouchstep4";
+        crouchstepSound[4] = "pc_crouchstep5";
+        crouchstepSound[5] = "pc_crouchstep6";
+        crouchstepSound[6] = "pc_crouchstep7";
         currentFootStepPlaying = 0;
         audioTimer = 1.0f;
 
@@ -588,7 +597,7 @@ public class FPS_Controller_Script : Script
         //transform.SetPositionY(0);
         Quaternion quat = new Quaternion(transform.GetRotation());
         gameObject.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(
-            new Vector3(transform.GetPosition().X, 0, transform.GetPosition().Z),
+            new Vector3(transform.GetPosition().X, transform.GetPosition().Y - heightToCrouchTo, transform.GetPosition().Z),
             new Vector4 (quat.X, quat.Y, quat.Z, quat.W), new Vector3(0, 0, 0), new Vector3(0, 0, 0));
 
         if (speedReduction != 0 && walkSpeed == savedWalkSpeed) walkSpeed *= speedReduction;
@@ -600,7 +609,7 @@ public class FPS_Controller_Script : Script
         //transform.SetPositionY(originalHeight);
         Quaternion quat = new Quaternion(transform.GetRotation());
         gameObject.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(
-            new Vector3(transform.GetPosition().X, originalHeight, transform.GetPosition().Z),
+            new Vector3(transform.GetPosition().X, transform.GetPosition().Y + (originalHeight * crouchHeight), transform.GetPosition().Z),
             new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(0, 0, 0), new Vector3(0, 0, 0));
         if (speedReduction != 0 && walkSpeed < savedWalkSpeed) walkSpeed /= speedReduction;
     }
@@ -642,20 +651,20 @@ public class FPS_Controller_Script : Script
     {
         audio = gameObject.GetComponent<AudioComponent>();
         
-        if(isWalking && !isCrouched) //no footsteps sfx when crouching
+        if(isWalking) //no footsteps sfx when crouching
         {
             if (audioTimer < 0.0f)
             {
-                if (isSprinting)
+                if (!isCrouched)
                 {
                     currentFootStepPlaying = (currentFootStepPlaying > 10 ? 0 : currentFootStepPlaying + 1);
                     audio.play(footStepSoundEffects[currentFootStepPlaying]);
-                    audioTimer = 0.5f;
+                    audioTimer = 1.0f;
                 }
                 else
                 {
-                    currentFootStepPlaying = (currentFootStepPlaying > 10 ? 0 : currentFootStepPlaying + 1);
-                    audio.play(footStepSoundEffects[currentFootStepPlaying]);
+                    currentFootStepPlaying = (currentFootStepPlaying > 7 ? 0 : currentFootStepPlaying + 1);
+                    audio.play(crouchstepSound[currentFootStepPlaying]);
                     audioTimer = 1.0f;
                 }
             }

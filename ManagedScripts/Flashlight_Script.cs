@@ -24,6 +24,7 @@ public class Flashlight_Script : Script
     public float followSpeed;
     public static float batteryLife = 100.0f; //start battery at 74% for the flickering light at corridor
     public float batteryTick = 15.0f;
+    public GameObject batteryHUD;
 
 
     private float tick = 0.0f;
@@ -80,6 +81,7 @@ public class Flashlight_Script : Script
         if (activateLight)
         {
             lightSourceObj.SetActive(true);
+            batteryHUD.SetActive(true);
             BatteryLife();
             if (flicker)
             {
@@ -89,6 +91,7 @@ public class Flashlight_Script : Script
         else
         {
             lightSourceObj.SetActive(false);
+            batteryHUD.SetActive(false);
         }
 
     }

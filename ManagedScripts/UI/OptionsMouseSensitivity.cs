@@ -48,6 +48,6 @@ public class OptionsMouseSensitivity : Script
             Input.SetSensitivity(mouseValue);
             buttonSfx.play(buttonSfxName);
         }
-        mouseText.GetComponent<UISpriteComponent>().SetFontMessage((Math.Round(mouseValue, 2)).ToString());
+        mouseText.GetComponent<UISpriteComponent>().SetFontMessage((Math.Round(mouseValue, 2)).ToString("F2"));
     }
 }

@@ -15,6 +15,7 @@ public class AfterGameCredits : Script
 {
     string[] textures;
     float counter;
+    AudioComponent audio;
 
     public override void Awake()
     {
@@ -36,6 +37,9 @@ public class AfterGameCredits : Script
     {
         UISpriteComponent Sprite = gameObject.GetComponent<UISpriteComponent>();
         counter += Time.deltaTime;
+        audio = new AudioComponent();
+        audio = gameObject.GetComponent<AudioComponent>();
+        audio.play("Horror_Menu_Finale_Finale");
 
         //Console.WriteLine(counter.ToString());
 

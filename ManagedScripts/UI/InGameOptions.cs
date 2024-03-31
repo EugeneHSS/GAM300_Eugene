@@ -14,11 +14,7 @@ using System;
 public class InGameOptions : Script
 {
     public GameBlackboard? gameBlackboard;
-
     UISpriteComponent optionsSprite;
-
-    //public GameObject player;
-
     GameObject OptionsObject;
 
     public override void Awake()

@@ -17,11 +17,13 @@ public class ReturnToMainMenuButton : Script
     UISpriteComponent returntoMMButtonSprite;
     private AudioComponent buttonSfx;
     private string buttonSfxName = "";
+    private bool firstHover = true;
+    GameObject arrowObject;
     public override void Awake()
     {
         buttonSfxName = "button_press";
         buttonSfx = gameObject.GetComponent<AudioComponent>();
-
+        arrowObject = GameObjectScriptFind("MainMenuArrow");
     }
 
     public override void Start()
@@ -41,14 +43,23 @@ public class ReturnToMainMenuButton : Script
             returntoMMButtonSprite.SetEnabled(false);
         }
 
-        //if (Input.GetMouseButtonDown(Keycode.M1) && returntoMMButtonSprite.IsMouseCollided() && PopupUI.isDisplayed == true)
+        if (returntoMMButtonSprite.IsMouseCollided() && firstHover && (gameBlackboard.gameState == GameBlackboard.GameState.Paused))
+        {
+            firstHover = false;
+            buttonSfx.play("buttonhover");
+            arrowObject.SetActive(true);
+        }
+
+        if (!returntoMMButtonSprite.IsMouseCollided())
+        {
+            firstHover = true;
+            arrowObject.SetActive(false);
+        }
+
         if (Input.GetMouseButtonDown(Keycode.M1) && returntoMMButtonSprite.IsMouseCollided() && gameBlackboard.gameState == GameBlackboard.GameState.Paused)
         {
-            //Console.WriteLine("Return to MM Button Pressed");
             buttonSfx.play(buttonSfxName);
             AudioComponent audio = gameObject.GetComponent<AudioComponent>();
-            //audio.stopAll();
-            //PopupUI.isDisplayed = false;
             SceneLoader.LoadMainMenu();
         }
     }

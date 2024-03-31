@@ -202,6 +202,11 @@ namespace ScriptAPI
 		TDS::proxy_audio_system::ScriptPlay(toStdString(pathing));
 	}
 
+	void AudioComponent::playAllPaused()
+	{
+		TDS::proxy_audio_system::ScriptPlayAllPaused();
+	}
+
 	void AudioComponent::playQueue()
 	{
 		TDS::proxy_audio_system::Play_queue();
@@ -210,6 +215,11 @@ namespace ScriptAPI
 	void AudioComponent::pause(System::String^ pathing)
 	{
 		TDS::proxy_audio_system::ScriptPause(toStdString(pathing));
+	}
+
+	void AudioComponent::pauseAll()
+	{
+		TDS::proxy_audio_system::ScriptPauseAll();
 	}
 
 	void AudioComponent::stop(System::String^ pathing)

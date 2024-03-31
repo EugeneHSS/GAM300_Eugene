@@ -35,7 +35,7 @@ public class EventBedroomHiding : Script
         voClips[0] = "pc_hideinclosetfirst";
         voClips[1] = "pc_wanderingcloset";
         voClips[2] = "pc_monstergoesaway1"; //wth was that
-        doorState = GameObjectScriptFind("DoorState").GetComponent<DoorState>();
+        doorState = GameObjectScriptFind("DoorStates").GetComponent<DoorState>();
 	}
 
 

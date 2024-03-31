@@ -59,9 +59,9 @@ namespace TDS {
 		//	GlobalBufferPool::GetInstance()->AddToGlobalPool(MAX_PARTICLES * sizeof(Mat4), 34, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, "v_TransformMatrix", nullptr, i);
 		//}
 
-		
 
-		
+
+
 		m_ComputePipeline->Create(ParticleComputeEntry);
 
 
@@ -146,7 +146,7 @@ namespace TDS {
 												std::min(SpawnAmt, currentEmitter.GetMaxParticles()),
 												currentEmitter.GetSpawnTimer()
 			};
-			
+
 			m_EmitterPipeline->UpdateUBO(&GPUPush, sizeof(Particle_Emitter_PushData), 33, currentframe, 0, false, i);
 
 			AddEmitterGroup(&currentEmitter, i, SpawnAmt);
@@ -172,10 +172,17 @@ namespace TDS {
 		m_ComputePipeline->SetCommandBuffer(commandBuffer);
 
 		float dt = TimeStep::GetDeltaTime();
+		struct timeblock {
+			float deltatime;
+			float EmitterRunTime;
+		}TimeBlock;
+		TimeBlock.deltatime = dt;
 		m_ComputePipeline->BindComputePipeline();
 		for (unsigned int i{ 0 }; i < Entities.size(); ++i)
 		{
 			Particle_Component& currentEmitter = EmitterList[i];
+			float EmitterRunTime = currentEmitter.GetSpawnTimer();
+			TimeBlock.EmitterRunTime = EmitterRunTime;
 			m_ComputePipeline->BindDescriptor(0, 1, 0, true, i);
 			m_ComputePipeline->UpdateUBO(&dt, sizeof(float), 35, currentframe, 0, false, i);
 			int numwrkgrp = (currentEmitter.GetMaxParticles() + 128 - 1) / 128;
@@ -200,7 +207,7 @@ namespace TDS {
 		m_RenderPipeline->SetCommandBuffer(commandBuffer);
 		m_RenderPipeline->BindPipeline();
 		CameraUBO temp = { view, proj };
-		
+
 
 
 		for (std::uint32_t i = 0; i < m_GroupCnt; ++i)
@@ -240,10 +247,10 @@ namespace TDS {
 
 
 
-		
+
 			for (int i = 0; i < MAX_PARTICLES; ++i)
 				initList.arr[i] = i;
-			
+
 			m_EmitterPipeline->UpdateUBO(&initList, sizeof(FreeList), 32, 0, 0, false, descIndex);
 			m_EmitterPipeline->UpdateUBO(&initList, sizeof(FreeList), 32, 1, 0, false, descIndex);
 		}

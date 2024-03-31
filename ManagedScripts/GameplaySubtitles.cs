@@ -10,6 +10,7 @@
 ***/
 using ScriptAPI;
 using System;
+using System.Diagnostics;
 
 public class GameplaySubtitles : Script
 {
@@ -23,30 +24,33 @@ public class GameplaySubtitles : Script
     float timer;
     int pressCtrlTwice = 0;
     float subtitleTimer = 2.0f;
+    private float twoSecTimer = 2.0f;
 
     private bool Isfire = true;
 
     public override void Awake()
     {
         Audiofiles = new String[17];
-        Subtitles = new String[48];
+        Subtitles = new String[50];
         GraphicsManagerWrapper.ToggleViewFrom2D(false);
         Subtitles[0] = "Press [F] for flashlight";
-        Subtitles[1] = "Press [WASD] to move";
-        Subtitles[2] = "Press [I] to open/close Inventory";
-        Subtitles[3] = "Press [I] to open/close Inventory";
+        Subtitles[1] = "Move [mouse] to look around";
+        Subtitles[2] = "Press [WASD] to move";
+        Subtitles[3] = "Press [Tab] to open the map";
         Subtitles[4] = "Press [E] to interact with objects"; //do lockpicking
                                                              //note: 
                                                              // these subtitles: "Martin (Internal): Hopefully, I won\’t forget how to do this.";
                                                              //"Move [mouse] to adjust pick", "Press [E] to turn lock"
                                                              //are done in LockPick1.cs already, so this handles overall gameplay subtitles
 
+        //for blank sub, show counter = 5
         Subtitles[5] = "";
         Subtitles[6] = "Alright, looks like I\'m in.";
 
         Subtitles[7] = "No turning back now.";
 
-
+        //the difference between 5 and 8 is that 8 is a blank before a ghost event
+        //so just set to 5 always to clear subtitle, unless u have monster event next
         Subtitles[8] = "";
         Subtitles[9] = "Nothing inside,";
 
@@ -73,9 +77,9 @@ public class GameplaySubtitles : Script
         Subtitles[26] = "The tub is still wet, but there's no one...";
         Subtitles[27] = "Something's different about this one. What's this symbol on the back?";
         Subtitles[28] = "Painting: You shouldn't be here";
-        Subtitles[29] = "Martin: Huh?";
+        Subtitles[29] = "Huh?";
         Subtitles[30] = "Painting: You have our blood, but you're not one of us..";
-        Subtitles[31] = "Painting: And yet you choose to come back... why?";
+        Subtitles[31] = "Painting: And yet you still choose to come back... why?";
         Subtitles[32] = "Painting: LEAVE WHILE YOU STILL CAN!";
         Subtitles[33] = "More paintings.";
         Subtitles[34] = "Please don’t scream...";
@@ -92,6 +96,8 @@ public class GameplaySubtitles : Script
         Subtitles[45] = "That's it. Time to get out of here.";
         Subtitles[46] = "I don't think I can move this silently";
         Subtitles[47] = "That thing will definitely know where I am";
+        Subtitles[48] = "Place looks bigger than I imagined. Better look at the map.";
+        Subtitles[49] = "Press [I] to open/close inventory";
 
         Audiofiles[0] = ""; //wasd no audio
         Audiofiles[1] = ""; //no audio
@@ -124,7 +130,7 @@ public class GameplaySubtitles : Script
 
         UISpriteComponent Sprite = gameObject.GetComponent<UISpriteComponent>();
         AudioComponent audio = gameObject.GetComponent<AudioComponent>();
-
+            
         if (counter == 0)
         {
             if (Input.GetKeyDown(Keycode.F))
@@ -132,20 +138,27 @@ public class GameplaySubtitles : Script
 
         } if (counter == 1)
         {
-            audio.set3DCoords(/*GameObjectScriptFind("(Kitchen) Fridge").*/transform.GetPosition(), "kitchen_ambience");
-            //Console.WriteLine(GameObjectScriptFind("(Kitchen) Fridge").transform.GetPosition().X);
-            //Console.WriteLine(GameObjectScriptFind("(Kitchen) Fridge").transform.GetPosition().Z);
-            audio.play("kitchen_ambience");
+            if (/*GameObjectScriptFind("Main Entrance Door (1)").GetComponent<RigidBodyComponent>().IsRayHit() && */twoSecTimer > 0.0f)
+            {
+                //check if player has turned on flashlight and 2 seconds passed, then go to next subtitle
+                //note: difficult to do if player has looked at door for 2 seconds as the 
+                //player needs to move and be super close to the door for the raycast to trigger IsRayHit()
+                twoSecTimer -= Time.deltaTime;
+            }
+            if (twoSecTimer <= 0.0f) 
+            {
+                counter = 2;
+            }
+        }
+        if (counter == 2)
+        {
             if (Input.GetKeyDown(Keycode.W) || Input.GetKeyDown(Keycode.A) || Input.GetKeyDown(Keycode.S) || Input.GetKeyDown(Keycode.D))
             {
                 //go next line
-                counter++;
+                counter = 4;
             }
-        }
-        if (counter == 2 || counter == 3)
-        {
-            if (Input.GetKeyDown(Keycode.I))
-                counter++;
+            //if (Input.GetKeyDown(Keycode.I))
+            //    counter++;
 
         }
         if (counter == 4)
@@ -154,7 +167,7 @@ public class GameplaySubtitles : Script
                 counter++;
 
         }
-        if (counter == 7 )
+        if (counter == 7)
         {
             audio.stop("outside_ambience");
             if (audio.finished("pc_lockpicksuccess2"))
@@ -241,10 +254,26 @@ public class GameplaySubtitles : Script
             if (audio.finished("pc_letsseewhere"))
             {
                 audio.stop("pc_letsseewhere");
+                audio.play("pc_placelooksbigger");
+                counter = 48;
+            }
+        }
+        if (counter == 48)
+        {
+            if (audio.finished("pc_placelooksbigger"))
+            {
+                audio.stop("pc_placelooksbigger");
+                counter = 3;
+            }
+        }
+        if (counter == 3)
+        {
+            if (Input.GetKeyDown(Keycode.TAB))
+            {
                 counter = 5;
             }
         }
-        
+
         if (counter == 21)
         {
             if (audio.finished("pc_approachbedroom"))
@@ -259,11 +288,18 @@ public class GameplaySubtitles : Script
             if (audio.finished("pc_runningoutofjuice"))
             {
                 audio.stop("pc_runningoutofjuice");
-                GameplaySubtitles.counter = 5;
+                GameplaySubtitles.counter = 49;
 
             }
         }
-        
+        if (counter == 49)
+        {
+            if (Input.GetKeyDown(Keycode.I))
+            {
+                GameplaySubtitles.counter = 5;
+            }
+        }
+
         // Notes stuff
         if (counter == 14) // Bedroom Receipt
         {
@@ -454,38 +490,17 @@ public class GameplaySubtitles : Script
             }
         }
 
-       
+        //set font to red if its the painting talking
+        if (counter == 28 || counter == 30 || counter == 31 || counter == 32)
+        {
+            Sprite.SetFontColour(new Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+        }
+        else
+            Sprite.SetFontColour(new Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
-        // if (Input.GetKeyDown(Keycode.SPACE))
-        // {
-        //     audio.stop(Audiofiles[counter]);
-        //     GraphicsManagerWrapper.ToggleViewFrom2D(false);
-        //     SceneLoader.LoadMainGame();
-        // }
-        // else
-        // {
-        //     audio.playplay();
 
-        //     if (counter > 16)//cutscene over
-        //     {
-        //         GraphicsManagerWrapper.ToggleViewFrom2D(false);
-        //         SceneLoader.LoadMainGame();
-        //     }
-        //     else
-        //     {
-        //         if (next)
-        //         {
         Sprite.SetFontMessage(Subtitles[counter]);
-        //             audio.play(Audiofiles[counter]);
-        //             next = false;
-        //         }
-        //         else if (audio.finished(Audiofiles[counter]))
-        //         {
-        //             next = true;
-        //             ++counter;
-        //         }
-        //     }
-        // }
+        
         
     }
 }

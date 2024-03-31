@@ -31,7 +31,7 @@ public class FinishGame : Script
         if (gameObject.GetComponent<RigidBodyComponent>().IsRayHit())
         {
             doorStates.GetComponent<DoorState>().doorLookedAt = true;
-            doorText.GetComponent<UISpriteComponent>().SetFontMessage("Press E to Interact");
+            doorText.GetComponent<UISpriteComponent>().SetFontMessage("Press E to Escape Mansion");
 
             if (Input.GetKeyDown(Keycode.E) || fadeOut == true)
             {

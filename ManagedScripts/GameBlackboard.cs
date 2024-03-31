@@ -24,7 +24,8 @@ public class GameBlackboard : Script
         Paused,
         Map,
         Options,
-        Jumpscare
+        Jumpscare,
+        InventoryInteract
     }
 
     [DontSerializeField]
@@ -109,6 +110,13 @@ public class GameBlackboard : Script
                 Input.Lock(true);
                 Input.HideMouse(true);
                 //Console.WriteLine("GameState.Jumpscare");
+
+                break;
+
+            case GameState.InventoryInteract:
+                Input.Lock(true);
+                Input.HideMouse(true);
+                //Console.WriteLine("GameState.InventoryInteract");
 
                 break;
         }

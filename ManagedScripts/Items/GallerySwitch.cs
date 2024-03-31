@@ -36,7 +36,7 @@ public class GallerySwitch : Script
         if (!isActivated && p02.isPaintingCollected && isInteractUIActive)
         {
             Console.WriteLine("Gallery Switch");
-            //InteractUI.isShow = true;
+            InteractUI.isShow = true;
 
             if (Input.GetKeyDown(Keycode.E))
             {
@@ -54,6 +54,7 @@ public class GallerySwitch : Script
                 {
                     audioPlayer.play("pc_openedsomething");
                     GameplaySubtitles.counter = 44;
+                    gameObject.GetComponent<ColliderComponent>().SetEnabled(false);
                 }
             }
         }
@@ -63,7 +64,7 @@ public class GallerySwitch : Script
         }
         if (isInteractUIActive == false)
         {
-            _InteractUI.SetActive(false);
+            //InteractUI.isShow = false;
         }
 
     }
@@ -73,7 +74,7 @@ public class GallerySwitch : Script
         if (p02.isPaintingCollected)
         {
             isInteractUIActive = true;
-            _InteractUI.SetActive(true);
+            InteractUI.isShow = true;
         }
 
     }
@@ -81,6 +82,6 @@ public class GallerySwitch : Script
     public override void OnTriggerExit(ColliderComponent collider)
     {
         isInteractUIActive = false;
-        _InteractUI.SetActive(true);
+        //InteractUI.isShow = false;
     }
 }

@@ -25,6 +25,7 @@ public class GhostMovement : Script
     public float soundSpeed;
     public int walkingSoundCounter = -1;
     public float playSoundTimer;
+    float MonsterWalkingTimer;
 
     public String[] walkingSounds;
     public String voiceClips;
@@ -165,6 +166,7 @@ public class GhostMovement : Script
 
         voiceClips = "pc_monstergoesaway1";
         GhostTransformPosition = new Vector3();
+        MonsterWalkingTimer = 0.0f;
 
         speed = 3.0f;
         soundSpeed = 1.0f;
@@ -432,39 +434,49 @@ public class GhostMovement : Script
     {
         AudioComponent audio = gameObject.GetComponent<AudioComponent>();
 
-        if (audio.finished(walkingSounds[walkingSoundCounter]))
+        //Walking counter
+        if (walkingSoundCounter >= 7)
         {
-            if(walkingSoundCounter >= 7)
-            {
-                walkingSoundCounter = 0;
-            }
-            
-            if (playSoundTimer < 0)
-            {
-                audio.stop(walkingSounds[walkingSoundCounter]);
-                ++walkingSoundCounter;
+            walkingSoundCounter = 0;
+        }
 
-                //if (walkingSoundCounter == 7)  // finished
-                //{
-                //    audio.play("pc_afterscare_heartbeat");
-                //    return false;
-                //}
+        //Timer
+        if(playSoundTimer < 0 && currentEvent == GhostEvent.PlayingWalkingSound)
+        {
+            playSoundTimer = soundSpeed - walkingSoundCounter * 0.005f;
+        }
+        else
+        {
+            MonsterWalkingTimer -= Time.deltaTime;
+        }
 
-                audio.set3DCoords(transform.GetPosition(), walkingSounds[walkingSoundCounter]);
-                Console.WriteLine("Monster position: " + transform.GetPosition().X + ", " + transform.GetPosition().Y + ", " + transform.GetPosition().Z);
+        //Basement or not
+        if (MonsterWalkingTimer < 0)
+        {
+            if (!Door_Script.basementcheck)
+            {
+                audio.set3DCoords(GhostTransformPosition, walkingSounds[walkingSoundCounter]);
+                audio.set3DCoords(GhostTransformPosition, monsterPatrol[walkingSoundCounter]);
+                //Console.WriteLine("Ghost position: " + GhostTransformPosition.X + ", " + GhostTransformPosition.Y + ", " + GhostTransformPosition.Z); ;
+                //Console.WriteLine("Player position: " + player.transform.GetPosition().X + ", " + player.transform.GetPosition().Y + ", " + player.transform.GetPosition().Z);
                 audio.play(walkingSounds[walkingSoundCounter]);
-                playSoundTimer = soundSpeed - walkingSoundCounter * 0.005f;
-                //if (!triggerBedroomHideEvent)
-                //{
-                //    int ra = RandomNumberGenerator.GetInt32(8);
-                //    audio.play(monsterPatrol[ra]);
-                //    audio.set3DCoords(temp /*transform.GetPosition()*/, monsterPatrol[ra]);
-                //}
+                audio.play(monsterPatrol[walkingSoundCounter]);
+                walkingSoundCounter++;
             }
             else
             {
-                playSoundTimer -= Time.deltaTime;
+                audio.set3DCoords(GhostTransformPosition, walkingSounds[walkingSoundCounter]);
+                audio.set3DCoords(GhostTransformPosition, monsterPatrol[walkingSoundCounter]);
+                audio.play(walkingSounds[walkingSoundCounter]);
+                audio.play(monsterPatrol[walkingSoundCounter]);
+                walkingSoundCounter++;
             }
+
+            MonsterWalkingTimer = 1.0f;
+        }
+        else
+        {
+            MonsterWalkingTimer -= Time.deltaTime;
         }
 
         return true;
@@ -499,6 +511,8 @@ public class GhostMovement : Script
     public bool MoveTo(Vector2 destination, float speed)
     {
         Vector2 ghostPosition = new Vector2(transform.GetPosition().X, transform.GetPosition().Z);
+        GhostTransformPosition.X = ghostPosition.X;
+        GhostTransformPosition.Z = ghostPosition.Y;
         float step = speed * Time.deltaTime * 60;
         Vector2 nextPosition = Vector2.MoveTowards(ghostPosition, destination, step);
         transform.SetPosition(new Vector3(nextPosition.X, transform.GetPosition().Y, nextPosition.Y));
@@ -537,6 +551,7 @@ public class GhostMovement : Script
             bedroomMonsterAppearTimer = 2.0f;
 
             previousEvent = GhostEvent.BedroomHidingEvent;
+            //gameObject.GetComponent<AudioComponent>().set3DCoords(transform.GetPosition(), "door_rattle");
             gameObject.GetComponent<AudioComponent>().play("door_rattle");
         }
 
@@ -576,7 +591,9 @@ public class GhostMovement : Script
                 }
 
                 audio.play("pc_afterscare_breathing");
+                audio.setVolume(0.5f, "pc_afterscare_breathing");
                 audio.play("pc_afterscare_heartbeat");
+                audio.setVolume(0.5f, "pc_afterscare_heartbeat");
                 break;
 
             case 1: // Moving to player / hiding closet
@@ -683,6 +700,8 @@ public class GhostMovement : Script
             livingRoomMonsterAppearTimer = 4.0f;
 
             previousEvent = GhostEvent.LivingRoomHidingEvent;
+            //Vector3 door_pos = new Vector3(938.0f, transform.GetPosition().Y, 17.0f);
+            //gameObject.GetComponent<AudioComponent>().set3DCoords(door_pos, "door_rattle");
             gameObject.GetComponent<AudioComponent>().play("door_rattle");
 
             //Console.WriteLine("initialized living room hiding event");
@@ -913,7 +932,9 @@ public class GhostMovement : Script
                 }
 
                 audio.play("pc_afterscare_breathing");
+                audio.setVolume(0.5f, "pc_afterscare_breathing");
                 audio.play("pc_afterscare_heartbeat");
+                audio.setVolume(0.5f, "pc_afterscare_heartbeat");
                 break;
 
             case 1: // Walk into Study Room
@@ -957,7 +978,9 @@ public class GhostMovement : Script
                 }
 
                 audio.play("pc_afterscare_breathing");
+                audio.setVolume(0.5f, "pc_afterscare_breathing");
                 audio.play("pc_afterscare_heartbeat");
+                audio.setVolume(0.5f, "pc_afterscare_heartbeat");
 
                 break;
 

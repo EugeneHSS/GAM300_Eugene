@@ -17,10 +17,13 @@ public class RestartButton : Script
     UISpriteComponent restartButtonSprite;
     private AudioComponent buttonSfx;
     private string buttonSfxName = "";
+    private bool firstHover = true;
+    GameObject arrowObject;
     public override void Awake()
     {
         buttonSfxName = "button_press";
         buttonSfx = gameObject.GetComponent<AudioComponent>();
+        arrowObject = GameObjectScriptFind("RestartArrow");
     }
 
     public override void Start()
@@ -40,14 +43,21 @@ public class RestartButton : Script
             restartButtonSprite.SetEnabled(false);
         }
 
-        //if (Input.GetMouseButtonDown(Keycode.M1) && restartButtonSprite.IsMouseCollided() && PopupUI.isDisplayed == true)
+        if (restartButtonSprite.IsMouseCollided() && firstHover && (gameBlackboard.gameState == GameBlackboard.GameState.Paused))
+        {
+            firstHover = false;
+            buttonSfx.play("buttonhover");
+            arrowObject.SetActive(true);
+        }
+        if (!restartButtonSprite.IsMouseCollided())
+        {
+            firstHover = true;
+            arrowObject.SetActive(false);
+        }
+
         if (Input.GetMouseButtonDown(Keycode.M1) && restartButtonSprite.IsMouseCollided() && gameBlackboard.gameState == GameBlackboard.GameState.Paused)
         {
-            //Console.WriteLine("Restart Button Pressed");
             buttonSfx.play(buttonSfxName);
-            //AudioComponent audio = gameObject.GetComponent<AudioComponent>();
-            //audio.stopAll();
-            //PopupUI.changeDisplayed = true;
             SceneLoader.LoadMainGame();
         }
     }
