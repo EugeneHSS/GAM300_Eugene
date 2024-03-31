@@ -127,7 +127,7 @@ namespace TDS
 	}
 	void LightingBuffer::GetBlendAttachments(BlendContainer& blendCont, PipelineCreateEntry& createEntry)
 	{
-		blendCont.resize(1);
+		blendCont.resize(2);
 
 		if (createEntry.m_PipelineConfig.m_SrcClrBlend != VkBlendFactor::VK_BLEND_FACTOR_ZERO ||
 			createEntry.m_PipelineConfig.m_DstClrBlend != VkBlendFactor::VK_BLEND_FACTOR_ZERO ||
@@ -144,6 +144,16 @@ namespace TDS
 		blendCont[0].srcAlphaBlendFactor = createEntry.m_PipelineConfig.m_SrcAlphaBlend;
 		blendCont[0].dstAlphaBlendFactor = createEntry.m_PipelineConfig.m_DstAlphaBlend;
 		blendCont[0].alphaBlendOp = createEntry.m_PipelineConfig.m_AlphaBlend;
+
+
+		blendCont[1].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+		blendCont[1].blendEnable = VK_FALSE;
+		blendCont[1].srcColorBlendFactor = createEntry.m_PipelineConfig.m_SrcClrBlend;
+		blendCont[1].dstColorBlendFactor = createEntry.m_PipelineConfig.m_DstClrBlend;
+		blendCont[1].colorBlendOp = createEntry.m_PipelineConfig.m_ColorBlend;
+		blendCont[1].srcAlphaBlendFactor = createEntry.m_PipelineConfig.m_SrcAlphaBlend;
+		blendCont[1].dstAlphaBlendFactor = createEntry.m_PipelineConfig.m_DstAlphaBlend;
+		blendCont[1].alphaBlendOp = createEntry.m_PipelineConfig.m_AlphaBlend;
 
 	}
 }

@@ -12,5 +12,5 @@ void main(){
         discard;
     float cosdist = 0.5*(cos(3.14159*dist) + 1.0);
     fragColor = vec4(color.xyz + 0.5*cosdist, cosdist);
-    isLighted = vec4(0.0, 0.0, 0.0, 0.0);
+    isLighted = vec4(0.0, 1.0, 0.0, 0.0);
 }

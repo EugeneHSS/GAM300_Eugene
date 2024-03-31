@@ -14,6 +14,7 @@
 #include "Rendering/Revamped/FrameBuffers/G_Buffer.h"
 #include "Rendering/Revamped/FrameBuffers/LightingBuffer.h"
 #include "Rendering/Revamped/FrameBuffers/CompositionPass.h"
+#include "Rendering/Revamped/FrameBuffers/CubeShadow.h"
 #include "Rendering/Renderer2D.h"
 #include "Rendering/FontRenderer.h"
 #include "Physics/CollisionSystem.h"
@@ -1199,7 +1200,7 @@ namespace TDS
 		auto G_Buffer = m_FrameBuffers[RENDER_G_BUFFER];
 		auto Lighting = m_FrameBuffers[RENDER_LIGTHING];
 		auto Composition = m_FrameBuffers[RENDER_COMPOSITION];
-
+		
 		auto LightingPipeline = m_DeferredPipelines[DEFERRED_STAGE::STAGE_LIGTHING];
 		auto CompositionPipeline = m_DeferredPipelines[DEFERRED_STAGE::STAGE_COMPOSITION];
 
@@ -1212,7 +1213,7 @@ namespace TDS
 			auto normals = G_Buffer->GetTargets().at(3)->getImageInfoDescriptor();
 			auto PhongBlinnProp = G_Buffer->GetTargets().at(4)->getImageInfoDescriptor();
 			auto LightCondition = G_Buffer->GetTargets().at(5)->getImageInfoDescriptor();
-
+			
 
 			LightingPipeline->UpdateDescriptor(albedo, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4, 0);
 			LightingPipeline->UpdateDescriptor(albedo, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4, 0);
@@ -1228,14 +1229,18 @@ namespace TDS
 
 			LightingPipeline->UpdateDescriptor(LightCondition, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 9, 0);
 			LightingPipeline->UpdateDescriptor(LightCondition, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 9, 1);
+		
+		
 		}
 
 		//Update composition Pass
 		{
 			auto albedo = Lighting->GetTargets().at(0)->getImageInfoDescriptor();
-
+			auto GammaCondition = Lighting->GetTargets().at(1)->getImageInfoDescriptor();
 			CompositionPipeline->UpdateDescriptor(albedo, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 2, 0);
 			CompositionPipeline->UpdateDescriptor(albedo, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 2, 1);
+			CompositionPipeline->UpdateDescriptor(GammaCondition, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 3, 0);
+			CompositionPipeline->UpdateDescriptor(GammaCondition, VkDescriptorType::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 3, 1);
 		}
 
 	}
@@ -1411,6 +1416,9 @@ namespace TDS
 		m_FrameBuffers[RENDER_LIGTHING]->Create();
 		m_FrameBuffers[RENDER_COMPOSITION] = new CompositionPass(Vec2(float(width), float(height)));
 		m_FrameBuffers[RENDER_COMPOSITION]->Create();
+
+
+
 	}
 	void DeferredController::Resize(std::uint32_t width, std::uint32_t height)
 	{

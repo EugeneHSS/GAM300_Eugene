@@ -3,12 +3,14 @@
 layout (location = 0) in vec2 inUV;
 
 layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 outConditions;
 
 layout (set = 0, binding = 4) uniform sampler2D vColor;
 layout (set = 0, binding = 5) uniform sampler2D vPositions;
 layout (set = 0, binding = 6) uniform sampler2D vNormalsMap;
 layout (set = 0, binding = 8) uniform sampler2D MaterialDataIn;
 layout (set = 0, binding = 9) uniform sampler2D IsLightOn;
+
 
 
 struct PointLight 
@@ -87,6 +89,9 @@ void main()
     vec4 MaterialProps = texture(MaterialDataIn, inUV);
 
     uint Lighted = uint(isLightOn.x);
+
+    outConditions = isLightOn;
+
     uint shadingModel = uint(MaterialProps.z);
     uint UseMaterials = uint(MaterialProps.y);
 
@@ -103,6 +108,7 @@ void main()
         return;
     }
 
+    
     vec4 fragColor = texture(vColor, inUV);
 
     vec4 albedo = fragColor;

@@ -11,14 +11,6 @@ layout(location = 7) in vec4 Weights;
 layout(location = 8) in vec2 meshID;
 
 
-//for the scene
-layout(set = 0, binding = 5) uniform SceneUBO
-{
-    mat4 proj;
-    mat4 view;
-}Scene3D;
-
-
 
 
 struct Material
@@ -62,30 +54,6 @@ struct Material
     int  UseMaterialTextures;
     int  UseMaterialNormal;
 };
-
-layout(push_constant) uniform ConstantData
-{
-	uint offset;
-};
-
-layout(std140, binding = 16) readonly buffer MaterialBuffer
-{
-    Material material[];
-}materialData;
-
-
-Material GetMaterial(uint MaterialID)
-{
-    for (uint i = 0; i < materialData.material.length(); i++)
-    {
-        if (materialData.material[i].MaterialID == MaterialID)
-        {
-            return materialData.material[i];
-        }
-    }
-    
-}
-
 struct InstanceData
 {
     mat4 modelMatrix;
@@ -107,33 +75,19 @@ layout(std140, binding = 15) readonly buffer InstanceBuffer
 	InstanceData instances[];
 };
 
-
-layout(std140, binding = 19) readonly buffer boneView
+out gl_PerVertex 
 {
-    mat4 BoneMatrices[];
-}bones;
+    vec4 gl_Position;   
+};
 
+layout(push_constant) uniform Scene3D
+{
+    mat4 depthMVP;
+};
 
-
-
-layout(location = 0) out vec4 fragColor;
-layout(location = 1) out vec2 fragTexCoord;
-layout(location = 2) out vec3 fragPosWorld;
-layout(location = 3) out vec3 fragNormalWorld;
-layout(location = 4) out flat uint id;
-layout(location = 5) out vec4 clipspacepos;
-layout(location = 6) out flat uint UseMaterials;
-layout(location = 7) out flat uint texID;
-layout(location = 8) out float linearDepth;
-layout(location = 9) out uint isRenderable;
-layout(location = 10) out mat3 TBN;
-layout(location = 13) out Material vMaterial;
-
+layout (location = 0) out uint isRenderable;
 void main() 
 {
-    //Common data in this and the batch version, but this is instancing so we are not using this
-
-    
     InstanceData instance = instances[gl_InstanceIndex + offset + uint(meshID.x)];
     uint textureID = instance.textureID;
     mat4 modelMatrix = instance.modelMatrix;
@@ -148,47 +102,14 @@ void main()
 		Weights.z * bones.BoneMatrices[instance.m_AnimOffset + uint(BoneIDs.z)] +
 		Weights.w * bones.BoneMatrices[instance.m_AnimOffset + uint(BoneIDs.w)];
     }
-
-
+    
     mat4 accumulated = modelMatrix * skinMat;
     
     vec4 position_in_world = accumulated * vec4(vPosition, 1.0);
-    fragTexCoord = vUV;
-    
-    id = instance.entityID;
 
-    vec4 clipspacepos = Scene3D.proj * Scene3D.view * position_in_world;
+    vec4 clipspacepos =  depthMVP * position_in_world;
     gl_Position = clipspacepos;
     
-    TBN = mat3(vBiTangent, vTangent, vNormals);
-    
-    texID = textureID;
-    fragNormalWorld = vNormals;
-    fragPosWorld = position_in_world.xyz;
+    isRenderable = batchData.isRender;
 
-    fragColor = vColor;
-   
-    linearDepth = -(Scene3D.view * position_in_world).z;
-
-    isRenderable = instance.isRender;
-
-    if (instance.m_UseMaterials == 1)
-    {
-        if (instance.m_UseMeshMatID == 1)
-        {
-            int matID = int(meshID.y);
-            vMaterial = GetMaterial(matID);
-        }
-        else
-        {
-            vMaterial = instance.m_Material;
-        }
-            
-        
-        UseMaterials = 1;
-    }
-    else
-    {
-        UseMaterials = 0;
-    }
 }

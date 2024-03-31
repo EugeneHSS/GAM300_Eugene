@@ -25,6 +25,7 @@ namespace TDS
 	struct PipelineCreateEntry;
 
 	class FrameBuffer;
+	class VulkanTexture;
 	class RenderPass;
 
 	class FBO
@@ -60,7 +61,7 @@ namespace TDS
 		virtual void										EndRenderPass(VkCommandBuffer commandBuffer);
 		VkSampleCountFlagBits								QueryMaxSamplingCnt();
 
-
+		virtual std::shared_ptr<VulkanTexture>				GetImageTexture() { return nullptr; }
 		void												SetDepthTarget(RenderTarget*& depthTarget);
 		void												SetResizeable(bool condition);
 		void												SetAutoSync(bool condition);
