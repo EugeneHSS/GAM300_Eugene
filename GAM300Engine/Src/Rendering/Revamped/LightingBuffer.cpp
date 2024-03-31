@@ -27,6 +27,20 @@ namespace TDS
 
 		);
 
+		m_RenderAttachmentInfo.emplace_back(
+			RenderTargetCI(VK_FORMAT_R32G32B32A32_SFLOAT,
+				VK_IMAGE_ASPECT_COLOR_BIT,
+				VK_IMAGE_VIEW_TYPE_2D,
+				Dim,
+				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+				VK_IMAGE_USAGE_SAMPLED_BIT,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				RenderTargetType::COLOR,
+				false,
+				VK_SAMPLE_COUNT_1_BIT)
+
+		);
+
 
 	}
 	LightingBuffer::~LightingBuffer()
