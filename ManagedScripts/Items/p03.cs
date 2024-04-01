@@ -50,12 +50,12 @@ public class p03 : Script
         {
             if (!isPaintingCollected && gameObject.GetComponent<RigidBodyComponent>().IsRayHit())
             {
-                if (doOnce)
-                {
-                    gameObject.GetComponent<AudioComponent>().play("pc_movethissilently");
-                    GameplaySubtitles.counter = 46;
-                    doOnce = false;
-                }
+                //if (doOnce)
+                //{
+                //    gameObject.GetComponent<AudioComponent>().play("pc_movethissilently");
+                //    GameplaySubtitles.counter = 46;
+                //    doOnce = false;
+                //}
                 Console.WriteLine("p03");
                 InteractUI.isShow = true;
                 if (Input.GetKeyDown(Keycode.E))
@@ -80,6 +80,8 @@ public class p03 : Script
                     hidingGameObject.GetComponent<EventGalleryHiding>().GhostMoved = false;
 
                     ghost.GetComponent<GhostMovement>().PlayMonsterWalkingSoundInitial();
+                    paintingMoved = false;
+                    timer = 2.0f;
                 }
             }
             else

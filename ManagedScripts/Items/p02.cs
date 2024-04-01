@@ -56,11 +56,11 @@ public class p02 : Script
 
                     // Trigger Painting Event
                     AudioPlayer.play("gallery_movepainting");
-                    gameObject.GetComponent<ColliderComponent>().SetEnabled(false);
+                    //gameObject.GetComponent<ColliderComponent>().SetEnabled(false);
                     //GameplaySubtitles.counter = 8;
 
-                    // hiding event 
-
+                    paintingMoved = false;
+                    timer = 2.0f;
                 }
             }
             else

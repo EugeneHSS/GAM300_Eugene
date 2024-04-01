@@ -72,6 +72,8 @@ public class p01 : Script
                     hidingGameObject.GetComponent<EventGalleryHiding>().GhostMoved = false;
 
                     ghost.GetComponent<GhostMovement>().PlayMonsterWalkingSoundInitial();
+                    paintingMoved = false;
+                    timer = 2.0f;
                 }
             }
             else

@@ -21,6 +21,9 @@ public class GallerySwitch : Script
     public GameObject? _InteractUI;
     private bool isInteractUIActive = false;
     public GameObject? hidingGameObject;
+    public static bool isGallerySwitchActivated = false;
+    private bool mightHaveOpened = false;
+    private bool openedsomething = false;
     public override void Awake()
     {
         audioPlayer = gameObject.GetComponent<AudioComponent>();
@@ -47,24 +50,31 @@ public class GallerySwitch : Script
                 hidingGameObject.GetComponent<EventGalleryHiding>().GhostMoved = false;
                 if (GalleryLetter.isNotePicked)
                 {
+                    isGallerySwitchActivated = true;
+                    mightHaveOpened = true;
                     audioPlayer.play("pc_mighthaveopened");
                     GameplaySubtitles.counter = 43;
                 }
                 else
                 {
+                    isGallerySwitchActivated = true;
+                    openedsomething = true;
                     audioPlayer.play("pc_openedsomething");
+
                     GameplaySubtitles.counter = 44;
-                    gameObject.GetComponent<ColliderComponent>().SetEnabled(false);
+                    //gameObject.GetComponent<ColliderComponent>().SetEnabled(false);
                 }
             }
         }
-        else
+        if (mightHaveOpened && audioPlayer.finished("pc_mighthaveopened"))
         {
-            //_InteractUI.SetActive(false);
+            mightHaveOpened = false;
+            isGallerySwitchActivated = false;
         }
-        if (isInteractUIActive == false)
+        if (openedsomething && audioPlayer.finished("pc_openedsomething"))
         {
-            //InteractUI.isShow = false;
+            openedsomething = false;
+            isGallerySwitchActivated = false;
         }
 
     }

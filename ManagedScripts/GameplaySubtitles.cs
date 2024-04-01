@@ -20,13 +20,10 @@ public class GameplaySubtitles : Script
     [SerializeField]
     public static int counter;
     public static bool next = true;
-    public GameObject? fire;
     float timer;
     int pressCtrlTwice = 0;
     float subtitleTimer = 2.0f;
     private float twoSecTimer = 2.0f;
-
-    private bool Isfire = true;
 
     public override void Awake()
     {
@@ -368,10 +365,6 @@ public class GameplaySubtitles : Script
                 audio.play("pc_monsterrattledoor"); // Someone's coming, better hide
                 counter = 22; //commented this out as u dont hide after every painting u pick up
             }
-            if (!Isfire)
-            {
-                fire.SetActive(false);
-            }
         }
         if (counter == 22)
         {
@@ -483,11 +476,6 @@ public class GameplaySubtitles : Script
             }
             audio.set3DCoords(transform.GetPosition(), "painting_burning");
             audio.play("painting_burning");
-            if (Isfire)
-            {
-                fire.SetActive(true);
-                Isfire = false;
-            }
         }
 
         //set font to red if its the painting talking

@@ -152,7 +152,7 @@ public class LockPick1 : Script
     public override void Start()
     {
         //audio.play(startingVOstr);
-        movePick = true;
+        movePick = false;
         next_VO = true;
         pickWasCloseButYouMovedAway = false;
     }

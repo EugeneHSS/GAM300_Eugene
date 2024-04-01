@@ -32,7 +32,7 @@ public class DoorState : Script
         }
         Doors[0] = State.Locked;
         Doors[1] = State.Locked;
-        Doors[3] = State.Locked;
+        //Doors[3] = State.Locked;
         Doors[10] = State.Locked;
     }
     public override void LateUpdate()

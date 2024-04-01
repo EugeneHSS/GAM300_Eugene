@@ -47,6 +47,18 @@ public class Checkpoint : Script
     public DoorState DoorStates;
     public int FinalChaseDoorIndex;
 
+    public GameObject GalleryOtherPainting1; // p01
+    public GameObject GalleryOtherPainting2; //p03
+    public GameObject GalleryMainPainting; // p02
+    public Vector3 GalleryOtherPainting1Position;
+    public Vector3 GalleryOtherPainting2Position;
+    public Vector3 GalleryMainPaintingPosition;
+    public bool GalleryMainPaintingCollected;
+    public bool GalleryOtherPainting1Collected;
+    public bool GalleryOtherPainting2Collected;
+    public bool SwitchClicked; // From gallery switch
+    //public GameObject Switch; // From gallery switch
+
     public void OverrideCheckpoint(GhostMovement.GhostEvent currentEvent)
     {
         Console.WriteLine("Override Checkpoint");
@@ -61,8 +73,17 @@ public class Checkpoint : Script
         MonsterPositonCheckpoint = Monster.transform.GetPosition();
         GhostEventCheckpoint = currentEvent;
 
-        // Painting
+        // Paintings
         BedroomPaintingEnabled = BedroomPainting.GetActive();
+
+        GalleryOtherPainting1Position = GalleryOtherPainting1.transform.GetPosition();
+        GalleryOtherPainting2Position = GalleryOtherPainting2.transform.GetPosition();
+        GalleryMainPaintingPosition = GalleryMainPainting.transform.GetPosition();
+
+        GalleryMainPaintingCollected = p02.isPaintingCollected;
+        GalleryOtherPainting1Collected = p01.isPaintingCollected;
+        GalleryOtherPainting2Collected = p03.isPaintingCollected;
+        SwitchClicked = GallerySwitch.isActivated;
     }
 
     public void RevertToCheckpoint()
@@ -72,13 +93,13 @@ public class Checkpoint : Script
         // Player
         //Console.WriteLine("Player");
         Quaternion quat = new Quaternion(PlayerRotationCheckpoint);
-        Player.transform.SetPosition(PlayerPositonCheckpoint);
-        Player.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(PlayerPositonCheckpoint, new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(1, 1, 1).Normalize(), new Vector3(1, 1, 1).Normalize());
+        Vector3 newPlayerPosition = new Vector3(PlayerPositonCheckpoint.X, Player.transform.GetPosition().Y, PlayerPositonCheckpoint.Z);
+        Player.transform.SetPositionX(PlayerPositonCheckpoint.X);
+        Player.transform.SetPositionZ(PlayerPositonCheckpoint.Z);
+        Player.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(newPlayerPosition, new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(1, 1, 1).Normalize(), new Vector3(1, 1, 1).Normalize());
         Player.transform.SetRotation(PlayerRotationCheckpoint);
-        Player.GetComponent<FPS_Controller_Script>().StandUp();
-        Player.GetComponent<FPS_Controller_Script>().isCrouched = false;
-
-        Console.WriteLine(PlayerPositonCheckpoint.X + "\t\t" + PlayerPositonCheckpoint.Z);
+        //Console.WriteLine("Saved position: " + PlayerPositonCheckpoint.X + "\t" + PlayerPositonCheckpoint.Z);
+        //Console.WriteLine("Player new position: " + Player.transform.GetPosition().X + "\t" + Player.transform.GetPosition().Z);
 
         // Monster
         //Console.WriteLine("Monster");
@@ -96,8 +117,27 @@ public class Checkpoint : Script
 
         DoorStates.Doors[FinalChaseDoorIndex] = DoorState.State.Locked;
 
-        // Painting
+        // Paintings
         BedroomPainting.SetActive(BedroomPaintingEnabled);
+
+        GalleryOtherPainting1.transform.SetPosition(GalleryOtherPainting1Position);
+        GalleryOtherPainting2.transform.SetPosition(GalleryOtherPainting2Position);
+        GalleryMainPainting.transform.SetPosition(GalleryMainPaintingPosition);
+        GalleryMainPainting.GetComponent<RigidBodyComponent>().SetPosition(GalleryMainPaintingPosition);
+
+        p02.isPaintingCollected = GalleryMainPaintingCollected;
+        p01.isPaintingCollected = GalleryOtherPainting1Collected;
+        p03.isPaintingCollected = GalleryOtherPainting2Collected;
+        GallerySwitch.isActivated = SwitchClicked;
+
+        //if (!GalleryMainPaintingCollected)
+        //{
+        //    GalleryMainPainting.GetComponent<ColliderComponent>().SetEnabled(true);
+        //}
+        //if (!SwitchClicked)
+        //{
+        //    Switch.GetComponent<ColliderComponent>().SetEnabled(true);
+        //}
     }
 }
 

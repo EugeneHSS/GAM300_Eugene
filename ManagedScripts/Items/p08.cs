@@ -47,13 +47,13 @@ public class p08 : Script
             InteractUI.isShow = true;
             // AudioPlayer.play(""); // Mom's face is scratched
 
-            if (Input.GetKeyDown(Keycode.E))
-            {
-                Console.WriteLine("Picked up painting");
+            //if (Input.GetKeyDown(Keycode.E))
+            //{
+            //    Console.WriteLine("Picked up painting");
 
-                // Trigger Painting Event
-                AudioPlayer.play("pc_movethissilently");
-            }
+            //    // Trigger Painting Event
+            //    AudioPlayer.play("pc_movethissilently");
+            //}
         }
         else
         {

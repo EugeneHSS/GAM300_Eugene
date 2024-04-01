@@ -52,6 +52,10 @@ public class JumpscareScript : Script
             // 1. calculating rotations
             case 0:
 
+                Console.WriteLine("Jumpscare start");
+                Console.WriteLine(player.transform.GetPosition().X + "\t" + player.transform.GetPosition().Z);
+                Console.WriteLine(transform.GetPosition().X + "\t" + transform.GetPosition().Z);
+
                 GraphicsManagerWrapper.ToggleViewFrom2D(false);
 
                 // Turning towards ghost
@@ -59,12 +63,19 @@ public class JumpscareScript : Script
                 float lineToNextPositionLength = Mathf.Sqrt(lineToNextPosition.X * lineToNextPosition.X + lineToNextPosition.Y * lineToNextPosition.Y);
                 float forwardVectorLength = Mathf.Sqrt(Vector3.Forward().X * Vector3.Forward().X + Vector3.Forward().Z * Vector3.Forward().Z);
 
+                Console.WriteLine(lineToNextPosition.X + "\t" + lineToNextPosition.Y);
+                Console.WriteLine(lineToNextPositionLength);
+
                 yRotation = Mathf.Acos((lineToNextPosition.X * Vector3.Forward().X + lineToNextPosition.Y * Vector3.Forward().Z) / (lineToNextPositionLength * forwardVectorLength));
+
+                Console.WriteLine(yRotation);
 
                 if (lineToNextPosition.X >= 0)
                     yRotation = 360 - (float)(yRotation / Math.PI * 180.0f);
                 else
                     yRotation = (float)(yRotation / Math.PI * 180.0f);
+
+                Console.WriteLine(yRotation);
 
                 ++jumpscareSequenceIndex;
                 timer = 0.3f;
@@ -78,7 +89,7 @@ public class JumpscareScript : Script
                 player.GetComponent<FPS_Controller_Script>().playerCamera.transform.SetRotationX(
                     Mathf.LerpAngle(player.GetComponent<FPS_Controller_Script>().playerCamera.transform.GetRotation().X, 28, Time.deltaTime * 12));
 
-                Console.WriteLine(yRotation);
+                //Console.WriteLine(yRotation);
 
                 if (player.transform.GetRotation().Y >= 360)
                 {

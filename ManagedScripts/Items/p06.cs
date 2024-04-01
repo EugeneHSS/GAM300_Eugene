@@ -164,6 +164,12 @@ public class p06 : Script
                     ghost.GetComponent<GhostMovement>().startEvent = true;
                     endingSequence = true;
                     gameObject.SetActive(false);
+
+                    // reset player height
+                    Quaternion quat = new Quaternion(transform.GetRotation());
+                    gameObject.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(
+                        new Vector3(transform.GetPosition().X, 90.0f, transform.GetPosition().Z),
+                        new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(0, 0, 0), new Vector3(0, 0, 0));
                 }
             }
         }
