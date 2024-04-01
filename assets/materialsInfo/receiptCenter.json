@@ -1,0 +1,66 @@
+{
+    "materialAttributes": [
+        {
+            "key": 0,
+            "value": {
+                "shading": "SHADING_PHONG_BLINN",
+                "PBRAttributes": {
+                    "NormalTex": "",
+                    "RoughnessTex": "",
+                    "MetallicTex": "",
+                    "EmissiveTex": "",
+                    "AOTex": "",
+                    "Metalness": 0.0,
+                    "Roughness": 0.4343146085739136,
+                    "Emissive": 0.0
+                },
+                "MaterialName": "Reciept",
+                "phongBlinn": {
+                    "DiffuseTex": "Receipt.dds",
+                    "SpecularTex": "",
+                    "AmbientTex": "",
+                    "EmissiveTex": "",
+                    "ShininessTex": "",
+                    "DiffuseColor": {
+                        "x": 0.800000011920929,
+                        "y": 0.800000011920929,
+                        "z": 0.800000011920929
+                    },
+                    "SpecularColor": {
+                        "x": 0.800000011920929,
+                        "y": 0.800000011920929,
+                        "z": 0.800000011920929
+                    },
+                    "EmissiveColor": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "AmbientColor": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "Shininess": 32.0,
+                    "ShininessStrength": 0.5
+                },
+                "AlbedoTex": "Receipt.dds",
+                "Reflectivity": 0.0,
+                "Reflectance": {
+                    "x": 0.800000011920929,
+                    "y": 0.800000011920929,
+                    "z": 0.800000011920929
+                },
+                "ReflectanceTexture": ""
+            }
+        }
+    ],
+    "TextureToload": [
+        {
+            "TexturePath": "Receipt.png",
+            "UMode": 0,
+            "VMode": 0
+        }
+    ],
+    "ModelName": "receiptCenter_Bin.bin"
+}

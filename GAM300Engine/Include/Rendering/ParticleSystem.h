@@ -47,7 +47,7 @@ namespace TDS {
 		//Spawn/Draws all particles from all entities
 		DLL_API static void Render();
 		DLL_API static void ShutDown();
-
+		DLL_API static void AddEmitterGroup(Particle_Component* Particles, std::uint32_t descIndex, std::uint32_t spawnAmount);
 		//helper functions
 
 		//for compute
@@ -55,7 +55,7 @@ namespace TDS {
 		inline static std::shared_ptr<VulkanPipeline> m_EmitterPipeline;
 		//for rendering
 		inline static std::shared_ptr<VulkanPipeline> m_RenderPipeline;
-		inline static std::array<InputRenderBuffers, ParticleMesh::MAX_MESHES>  MeshRenderBuffers;
+		//inline static std::array<InputRenderBuffers, ParticleMesh::MAX_MESHES>  MeshRenderBuffers;
 
 		inline static std::vector<ParticleInstanceGroup>			m_Group;
 		inline static std::uint32_t									m_GroupCnt;

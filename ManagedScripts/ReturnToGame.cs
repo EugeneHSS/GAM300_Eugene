@@ -16,8 +16,15 @@ public class ReturnToGame : Script
 {
     public GameBlackboard? gameBlackboard;
     UISpriteComponent buttonSprite;
+    private AudioComponent buttonSfx;
+    private string buttonSfxName = "";
+    private bool firstHover = true;
+    GameObject arrowObject;
     public override void Awake()
-    {  
+    {
+        buttonSfxName = "button_press";
+        buttonSfx = gameObject.GetComponent<AudioComponent>();
+        arrowObject = GameObjectScriptFind("ContinueArrow");
     }
 
     public override void Start()
@@ -35,11 +42,23 @@ public class ReturnToGame : Script
         {
             buttonSprite.SetEnabled(false);
         }
-            
-        //if (Input.GetMouseButtonDown(Keycode.M1) && buttonSprite.IsMouseCollided() && PopupUI.isDisplayed == true)
+
+        if (buttonSprite.IsMouseCollided() && firstHover && (gameBlackboard.gameState == GameBlackboard.GameState.Paused))
+        {
+            firstHover = false;
+            buttonSfx.play("buttonhover");
+            arrowObject.SetActive(true);
+        }
+        if (!buttonSprite.IsMouseCollided())
+        {
+            firstHover = true;
+            arrowObject.SetActive(false);
+        }
+
         if (Input.GetMouseButtonDown(Keycode.M1) && buttonSprite.IsMouseCollided() && gameBlackboard.gameState == GameBlackboard.GameState.Paused)
         {
-            Console.WriteLine("Continue Button Pressed");
+            //Console.WriteLine("Continue Button Pressed");
+            buttonSfx.play(buttonSfxName);
             PopupUI.changeDisplayed = true;
         }
     }

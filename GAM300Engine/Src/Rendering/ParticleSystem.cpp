@@ -6,6 +6,8 @@
 #include "Rendering/Revamped/DeferredController.h"
 
 
+#define MAX_PARTICLES 100000
+#define MAX_EMITTERS 2
 
 namespace TDS {
 
@@ -26,30 +28,39 @@ namespace TDS {
 		m_EmitterPipeline = std::make_shared<VulkanPipeline>();
 
 		PipelineCreateEntry EmitterComputeEntry;
-		EmitterComputeEntry.m_NumDescriptorSets = 1;
+		EmitterComputeEntry.m_NumDescriptorSets = MAX_EMITTERS;
 		EmitterComputeEntry.m_PipelineConfig.m_DstClrBlend = VK_BLEND_FACTOR_ZERO;
 		EmitterComputeEntry.m_PipelineConfig.m_SrcClrBlend = VK_BLEND_FACTOR_ZERO;
 		EmitterComputeEntry.m_PipelineConfig.m_DstAlphaBlend = VK_BLEND_FACTOR_ZERO;
 		EmitterComputeEntry.m_PipelineConfig.m_SrcAlphaBlend = VK_BLEND_FACTOR_ZERO;
 		EmitterComputeEntry.m_ShaderInputs.m_Shaders.insert(std::make_pair(SHADER_FLAG::COMPUTE_SHADER, "../assets/shaders/ParticleEmitter.spv"));
 
-		GlobalBufferPool::GetInstance()->AddToGlobalPool(MAX_PARTICLES * sizeof(Particle), 31, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, "v_ParticleOut");
-		GlobalBufferPool::GetInstance()->AddToGlobalPool((MAX_PARTICLES + 1) * sizeof(int), 32, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, "FreeList");
-
+		for (std::uint32_t i = 0; i < MAX_EMITTERS; ++i)
+		{
+			std::string particleOutName = "v_ParticleOut" + std::to_string(i);
+			std::string freeListName = "FreeList" + std::to_string(i);
+			GlobalBufferPool::GetInstance()->AddToGlobalPool(MAX_PARTICLES * sizeof(Particle), 31, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, particleOutName, nullptr, i);
+			GlobalBufferPool::GetInstance()->AddToGlobalPool((MAX_PARTICLES + 1) * sizeof(int), 32, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, freeListName, nullptr, i);
+		}
 		m_EmitterPipeline->Create(EmitterComputeEntry);
 
 		//compute pipeline
 		m_ComputePipeline = std::make_shared<VulkanPipeline>();
 
 		PipelineCreateEntry ParticleComputeEntry;
-		ParticleComputeEntry.m_NumDescriptorSets = 1;
+		ParticleComputeEntry.m_NumDescriptorSets = MAX_EMITTERS;
 		ParticleComputeEntry.m_PipelineConfig.m_DstClrBlend = VK_BLEND_FACTOR_ZERO;
 		ParticleComputeEntry.m_PipelineConfig.m_SrcClrBlend = VK_BLEND_FACTOR_ZERO;
 		ParticleComputeEntry.m_PipelineConfig.m_DstAlphaBlend = VK_BLEND_FACTOR_ZERO;
 		ParticleComputeEntry.m_PipelineConfig.m_SrcAlphaBlend = VK_BLEND_FACTOR_ZERO;
 		ParticleComputeEntry.m_ShaderInputs.m_Shaders.insert(std::make_pair(SHADER_FLAG::COMPUTE_SHADER, "../assets/shaders/ParticleCompute.spv"));
+		//for (std::uint32_t i = 0; i < MAX_EMITTERS; ++i)
+		//{
+		//	GlobalBufferPool::GetInstance()->AddToGlobalPool(MAX_PARTICLES * sizeof(Mat4), 34, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, "v_TransformMatrix", nullptr, i);
+		//}
 
-		GlobalBufferPool::GetInstance()->AddToGlobalPool(MAX_PARTICLES * sizeof(Mat4), 34, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, "v_TransformMatrix");
+
+
 
 		m_ComputePipeline->Create(ParticleComputeEntry);
 
@@ -58,12 +69,12 @@ namespace TDS {
 		m_RenderPipeline = std::make_shared<VulkanPipeline>();
 
 		PipelineCreateEntry ParticleRenderEntry;
-		ParticleRenderEntry.m_NumDescriptorSets = 1;
+		ParticleRenderEntry.m_NumDescriptorSets = MAX_EMITTERS;
 		ParticleRenderEntry.m_PipelineConfig.m_SrcClrBlend = VK_BLEND_FACTOR_SRC_ALPHA;
 		ParticleRenderEntry.m_PipelineConfig.m_DstClrBlend = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 		ParticleRenderEntry.m_PipelineConfig.m_SrcAlphaBlend = VK_BLEND_FACTOR_SRC_ALPHA;
 		ParticleRenderEntry.m_PipelineConfig.m_DstAlphaBlend = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-		ParticleRenderEntry.m_FBTarget = GraphicsManager::getInstance().GetDeferredController()->GetFrameBuffer(RENDER_PASS::RENDER_COMPOSITION);
+		ParticleRenderEntry.m_FBTarget = GraphicsManager::getInstance().GetDeferredController()->GetFrameBuffer(RENDER_PASS::RENDER_G_BUFFER);
 		ParticleRenderEntry.m_ShaderInputs.m_Shaders.insert(std::make_pair(SHADER_FLAG::VERTEX, "../assets/shaders/RenderParticleVert.spv"));
 		ParticleRenderEntry.m_ShaderInputs.m_Shaders.insert(std::make_pair(SHADER_FLAG::FRAGMENT, "../assets/shaders/RenderParticleFrag.spv"));
 
@@ -72,26 +83,26 @@ namespace TDS {
 			});*/
 			//ParticleRenderEntry.m_ShaderInputs.m_InputVertex.push_back(VertexBufferInfo(false, layout, sizeof(Vec2)));
 
-		MeshRenderBuffers[CUBE].m_MeshReference.m_ResourcePtr = AssetManager::GetInstance()->GetMeshFactory().GetMeshController("cube_Bin.bin", MeshRenderBuffers[CUBE].m_MeshReference);
+		/*MeshRenderBuffers[CUBE].m_MeshReference.m_ResourcePtr = AssetManager::GetInstance()->GetMeshFactory().GetMeshController("cube_Bin.bin", MeshRenderBuffers[CUBE].m_MeshReference);
 
 		MeshRenderBuffers[SPHERE].m_MeshReference.m_ResourcePtr = AssetManager::GetInstance()->GetMeshFactory().GetMeshController("cube_Bin.bin", MeshRenderBuffers[SPHERE].m_MeshReference);
 
-		MeshRenderBuffers[CAPSULE].m_MeshReference.m_ResourcePtr = AssetManager::GetInstance()->GetMeshFactory().GetMeshController("cube_Bin.bin", MeshRenderBuffers[CAPSULE].m_MeshReference);
+		MeshRenderBuffers[CAPSULE].m_MeshReference.m_ResourcePtr = AssetManager::GetInstance()->GetMeshFactory().GetMeshController("cube_Bin.bin", MeshRenderBuffers[CAPSULE].m_MeshReference);*/
 
 		m_RenderPipeline->Create(ParticleRenderEntry);
 
-		struct FreeList
-		{
-			int count = MAX_PARTICLES;
-			std::array<int, MAX_PARTICLES> arr;
-		}initList;
+		//struct FreeList
+		//{
+		//	int count = MAX_PARTICLES;
+		//	std::array<int, MAX_PARTICLES> arr;
+		//}initList;
 
 		//Memset the array to 0
-		for (int i = 0; i < MAX_PARTICLES; ++i)
-			initList.arr[i] = i;
+		//for (int i = 0; i < MAX_PARTICLES; ++i)
+		//	initList.arr[i] = i;
 
 
-		m_RenderPipeline->UpdateUBO(&initList, sizeof(FreeList), 32, 0);
+		//m_RenderPipeline->UpdateUBO(&initList, sizeof(FreeList), 32, 0);
 
 		//creating index buffer for quad
 		std::vector<std::uint32_t> IndexQuad;
@@ -135,16 +146,16 @@ namespace TDS {
 												std::min(SpawnAmt, currentEmitter.GetMaxParticles()),
 												currentEmitter.GetSpawnTimer()
 			};
-			m_EmitterPipeline->BindDescriptor(0, 1, 0, true);
-			m_EmitterPipeline->UpdateUBO(&GPUPush, sizeof(Particle_Emitter_PushData), 33, 0);
 
+			m_EmitterPipeline->UpdateUBO(&GPUPush, sizeof(Particle_Emitter_PushData), 33, currentframe, 0, false, i);
 
-			ParticleInstanceGroup* group = (m_GroupCnt >= m_Group.size()) ? &m_Group.emplace_back() : &m_Group[m_GroupCnt];
-			m_GroupCnt++;
+			AddEmitterGroup(&currentEmitter, i, SpawnAmt);
+			//ParticleInstanceGroup* group = (m_GroupCnt >= m_Group.size()) ? &m_Group.emplace_back() : &m_Group[m_GroupCnt];
+			//m_GroupCnt++;
 
-			group->m_ParticleAmount = SpawnAmt;
-			group->m_PRenderBuffers = &MeshRenderBuffers[EmitterList[i].GetMeshType()];
-
+			//group->m_ParticleAmount = SpawnAmt;
+			//group->m_PRenderBuffers = &MeshRenderBuffers[EmitterList[i].GetMeshType()];
+			m_EmitterPipeline->BindDescriptor(0, 1, 0, true, i);
 
 			m_EmitterPipeline->DispatchCompute(ceil((SpawnAmt + 64) / 64), 1, 1);
 
@@ -161,12 +172,19 @@ namespace TDS {
 		m_ComputePipeline->SetCommandBuffer(commandBuffer);
 
 		float dt = TimeStep::GetDeltaTime();
+		struct timeblock {
+			float deltatime;
+			float EmitterRunTime;
+		}TimeBlock;
+		TimeBlock.deltatime = dt;
 		m_ComputePipeline->BindComputePipeline();
 		for (unsigned int i{ 0 }; i < Entities.size(); ++i)
 		{
 			Particle_Component& currentEmitter = EmitterList[i];
-			m_ComputePipeline->BindDescriptor(0, 1, 0, true);
-			m_ComputePipeline->UpdateUBO(&dt, sizeof(float), 35, 0);
+			float EmitterRunTime = currentEmitter.GetSpawnTimer();
+			TimeBlock.EmitterRunTime = EmitterRunTime;
+			m_ComputePipeline->BindDescriptor(0, 1, 0, true, i);
+			m_ComputePipeline->UpdateUBO(&dt, sizeof(float), 35, currentframe, 0, false, i);
 			int numwrkgrp = (currentEmitter.GetMaxParticles() + 128 - 1) / 128;
 			m_ComputePipeline->DispatchCompute(numwrkgrp, 1, 1);
 		}
@@ -189,15 +207,16 @@ namespace TDS {
 		m_RenderPipeline->SetCommandBuffer(commandBuffer);
 		m_RenderPipeline->BindPipeline();
 		CameraUBO temp = { view, proj };
-		m_RenderPipeline->UpdateUBO(&temp, sizeof(CameraUBO), 5, currentframe);
+
 
 
 		for (std::uint32_t i = 0; i < m_GroupCnt; ++i)
 		{
 			//m_RenderPipeline->BindVertexBuffer(*m_Group[i].m_PRenderBuffers->m_MeshReference.m_ResourcePtr->GetMeshBuffer()->m_VertexBuffer);
 			//m_RenderPipeline->BindIndexBuffer(*m_Group[i].m_PRenderBuffers->m_MeshReference.m_ResourcePtr->GetMeshBuffer()->m_IndexBuffer);
+			m_RenderPipeline->UpdateUBO(&temp, sizeof(CameraUBO), 5, currentframe, 0, false, i);
 			m_RenderPipeline->BindIndexBuffer(*m_IndexQuad);
-			m_RenderPipeline->BindDescriptor(currentframe, 1);
+			m_RenderPipeline->BindDescriptor(currentframe, 1, 0, false, i);
 
 			m_RenderPipeline->Draw(6, currentframe, m_Group[i].m_ParticleAmount);
 			//m_RenderPipeline->DrawInstancedIndexed(*m_Group[i].m_PRenderBuffers->m_MeshReference.m_ResourcePtr->GetMeshBuffer()->m_VertexBuffer, *m_Group[i].m_PRenderBuffers->m_MeshReference.m_ResourcePtr->GetMeshBuffer()->m_IndexBuffer, m_Group[i].m_ParticleAmount, currentframe);
@@ -211,5 +230,31 @@ namespace TDS {
 		m_EmitterPipeline->ShutDown();
 		m_RenderPipeline->ShutDown();
 		m_IndexQuad->DestroyBuffer();
+	}
+	void ParticleSystem::AddEmitterGroup(Particle_Component* Particles, std::uint32_t descIndex, std::uint32_t spawnAmount)
+	{
+		bool IncreaseGroupCnt = (m_GroupCnt >= m_Group.size());
+		ParticleInstanceGroup* group = IncreaseGroupCnt ? &m_Group.emplace_back() : &m_Group[m_GroupCnt];
+
+		m_GroupCnt++;
+		if (IncreaseGroupCnt)
+		{
+			struct FreeList
+			{
+				int count = MAX_PARTICLES;
+				std::array<int, MAX_PARTICLES> arr;
+			}initList;
+
+
+
+
+			for (int i = 0; i < MAX_PARTICLES; ++i)
+				initList.arr[i] = i;
+
+			m_EmitterPipeline->UpdateUBO(&initList, sizeof(FreeList), 32, 0, 0, false, descIndex);
+			m_EmitterPipeline->UpdateUBO(&initList, sizeof(FreeList), 32, 1, 0, false, descIndex);
+		}
+		group->m_ParticleAmount = spawnAmount;
+		/*group->m_PRenderBuffers = &MeshRenderBuffers[EmitterList[i].GetMeshType()];*/
 	}
 }

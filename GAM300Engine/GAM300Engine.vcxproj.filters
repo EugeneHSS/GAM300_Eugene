@@ -128,11 +128,16 @@
     <ClCompile Include="Src\Animation\Animation.cpp" />
     <ClCompile Include="Src\Animation\AnimationLoader.cpp" />
     <ClCompile Include="Src\Serialization\BinarySerializor.cpp" />
+    <ClCompile Include="Src\components\animationComponent.cpp" />
+    <ClCompile Include="Src\Animation\AnimationSystem.cpp" />
+    <ClCompile Include="Src\GraphicsResource\Revamped\MaterialAttributes.cpp" />
+    <ClCompile Include="Src\Rendering\Revamped\MaterialManager.cpp" />
+    <ClCompile Include="Src\Rendering\Revamped\FrameBuffers\CubeShadow.cpp" />
+    <ClCompile Include="Src\Rendering\Revamped\FrameBuffers\ShadowPass.cpp" />
     <ClCompile Include="Src\GraphicsResource\MaterialInfo.cpp" />
     <ClCompile Include="Src\Rendering\MaterialFactory\PhongBlinnMaterial.cpp" />
     <ClCompile Include="Src\Rendering\MaterialFactory\PBRMaterial.cpp" />
-    <ClCompile Include="Src\components\animationComponent.cpp" />
-    <ClCompile Include="Src\Animation\AnimationSystem.cpp" />
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Shared_Libs\MathCommon.h" />
@@ -168,7 +173,6 @@
     <ClInclude Include="Include\AssetManagement\FactoryBase.h" />
     <ClInclude Include="Include\AssetManagement\TextureFactory.h" />
     <ClInclude Include="Include\GraphicsResource\GraphicsResourceDefines.h" />
-    <ClInclude Include="Include\GraphicsResource\MaterialInfo.h" />
     <ClInclude Include="Include\GraphicsResource\TextureInfo.h" />
     <ClInclude Include="Include\GraphicsResource\VertexInfo.h" />
     <ClInclude Include="Include\GraphicsResource\AssetModel.h" />
@@ -302,12 +306,18 @@
     <ClInclude Include="Include\Animation\Animation.h" />
     <ClInclude Include="Include\Animation\AnimationInfo.h" />
     <ClInclude Include="Include\Animation\AnimationLoader.h" />
-    <ClInclude Include="Include\Rendering\MaterialFactory\MaterialShader.h" />
-    <ClInclude Include="Include\Rendering\MaterialFactory\PBRMaterial.h" />
-    <ClInclude Include="Include\Rendering\MaterialFactory\PhongBlinnMaterial.h" />
     <ClInclude Include="Include\components\animationComponent.h" />
     <ClInclude Include="Include\Animation\AnimationSystem.h" />
     <ClInclude Include="Include\AssetManagement\AnimationFactory.h" />
+    <ClInclude Include="Include\GraphicsResource\Revamped\MaterialAttributes.h" />
+    <ClInclude Include="Include\Rendering\Revamped\MaterialManager.h" />
+    <ClInclude Include="Include\Rendering\Revamped\FrameBuffers\CubeShadow.h" />
+    <ClInclude Include="Include\Rendering\Revamped\FrameBuffers\ShadowPass.h" />
+    <ClInclude Include="Include\Rendering\MaterialFactory\MaterialShader.h" />
+    <ClInclude Include="Include\Rendering\MaterialFactory\PBRMaterial.h" />
+    <ClInclude Include="Include\Rendering\MaterialFactory\PhongBlinnMaterial.h" />
+    <ClInclude Include="Include\Rendering\Revamped\FrameBuffers\IrrandianceFBO.h" />
+    <ClInclude Include="Include\Rendering\Revamped\FrameBuffers\PrefilteredFBO.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Logger\Logger.h" />

@@ -8,13 +8,11 @@
 \brief  Gameplay script for player hiding from the monster
 ****************************************************************************
 ***/
-using System;
-using System.Reflection.Emit;
 using ScriptAPI;
 
 public class Hiding : Script
 {
-    public bool interactable;
+    public bool interactable = true;
     public bool hiding;
     public Vector3 hidingPos;
     public Vector3 nonHidingPos;
@@ -23,29 +21,40 @@ public class Hiding : Script
     public GameObject enemyPathfinding;
     public GameObject _flashlight;
     public GameObject _InteractUI;
+    public GameObject _ExitTimerUI;
     //public CheckGameState myGameState;
     public GameObject closet;
+    public GameObject doorStates;
+    public GameObject doorText;
     [Header("AudioStuff")]
     //public AudioSource playerVOSource;
-    public AudioComponent audioPlayer;
+    public AudioComponent audioPlayer;  //#1
     String[] voClips;
     public String[] subtitles;
     int counter;
     public static bool playOnce = true;
     GameObject textmachine;
 
+    public float hidingTimer = 0.5f;
+    public float maxHidingTime = 0.5f;
+
+    private bool fadeOut = false;
+    private bool fadeIn = false;
+    private float originalFadeValue;
+    private float fadeValueIncrement = 0.05f;
+
+    private float originalUIScale;
+
     private float timer = 1.0f;
 
     public float turnSpeed = 0.01f;
+    private bool dialogueStarted = false;
 
-    public int numOfPaintingsTook = 0;
 
     public override void Awake()
     {
-        numOfPaintingsTook = 0;
-
         //counter = 0;
-        audioPlayer = gameObject.GetComponent<AudioComponent>();
+        audioPlayer = gameObject.GetComponent<AudioComponent>();    //#2
         voClips = new string[3];
         voClips[0] = "pc_hideinclosetfirst";
         voClips[1] = "pc_wanderingcloset";
@@ -53,6 +62,8 @@ public class Hiding : Script
         subtitles = new String[2];
         subtitles[0] = "Nothing inside";
         subtitles[1] = "But I could hide in here in case someone shows up";
+        doorText = GameObjectScriptFind("DoorText");    // Hate this please change after milestone
+        doorStates = GameObjectScriptFind("DoorStates");    // Hate this please change after milestone
     }
 
     public override void Start()
@@ -60,49 +71,51 @@ public class Hiding : Script
         //_flashlight = player.GetComponent<Flashlight_Script>();
         hidingPos = closet.transform.GetPosition();
         _RotationAngle = 180.0f;
-
+        originalFadeValue = GraphicsManagerWrapper.GetFadeFactor();
+        originalUIScale = _ExitTimerUI.transform.GetScale().X;
         timer = 0.8f;
-
     }
 
     public override void Update()
     {
-
-        if (interactable && gameObject.GetComponent<RigidBodyComponent>().IsRayHit())
+        if (dialogueStarted) { timer -= Time.deltaTime; }
+        if (timer <= 0.0f) //make sure text goes away even when u are not looking at closet
         {
-            _InteractUI.SetActive(true);
+            //counter = 1;
+            GameplaySubtitles.counter = 10; //but i could hide
+            playOnce = false;
+        }
+        if (interactable && gameObject.GetComponent<RigidBodyComponent>().IsRayHit()&& !hiding)
+        {
+            //_InteractUI.SetActive(true);
+            doorStates.GetComponent<DoorState>().doorLookedAt = true;
+            //doorText.SetActive(true);
+            doorText.GetComponent<UISpriteComponent>().SetFontMessage("Press E to Hide");
 
 
-            if (playOnce && !Painting_Script.isPaintingCollected)
+            if (playOnce && !p07.isPaintingCollected && timer > 0.0f)
             {
                 //textmachine.SetActive(false);
                 //UISpriteComponent Sprite = GameObjectScriptFind("VOSubtitles").GetComponent<UISpriteComponent>();
-                if (timer <= 0.0f)
-                {
-                    //counter = 1;
-
-                    GameplaySubtitles.counter = 10; //but i could hide
-                    playOnce = false;
-                }
-                else
-                {
-                    timer -= Time.deltaTime;
-                    GameplaySubtitles.counter = 9; //nothing inside
-                    audioPlayer.play(voClips[0]);
-
-
-                }
+                dialogueStarted = true;
+                
+                GameplaySubtitles.counter = 9; //nothing inside
+                audioPlayer.play(voClips[0]);
+                
             }
-            
-            
+
+
             //Sprite.SetFontMessage(subtitles[counter]); //no effect
 
-            
 
-            if (Input.GetKeyDown(Keycode.E) && hiding == false)
+
+            if (Input.GetKeyDown(Keycode.E) && hiding == false) // Player hides to trigger the monster event
             {
+
+
+
                 hiding = true;
-                interactable = false;
+                //interactable = false;
                 nonHidingPos = player.transform.GetPosition();
                 //player.transform.SetPosition(closet.transform.GetPosition());
                 //counter = 1;
@@ -124,70 +137,110 @@ public class Hiding : Script
                 }
                 player.GetComponent<Flashlight_Script>().activateLight = false;
                 _flashlight.SetActive(false);
-
-                if (enemyPathfinding.GetComponent<GhostMovement>().hideEventDone == false && numOfPaintingsTook == 1)
-                {
-                    if (enemyPathfinding.GetComponent<GhostMovement>().hideEvent == false)
-                    {
-                        enemyPathfinding.transform.SetPosition(new Vector3(1790.0f, enemyPathfinding.transform.GetPosition().Y, -750.0f));
-                        enemyPathfinding.GetComponent<GhostMovement>().hideEvent = true;
-                    }
-                    enemyPathfinding.GetComponent<GhostMovement>().isChasingPlayer = false;
-                    enemyPathfinding.GetComponent<GhostMovement>().playSound = false;
-                }
+                audioPlayer.play("hiding enter exit");
             }
         }
         else if (hiding)
         {
-            _InteractUI.SetActive(false);
+            doorText.GetComponent<UISpriteComponent>().SetFontMessage("Hold E to Leave Closet");
 
-            if (Input.GetKeyDown(Keycode.E))
+            //_InteractUI.SetActive(false);
+            doorStates.GetComponent<DoorState>().doorLookedAt = true;
+
+            if (Input.GetKey(Keycode.E) || Input.GetKeyDown(Keycode.E))
             {
-                //Console.WriteLine("There");
-                hiding = false;
-                interactable = true;
-                //player.transform.SetPosition(nonHidingPos);
-
-                Vector3 rotation = player.transform.GetRotation();
-                Quaternion quat = new Quaternion(rotation);
-                player.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(nonHidingPos, new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(1, 1, 1).Normalize(), new Vector3(1, 1, 1).Normalize());
-
-                // add if monster is finished
-                player.GetComponent<FPS_Controller_Script>().playerCanMove = true;
-                player.GetComponent<FPS_Controller_Script>().enableHeadBob = true;
-                _flashlight.SetActive(true);
-                if (GhostMovement.GhostGone)
-                {
-                    audioPlayer.play(voClips[2]);
-                    GameplaySubtitles.counter = 15;
-                }
+                hidingTimer -= Time.deltaTime;
+                _ExitTimerUI.SetActive(true);
+                _ExitTimerUI.transform.SetScaleX((hidingTimer / maxHidingTime) * originalUIScale);
                 
+                if (hidingTimer <= 0.0f)
+                {
+                    //Console.WriteLine("There");
+                    _ExitTimerUI.SetActive(false);
+                    audioPlayer.play("hiding enter exit");
+                    hiding = false;
+                    interactable = true;
+                    //player.transform.SetPosition(nonHidingPos);
 
-                //Input.KeyRelease(Keycode.E);
+                    Vector3 rotation = player.transform.GetRotation();
+                    Quaternion quat = new Quaternion(rotation);
+                    player.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(nonHidingPos, new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(1, 1, 1).Normalize(), new Vector3(1, 1, 1).Normalize());
+
+                    // add if monster is finished
+                    player.GetComponent<FPS_Controller_Script>().playerCanMove = true;
+                    player.GetComponent<FPS_Controller_Script>().enableHeadBob = true;
+                    _flashlight.SetActive(true);
+
+                    if (EventBedroomHiding.doOnce == false)
+                    {
+                        audioPlayer.play("pc_monstergoesaway2");
+                        GameplaySubtitles.counter = 15;
+                    }
+                }
+            }
+            else
+            {
+                hidingTimer = maxHidingTime;
+                _ExitTimerUI.SetActive(false);
             }
         }
         else
         {
-            _InteractUI.SetActive(false);
-            
+            //_InteractUI.SetActive(false);
+
 
         }
-
     }
 
-    /*private void OnTriggerEnter(GameObject other)
+    void FadeInFadeOut()
     {
-        if (other.GetComponent<NameTagComponent>().GetName() == "Enemy" && hiding == true)
+        if (fadeOut && hiding)  //Start of hiding
         {
-            if (enemyPathfinding.isChasingPlayer && hiding == true)
+            float fadeValue = GraphicsManagerWrapper.GetFadeFactor();
+            fadeValue -= fadeValueIncrement;
+            GraphicsManagerWrapper.SetFadeFactor(fadeValue);
+            if (fadeValue <= 0.0f && !fadeIn)
             {
-                player.transform.SetPosition(nonHidingPos);
-                hiding = false;
-                interactable = false;
-                _flashlight.is_Enabled = true;
-                //Debug.LogError("Pulled Out");
-                //Play Attack Player Animation
+                fadeIn = true;
+                fadeOut = false;
             }
         }
-    }*/
+        if (fadeIn && hiding) //In the Closet
+        {
+            float fadeValue = GraphicsManagerWrapper.GetFadeFactor();
+            fadeValue += fadeValueIncrement;
+            GraphicsManagerWrapper.SetFadeFactor(fadeValue);
+            if (fadeValue >= originalFadeValue + 4.0f)
+            {
+                fadeIn = false;
+                fadeOut = false;
+            }
+        }
+        if (hidingTimer <= 0.0f)
+        {
+            fadeOut = true;
+        }
+        if (fadeOut && !hiding)
+        {
+            float fadeValue = GraphicsManagerWrapper.GetFadeFactor();
+            fadeValue -= fadeValueIncrement;
+            GraphicsManagerWrapper.SetFadeFactor(fadeValue);
+            if (fadeValue <= 0.0f && !fadeIn)
+            {
+                fadeIn = true;
+                fadeOut = false;
+            }
+        }
+        if (fadeIn && !hiding) //In the Closet
+        {
+            float fadeValue = GraphicsManagerWrapper.GetFadeFactor();
+            fadeValue += fadeValueIncrement;
+            GraphicsManagerWrapper.SetFadeFactor(fadeValue);
+            if (fadeValue >= originalFadeValue)
+            {
+                fadeIn = false;
+                fadeOut = false;
+            }
+        }
+    }
 }

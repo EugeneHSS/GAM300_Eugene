@@ -251,6 +251,11 @@ namespace TDS
 		delete m_FrameBuffer.m_Renderpass;
 	}
 
+	VulkanPipeline& Renderer2D::GetPipeline()
+	{
+		return *m_Pipeline;
+	}
+
 	void SpriteBatch::AddToBatch(void* component, Transform* transform, std::uint32_t entity)
 	{
 		auto Renderer2D = GraphicsManager::getInstance().GetRenderer2D();

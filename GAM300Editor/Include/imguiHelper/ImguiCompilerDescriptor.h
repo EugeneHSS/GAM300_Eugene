@@ -2,7 +2,7 @@
 
 #include "ImguiHelper.h"
 #include "imguiHelper/ImguiHierarchy.h"
-#include "Tools/CompilerSettings.h"
+#include "Tools/TextureCompressor.h"
 namespace TDS
 {
 
@@ -14,7 +14,7 @@ namespace TDS
 	public:
 
 		CompilerDescriptors();
-
+		~CompilerDescriptors();
 		void		init();
 		void		update();
 		
@@ -54,7 +54,7 @@ namespace TDS
 				m_IsSelected = false;
 				m_DescType = DESC_TEXTURE;
 			}
-			TextureDescriptor	m_TextureDescriptor{};
+			TextureCompilerSetting	m_TextureDescriptor{};
 		};
 
 		std::array<CompilerDisplay*, DESC_TOTAL>	m_CompilerDescriptors;

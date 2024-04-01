@@ -96,8 +96,8 @@ namespace TDS
 		DLL_API bool& getIsRayHit() { return mIsRayHit; }
 		DLL_API void setIsRayHit(bool hit) { mIsRayHit = hit; }
 
-		DLL_API bool& getDoor() { return mDoor; }
-		DLL_API void setDoor(bool door) { mDoor = door; }
+		DLL_API bool& getIsPlayer() { return mIsPlayer; }
+		DLL_API void setIsPlayer(bool isPlayer) { mIsPlayer = isPlayer; }
 
 		RTTR_ENABLE(IComponent);
 		RTTR_REGISTRATION_FRIEND
@@ -123,7 +123,7 @@ namespace TDS
 		float mRayScale;
 		bool mIsRayCast;
 		bool mIsRayHit;
-		bool mDoor;
+		bool mIsPlayer;
 
 		MotionType	mMotionType;
 		JoltBodyID	mBodyID;

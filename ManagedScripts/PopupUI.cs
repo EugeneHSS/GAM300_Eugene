@@ -21,11 +21,16 @@ public class PopupUI : Script
     public bool lockpickDisplayed;
     public UISpriteComponent popUpScreen;
 
+    private AudioComponent pauseAudio;
+    private string audioOpenName = "inventory open";
+    private string audioCloseName = "inventory close";
+
     public GameObject player;
 
     public override void Awake()
     {
         lockpickDisplayed = false;
+        pauseAudio = gameObject.GetComponent<AudioComponent>();
     }
 
     public override void Start()
@@ -43,6 +48,7 @@ public class PopupUI : Script
             if (gameBlackboard.gameState == GameBlackboard.GameState.InGame)
             {
                 popUpScreen.SetEnabled(true);
+                pauseAudio.play(audioOpenName);
                 player.GetComponent<FPS_Controller_Script>().playerCanMove = false;
                 player.GetComponent<FPS_Controller_Script>().cameraCanMove = false;
                 gameBlackboard.gameState = GameBlackboard.GameState.Paused;
@@ -58,6 +64,7 @@ public class PopupUI : Script
             else //if in pause menu close and continue game
             {
                 popUpScreen.SetEnabled(false);
+                pauseAudio.play(audioCloseName);
                 player.GetComponent<FPS_Controller_Script>().playerCanMove = true;
                 player.GetComponent<FPS_Controller_Script>().cameraCanMove = true;
                 gameBlackboard.gameState = GameBlackboard.GameState.InGame;

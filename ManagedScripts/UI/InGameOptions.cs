@@ -14,11 +14,7 @@ using System;
 public class InGameOptions : Script
 {
     public GameBlackboard? gameBlackboard;
-
     UISpriteComponent optionsSprite;
-
-    //public GameObject player;
-
     GameObject OptionsObject;
 
     public override void Awake()
@@ -37,7 +33,6 @@ public class InGameOptions : Script
         if (gameBlackboard.gameState == GameBlackboard.GameState.Options)
         {
             OptionsObject.SetActive(true);
-            
         }
         if(InGameOptionsButton.openedOptionsMenu == false)
         {

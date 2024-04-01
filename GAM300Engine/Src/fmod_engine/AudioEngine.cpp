@@ -12,6 +12,7 @@
 #include <fmod/fmod_errors.h>
 #include <iostream>
 #include <fmod_engine/AudioEngine.h>
+#include "../camera/camerasystem/CameraSystem.h"
 
 namespace TDS
 {
@@ -39,7 +40,7 @@ namespace TDS
             ERRCHECK(lowLevelSystem->init(MAX_AUDIO_CHANNELS, FMOD_INIT_NORMAL | FMOD_INIT_3D_RIGHTHANDED, 0));
             ERRCHECK(FMOD::Studio::System::create(&studioSystem));
             ERRCHECK(studioSystem->getCoreSystem(&lowLevelSystem));
-            ERRCHECK(lowLevelSystem->setSoftwareFormat(AUDIO_SAMPLE_RATE, FMOD_SPEAKERMODE_STEREO, 0));
+            ERRCHECK(lowLevelSystem->setSoftwareFormat(AUDIO_SAMPLE_RATE, FMOD_SPEAKERMODE_5POINT1, 0));
             ERRCHECK(lowLevelSystem->set3DSettings(1.0, DISTANCEFACTOR, 0.5f));
             ERRCHECK(lowLevelSystem->set3DNumListeners(1));
             ERRCHECK(studioSystem->initialize(MAX_AUDIO_CHANNELS, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, 0));
@@ -159,8 +160,7 @@ namespace TDS
                         }
 
                         // start play in 'paused' state
-                        ERRCHECK(lowLevelSystem->playSound(sounds[soundInfo.getUniqueID()], 0, true /* start paused */, &channel));
-                        ERRCHECK(channel->setChannelGroup(sort_channel));
+                        ERRCHECK(lowLevelSystem->playSound(sounds[soundInfo.getUniqueID()], sort_channel, true /* start paused */, &channel));
 
                         if (soundInfo.is3D)
                             set3dChannelPosition(soundInfo, channel);
@@ -372,15 +372,17 @@ namespace TDS
 
         void AudioEngine::FadeInSound(unsigned int duration, SoundInfo& soundInfo)
         {
-            pauseSound(soundInfo);
-
+            playSound(soundInfo);
+            
             unsigned long long DSPClock{ 0 };
             int rate{ 0 };
             ERRCHECK(lowLevelSystem->getSoftwareFormat(&rate, 0, 0));
 
+            ERRCHECK(channels[soundInfo.uniqueID]->setPaused(true));
             ERRCHECK(channels[soundInfo.uniqueID]->getDSPClock(0, &DSPClock));
             ERRCHECK(channels[soundInfo.uniqueID]->addFadePoint(DSPClock, 0.f));
             ERRCHECK(channels[soundInfo.uniqueID]->addFadePoint(DSPClock + (rate * duration), soundInfo.volume));
+            ERRCHECK(channels[soundInfo.uniqueID]->setPaused(false));
         }
 
         void AudioEngine::updateSoundLoopVolume(SoundInfo & soundInfo, float newVolume, unsigned int fadeSampleLength)
@@ -413,14 +415,24 @@ namespace TDS
 
         void AudioEngine::update3DSoundPosition(Vec3 pos, SoundInfo& soundInfo)
         {
-            if (checkPlaying(soundInfo) && soundInfo.is3D)
+            if (checkPlaying(soundInfo))
             {
+                soundInfo.is3D = true;
                 soundInfo.position = pos;
-                ERRCHECK(sounds[soundInfo.getUniqueID()]->setMode(FMOD_3D));
-                set3dChannelPosition(soundInfo, channels[soundInfo.getUniqueID()]);
+
+                channels[soundInfo.uniqueID]->stop();
             }
-            /*else
-                std::cout << "Audio Engine: Can't update sound position!\n";*/
+
+            sounds[soundInfo.uniqueID]->release();
+            channels.erase(soundInfo.uniqueID);
+            sounds.erase(soundInfo.uniqueID);
+            size_t first = soundInfo.getFilePath().find_last_of('\\') + 1,
+                last = soundInfo.getFilePath().find_last_of('.') - first;
+            std::string sound_name = soundInfo.getFilePath().substr(first, last);
+            SoundInfo_Container.erase(soundInfo.filePath);
+
+            loadSound(soundInfo);
+            playSound(soundInfo);
         }
 
         bool AudioEngine::checkPlaying(SoundInfo& soundInfo)
@@ -451,6 +463,7 @@ namespace TDS
             if (!check)
             {
                 soundInfo.whatState = SOUND_LOADED;
+                channels.erase(soundInfo.uniqueID);
             }
 
             return !check;
@@ -461,6 +474,7 @@ namespace TDS
             listenerpos = { posX,     posY,     posZ };
             forward = { forwardX, forwardY, forwardZ };
             up = { upX,      upY,      upZ };
+
             ERRCHECK(lowLevelSystem->set3DListenerAttributes(0, &listenerpos, 0, &forward, &up));
         }
 
@@ -472,12 +486,26 @@ namespace TDS
                 fvel{velX, velY, velZ},
                 ffor{forX, forY, forZ},
                 fup{ upX, upY, upZ };
-            ERRCHECK(lowLevelSystem->get3DListenerAttributes(1, &fpos, &fvel, &ffor, &fup));
+            ERRCHECK(lowLevelSystem->get3DListenerAttributes(0, &fpos, &fvel, &ffor, &fup));
 
             posX = fpos.x; posY = fpos.y; posZ = fpos.z;
             velX = fvel.x; velY = fvel.y; velZ = fvel.z;
             forX = ffor.x; forY = ffor.y; forZ = ffor.z;
             upX = fup.x; upY = fup.y; upZ = fup.z;
+        }
+
+        void AudioEngine::get3DListenerCharacteristics(Vec3& pos, Vec3& vel, Vec3& forward, Vec3& upVec)
+        {
+            FMOD_VECTOR fpos{ pos.x, pos.y, pos.z },
+                fvel{ vel.x, vel.y, vel.z },
+                ffor{ forward.x, forward.y, forward.z },
+                fup{ upVec.x, upVec.y, upVec.z };
+            ERRCHECK(lowLevelSystem->get3DListenerAttributes(0, &fpos, &fvel, &ffor, &fup));
+
+            pos.x = fpos.x; pos.y = fpos.y; pos.z = fpos.z;
+            vel.x = fvel.x; vel.y = fvel.y; vel.z = fvel.z;
+            forward.x = ffor.x; forward.y = ffor.y; forward.z = ffor.z;
+            upVec.x = fup.x; upVec.y = fup.y; upVec.z = fup.z;
         }
 
         unsigned int AudioEngine::getSoundLengthInMS(SoundInfo soundInfo)
@@ -604,6 +632,23 @@ namespace TDS
             return sounds;
         }
 
+        std::map<std::string, SoundInfo> AudioEngine::getChannelInfoContainer()
+        {
+            std::map<std::string, SoundInfo> temp;
+
+            for (auto& it : channels)
+            {
+                temp[findSound(it.first)->getFilePath()] = *findSound(it.first);
+            }
+
+            return temp;
+        }
+
+        int AudioEngine::GetAmountOfChannelsPlaying()
+        {
+            return channels.size();
+        }
+
         std::map<std::string, FMOD::Studio::Bank*> AudioEngine::getBankContainer()
         {
             return soundBanks;
@@ -622,6 +667,19 @@ namespace TDS
         SoundInfo* AudioEngine::findSound(std::string name)
         {
             return SoundInfo_Container[name];
+        }
+
+        SoundInfo* AudioEngine::findSound(unsigned int ID)
+        {
+            for (auto& it : SoundInfo_Container)
+            {
+                if (it.second->uniqueID == ID)
+                {
+                    return it.second;
+                }
+            }
+
+            return nullptr;
         }
 
         //// Private definitions 
@@ -652,9 +710,9 @@ namespace TDS
 
         void ERRCHECK_fn(FMOD_RESULT result, const char* file, int line)
         {
-            //(void)file;//TODO
-            //if (result != FMOD_OK)
-            //    std::cout << "FMOD ERROR: AudioEngine.cpp [Line " << line << "] " << result << "  - " << FMOD_ErrorString(result) << '\n';
+            (void)file;//TODO
+            if (result != FMOD_OK)
+                std::cout << "FMOD ERROR: AudioEngine.cpp [Line " << line << "] " << result << "  - " << FMOD_ErrorString(result) << '\n';
         }
 
         void AudioEngine::printEventInfo(FMOD::Studio::EventDescription * eventDescription)
@@ -697,6 +755,7 @@ namespace TDS
     void proxy_audio_system::audio_system_update(const float dt, const std::vector<EntityID>& entities, Transform* soundInfo)
     {
         aud_instance->update();
+        Play_queue();
     }
 
     void proxy_audio_system::audio_event_init(SoundInfo* container)
@@ -706,7 +765,6 @@ namespace TDS
 
     void proxy_audio_system::audio_event_update()
     {
-        
     }
 
     void proxy_audio_system::load_all_audio_files()
@@ -870,7 +928,7 @@ namespace TDS
     }
 
     void proxy_audio_system::ScriptSetListenerPos(Vec3 pos, Vec3 for_vec, Vec3 up_vec)
-    {
+    {        
         aud_instance->set3DListenerPosition(pos.x, pos.y, pos.z,
             for_vec.x, for_vec.y, for_vec.z,
             up_vec.x, up_vec.y, up_vec.z);
@@ -900,23 +958,19 @@ namespace TDS
     }
 
     void proxy_audio_system::Play_queue()
-    {        
-        /*Q_state = true;
-
-        if (Queue.begin()->second.first)
+    {       
+        if(!Queue.empty())
         {
-            aud_instance->playSound(*Queue.begin()->second.second);
-            Q_name = *Queue.begin()->second.second;
-            Queue.extract(Queue.begin()->first);
+            if (Queue.begin()->second.first)
+            {
+                Queue.begin()->second.first = false;
+                aud_instance->playSound(*Queue.begin()->second.second);
+            }
+            else if (checkifdone(Queue.begin()->first))
+            {
+                Queue.erase(Queue.begin()->first);
+            }
         }
-        if (aud_instance->checkPlaying(Q_name))
-        {
-            Q_name = Queue.begin()->first;
-        }
-        if (Queue.empty())
-        {
-            Q_state = false;
-        }*/
     }
 
     void proxy_audio_system::Clear_queue()

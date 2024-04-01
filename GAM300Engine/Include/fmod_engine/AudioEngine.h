@@ -229,14 +229,23 @@ namespace TDS
 
             /**
              * Get the values of the listener
-             * @param pos - position of the listener
-             * @param velocity - speed of the movement
-             * @param forward - forward angle character is looking in
-             * @param up - up vector that is perpendicular to forward vector 
+             * @param float pos - position of the listener
+             * @param float velocity - speed of the movement
+             * @param float forward - forward angle character is looking in
+             * @param float up - up vector that is perpendicular to forward vector 
             */
             DLL_API  void get3DListenerCharacteristics(float& posX, float& posY, float& posZ,
                 float& velX, float& velY, float& velZ, float& forX, float& forY, float& forZ,
                 float& upX, float& upY, float& upZ);
+
+            /**
+             * Get the values of the listener
+             * @param Vector pos - position of the listener
+             * @param Vector velocity - speed of the movement
+             * @param Vector forward - forward angle character is looking in
+             * @param Vector up - up vector that is perpendicular to forward vector
+            */
+            DLL_API  void get3DListenerCharacteristics(Vec3& pos, Vec3& vel, Vec3& forward, Vec3& upVec);
 
             /**
             * Utility method that returns the length of a SoundInfo's audio file in milliseconds
@@ -313,7 +322,17 @@ namespace TDS
             /**
              * Get container of sounds that's loaded
              */
-            DLL_API std::map<unsigned int, FMOD::Sound*> getSoundContainer();
+            DLL_API  std::map<unsigned int, FMOD::Sound*> getSoundContainer();
+
+            /**
+             * Get container of channels and the sound name together
+             */
+            DLL_API  std::map<std::string, SoundInfo> getChannelInfoContainer();
+
+            /**
+             * Get the amount of channels that's playing
+            */
+            DLL_API  int GetAmountOfChannelsPlaying();
 
             /**
              * Get container of banks that's loaded
@@ -334,6 +353,11 @@ namespace TDS
              * Find the SoundInfo by name
              */
             DLL_API  SoundInfo* findSound(std::string name);
+
+            /**
+             * Find the SoundInfo by unique ID
+             */
+            DLL_API  SoundInfo* findSound(unsigned int ID);
 
             // The audio sampling rate of the audio engine
             DLL_API  static const int AUDIO_SAMPLE_RATE = 44100;
@@ -378,7 +402,7 @@ namespace TDS
             static const unsigned int MAX_AUDIO_CHANNELS = 1024;
 
             // Units per meter.  I.e feet would = 3.28.  centimeters would = 100.
-            const float DISTANCEFACTOR = 100.0f;
+            const float DISTANCEFACTOR = 150.0f;
 
             // Listener head position, initialized to default value
             FMOD_VECTOR listenerpos = { 0.0f, 0.0f, -1.0f * DISTANCEFACTOR };

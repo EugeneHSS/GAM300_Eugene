@@ -40,8 +40,9 @@ namespace TDS
 
 		rttr::variant extract_basic_types(rapidjson::Value& val);
 		void DeserializeRecursion(rttr::instance m_inst, rapidjson::Value& json_obj);
-		void ReadSequential(rttr::variant& var, rapidjson::Value& json_array_value);
-		void ReadAssociative(rttr::variant& var, rapidjson::Value& json_map);
+		void ReadSequential(rttr::variant_sequential_view& view, rapidjson::Value& json_array_value);
+		void ReadAssociative(rttr::variant_associative_view& view, rapidjson::Value& json_map);
+		rttr::variant ExtractValue(rapidjson::Value::MemberIterator& itr, const rttr::type& t);
 		bool WritePair(const rttr::variant& var);
 
 	public:

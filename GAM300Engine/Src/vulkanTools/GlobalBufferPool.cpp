@@ -5,25 +5,25 @@
 #include "vulkanTools/Renderer.h"
 namespace TDS
 {
-	std::shared_ptr<UBO> GlobalBufferPool::GetBuffer(std::uint32_t binding)
+	std::shared_ptr<UBO> GlobalBufferPool::GetBuffer(std::uint32_t binding, std::uint32_t descIndex)
 	{
-		auto find = m_SharedBufferBindings.find(binding);
-		if (find == m_SharedBufferBindings.end())
+		auto find = m_SharedBufferBindings[descIndex].find(binding);
+		if (find == m_SharedBufferBindings[descIndex].end())
 			return nullptr;
 		return find->second[0];
 	}
-	std::vector<std::shared_ptr<UBO>>* GlobalBufferPool::GetBufferContainer(std::uint32_t binding)
+	std::vector<std::shared_ptr<UBO>>* GlobalBufferPool::GetBufferContainer(std::uint32_t binding, std::uint32_t descIndex)
 	{
-		auto find = m_SharedBufferBindings.find(binding);
-		if (find == m_SharedBufferBindings.end())
+		auto find = m_SharedBufferBindings[descIndex].find(binding);
+		if (find == m_SharedBufferBindings[descIndex].end())
 			return nullptr;
 		return &find->second;
 	}
-	void GlobalBufferPool::AddToGlobalPool(size_t size, std::uint32_t binding, VkBufferUsageFlags usage, std::string_view BufferName, void* data)
+	void GlobalBufferPool::AddToGlobalPool(size_t size, std::uint32_t binding, VkBufferUsageFlags usage, std::string_view BufferName, void* data, std::uint32_t descIndex)
 	{
 
-		auto find = m_SharedBufferBindings.find(binding);
-		if (find == m_SharedBufferBindings.end())
+		auto find = m_SharedBufferBindings[descIndex].find(binding);
+		if (find == m_SharedBufferBindings[descIndex].end())
 		{
 			std::shared_ptr<UBO> newBuffer = std::make_shared<UBO>();
 			newBuffer->m_Buffer = std::make_shared<VMABuffer>();
@@ -41,12 +41,12 @@ namespace TDS
 			newBuffer->m_BufferInfo.buffer = newBuffer->m_Buffer->GetBuffer();
 			newBuffer->m_BufferInfo.offset = 0;
 			newBuffer->m_BufferInfo.range = size;
-			m_SharedBufferBindings[binding].resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+			m_SharedBufferBindings[descIndex][binding].resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
 
 			for (std::uint32_t i = 0; i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT; ++i)
-				m_SharedBufferBindings[binding][i] = newBuffer;
+				m_SharedBufferBindings[descIndex][binding][i] = newBuffer;
 
-			m_SharedBindingNames[BufferName.data()] = binding;
+			m_SharedBindingNames[descIndex][BufferName.data()] = binding;
 		}
 		else
 		{
@@ -91,19 +91,20 @@ namespace TDS
 	//	}
 	//}
 
-	bool GlobalBufferPool::BindingExist(std::uint32_t binding)
+	bool GlobalBufferPool::BindingExist(std::uint32_t binding, std::uint32_t descIndex)
 	{
-		return m_SharedBufferBindings.find(binding) != m_SharedBufferBindings.end();
+		m_SharedBufferBindings[descIndex];
+		return m_SharedBufferBindings[descIndex].find(binding) != m_SharedBufferBindings[descIndex].end();
 	}
 
-	bool GlobalBufferPool::BindingExist(std::string_view name)
+	bool GlobalBufferPool::BindingExist(std::string_view name, std::uint32_t descIndex)
 	{
-		return m_SharedBindingNames.find(name.data()) != m_SharedBindingNames.end();
+		return m_SharedBindingNames[descIndex].find(name.data()) != m_SharedBindingNames[descIndex].end();
 	}
 
-	DLL_API std::uint32_t GlobalBufferPool::GetBinding(std::string_view name)
+	DLL_API std::uint32_t GlobalBufferPool::GetBinding(std::string_view name, std::uint32_t descIndex)
 	{
-		return m_SharedBindingNames[name.data()];
+		return m_SharedBindingNames[descIndex][name.data()];
 	}
 
 	void DLL_API GlobalBufferPool::Destroy()

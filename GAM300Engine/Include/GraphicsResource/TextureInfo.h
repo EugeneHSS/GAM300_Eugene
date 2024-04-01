@@ -37,7 +37,8 @@ namespace TDS
 
 	struct TextureInfo
 	{
-		VkSamplerAddressMode			m_SampleAddressMode = VkSamplerAddressMode::VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+		VkSamplerAddressMode			m_USampleAddressMode = VkSamplerAddressMode::VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+		VkSamplerAddressMode			m_VSampleAddressMode = VkSamplerAddressMode::VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
 		VkBorderColor					m_BorderClr = VkBorderColor::VK_BORDER_COLOR_INT_OPAQUE_WHITE;
 		VkFilter						m_ImageFilter = VkFilter::VK_FILTER_LINEAR;
 		std::uint32_t					mipCount = 1;

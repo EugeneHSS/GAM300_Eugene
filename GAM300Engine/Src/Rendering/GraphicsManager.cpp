@@ -22,6 +22,7 @@
 #include "Rendering/FontRenderer.h"
 #include "Rendering/Skybox.h"
 #include "Rendering/ParticleSystem.h"
+#include "Rendering/Revamped/MaterialManager.h"
 #undef BROADCAST_MESSAGE
 
 
@@ -58,6 +59,7 @@ namespace TDS
 		m_SwapchainRenderer = std::make_shared<Renderer>(*m_pWindow, *m_MainVkContext);
 		m_Renderer2D = std::make_shared<Renderer2D>();
 		m_FontRenderer = std::make_shared<FontRenderer>();
+		m_MaterialManager = std::make_shared<MaterialManager>();
 		DefaultTextures::GetInstance().Init();
 
 
@@ -175,15 +177,16 @@ namespace TDS
 	{
 		if (currentCommand == nullptr) return;
 
+
+		m_DeferredController->UpdateAllTextureArrays();
+
 		auto currFrame = m_SwapchainRenderer->getFrameIndex();
 
-		
 		m_DeferredController->G_BufferPass(currentCommand, currFrame);
 		m_DeferredController->LightingPass(currentCommand, currFrame);
 		
 		m_DeferredController->CombinationPass(currentCommand, currFrame);
 
-		
 		m_ObjectPicking->Update(currentCommand, currFrame, InputSystem::GetInstance()->getLocalMousePos());
 
 		m_SwapchainRenderer->BeginSwapChainRenderPass(currentCommand);
@@ -221,6 +224,11 @@ namespace TDS
 	bool GraphicsManager::IsRenderOn()
 	{
 		return m_StartRender;
+	}
+
+	MaterialManager& GraphicsManager::GetMaterialManager()
+	{
+		return *m_MaterialManager;
 	}
 
 

@@ -34,6 +34,7 @@ namespace TDS
 		}
 		if (!m_Data.LoadTexture(path))
 		{
+			TDS_ERROR("Failed to load texture {}", path.data());
 			return;
 		}
 		m_TextureInfo.m_Format = ConvertToVulkanFormat(m_Data.m_TextureLoaded.GetFormat());

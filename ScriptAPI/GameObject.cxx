@@ -19,6 +19,17 @@ namespace ScriptAPI
 		Console::WriteLine("Unreferenced Game Object");
 	}
 
+	bool GameObject::GetActive()
+	{
+		if (GetEntityID())
+		{
+			return TDS::ecs.getEntityIsEnabled(GetEntityID());
+		}
+
+		Console::WriteLine("Unreferenced Game Object");
+		return false;
+	}
+
 	TDS::EntityID GameObject::GetEntityID()
 	{
 		return entityID;
@@ -92,6 +103,10 @@ namespace ScriptAPI
 		else if (type == PointlightComponent::typeid)
 		{
 			return safe_cast<T>(PointlightComponent(entityID));
+		}
+		else if (type == AnimatedComponent::typeid)
+		{
+			return safe_cast<T>(AnimatedComponent(entityID));
 		}
 
 		//Console::WriteLine(entityID.ToString() + "\t" + type->FullName);

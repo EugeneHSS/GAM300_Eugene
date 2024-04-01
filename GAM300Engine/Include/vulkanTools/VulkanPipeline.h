@@ -45,8 +45,6 @@ namespace TDS
 		std::vector<VkDescriptorSet>											m_DescriptorSets;
 		std::vector<VkDescriptorSet>											m_TextureOrBindless;
 		std::uint32_t															descContainerSize = 0;
-		VkDescriptorSetLayout													m_DescSetLayout{};
-		VkDescriptorSetLayout													m_ArrayTextureLayout{};
 		VkDescriptorImageInfo													m_ImageInfo{};
 	};
 
@@ -103,15 +101,15 @@ namespace TDS
 		void									DrawInstanced(VMABuffer& vertexBuffer, std::uint32_t instance = 1, std::uint32_t frameIndex = 0);
 		void									DrawInstancedIndexed(VMABuffer& vertexBuffer, VMABuffer& indexBuffer, std::uint32_t instance = 1, std::uint32_t frameIndex = 0);
 		void									SubmitPushConstant(void* data, size_t size, std::int32_t flags);
-		void									UpdateUBO(void* data, size_t size, std::uint32_t binding, std::uint32_t frameIndex = 0, std::uint32_t offset = 0, bool readonly = false);
-		void									UpdateTextureArray(std::uint32_t binding, VkDescriptorType descriptorType, std::vector<Texture*>& texture);
-		void									UpdateTextureArray(std::uint32_t binding, VkDescriptorType descriptorType, std::array<Texture, 1000>& texture);
+		void									UpdateUBO(void* data, size_t size, std::uint32_t binding, std::uint32_t frameIndex = 0, std::uint32_t offset = 0, bool readonly = false, std::uint32_t DescIndex = 0);
+		void									UpdateTextureArray(std::uint32_t binding, VkDescriptorType descriptorType, std::vector<Texture*>& texture, std::uint32_t DescIndex = 0);
+		void									UpdateTextureArray(std::uint32_t binding, VkDescriptorType descriptorType, std::array<Texture, 1000>& texture, std::uint32_t DescIndex = 0);
 		void									UpdateTexture(std::uint32_t binding, VkDescriptorType descriptorType, VulkanTexture& texture);
 		void									BindPipeline(VkPrimitiveTopology drawMode = VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-		void									BindDescriptor(std::int32_t frame, std::uint32_t numofSet, std::uint32_t firstSet = 0, bool Compute = false);
+		void									BindDescriptor(std::int32_t frame, std::uint32_t numofSet, std::uint32_t firstSet = 0, bool Compute = false, std::uint32_t DescIndex = 0);
 		void									BindAllDescriptors(std::int32_t frame);
 		void									BindDescriptorSet(VkDescriptorSet descriptorSet);
-		void									BindArrayDescriptorSet(std::uint32_t FrameIndex, std::uint32_t numOfSet, std::uint32_t firstSet = 0);
+		void									BindArrayDescriptorSet(std::uint32_t FrameIndex, std::uint32_t numOfSet, std::uint32_t firstSet = 0, std::uint32_t DescIndex = 0);
 		void									BindVertexBuffer(VMABuffer& vertexBuffer);
 		void									BindIndexBuffer(VMABuffer& IndexBuffer);
 		void									LoadShader(std::string_view shaderPath, SHADER_FLAG shaderFlag);
@@ -120,21 +118,21 @@ namespace TDS
 		VkPipelineLayout& GetLayout();
 		VkDescriptorPool& GetDescriptorPool();
 		bool									IsBlendEnabled();
-		std::uint32_t							GetBufferBinding(std::string_view bufferName);
-		VulkanPipelineDescriptor& GetPipelineDescriptor();
+		std::uint32_t							GetBufferBinding(std::string_view bufferName, std::uint32_t descIndex = 0);
+		VulkanPipelineDescriptor&				GetPipelineDescriptor(std::uint32_t DescIndex = 0);
 		PipelineCreateEntry& GetCreateEntry();
 		VkCommandBuffer& GetCommandBuffer();
 
 		void									SetCommandBuffer(VkCommandBuffer& buffer);
 		//Descriptors
 		void									FreeDescriptors();
-		void									CreateDescriptorSet(ShaderInputs& shader, VulkanPipelineDescriptor& descriptor);
-		void									CreateUniformBuffers(ShaderInputs& shader, VulkanPipelineDescriptor& descriptor);
+		void									CreateDescriptorSet(ShaderInputs& shader, VulkanPipelineDescriptor& descriptor, std::uint32_t descIndex);
+		void									CreateUniformBuffers(ShaderInputs& shader, VulkanPipelineDescriptor& descriptor, std::uint32_t descIndex);
 		void									CreateSamplerDescriptors(ShaderInputs& shader, VulkanPipelineDescriptor& descriptor);
 		void									UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint);
-		void									UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint, std::uint32_t frame);
+		void									UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint, std::uint32_t frame, std::uint32_t DescIndex = 0);
 		VkDescriptorSetLayout					GetLayout() const;
-		const std::vector<VkDescriptorSet>& GetDescriptorSets() const;
+		const std::vector<VkDescriptorSet>& GetDescriptorSets(std::uint32_t descIndex = 0) const;
 		void									SetRenderTarget(VkRenderPass renderTarget);
 	private:
 		struct
@@ -158,7 +156,9 @@ namespace TDS
 		VkDescriptorPool						m_DescriptorPool = nullptr;
 		CommandBufferInfo						m_CommandBufferInfo{};
 
-		VulkanPipelineDescriptor				m_PipelineDescriptor;
+		VkDescriptorSetLayout					m_DescSetLayout{};
+		VkDescriptorSetLayout					m_ArrayTextureLayout{};
+		std::vector<VulkanPipelineDescriptor>	m_PipelineDescriptor;
 		std::unordered_map<VkPrimitiveTopology, VkPipeline>	m_Pipelines;
 		std::unordered_map<VkPrimitiveTopology, VkPipelineCache> m_Caches;
 

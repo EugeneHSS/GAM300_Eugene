@@ -50,6 +50,8 @@ namespace TDS
 		m_GameCamera->setPosition(_transform[entityIndex].GetPosition());
 		m_GameCamera->GetUpdateViewMatrix();
 		//_cameracomponent[entityIndex].setForwardVector(m_GameCamera->getForwardVector());
+		_cameracomponent[entityIndex].setForwardVector(GraphicsManager::getInstance().GetCamera().getForwardVector());
+		_cameracomponent[entityIndex].setRightVector(GraphicsManager::getInstance().GetCamera().getRightVector());
 
 		//pitch = _transform[entityIndex].GetRotation().x;
 		//yaw = _transform[entityIndex].GetRotation().y;
@@ -63,6 +65,8 @@ namespace TDS
 		m_GameCamera->setSpeed(_camera.getSpeed());
 		m_GameCamera->setFov(_camera.getFOV());
 		m_GameCamera->setMouseSensitivity(_camera.getMouseSensitivity());
+		m_GameCamera->setForwardVector(GraphicsManager::getInstance().GetCamera().getForwardVector());
+		m_GameCamera->setRightVector(GraphicsManager::getInstance().GetCamera().getRightVector());
 	}
 
 	/*void CameraSystem::UpdateViewMatrixSystem(CameraComponent* _cameracomponent)

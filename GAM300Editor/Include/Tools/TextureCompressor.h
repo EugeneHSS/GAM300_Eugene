@@ -1,20 +1,8 @@
 #pragma once
 #include "Compressonator/cmp_compressonatorlib/compressonator.h"
+#include "CompilerSettings.h"
 namespace TDS
 {
-	struct TextureCompilerSetting
-	{
-		struct Desc
-		{
-			std::string m_EncoderString = "CPU";
-			std::string m_FormatString = "BC7";
-			std::uint32_t Width = 0.f, height = 0.f;
-			float		m_FloatQuality = 1.f;
-		};
-		Desc m_Desc;
-		bool SerializeSettings(std::string_view FilePath, bool Read);
-
-	};
 	class TextureCompressor
 	{
 	public:

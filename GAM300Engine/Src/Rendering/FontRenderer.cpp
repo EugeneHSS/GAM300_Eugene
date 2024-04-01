@@ -265,6 +265,11 @@ namespace TDS
 		}
 	}
 
+	VulkanPipeline& FontRenderer::GetPipeline()
+	{
+		 return *m_Pipeline;
+	}
+
 
 
 

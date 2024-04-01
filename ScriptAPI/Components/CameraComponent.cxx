@@ -233,7 +233,7 @@ namespace ScriptAPI
 	// FORWARDVECTOR =========================================================================
 	// 
 	Vector3 CameraComponent::getForwardVector()
-	{
+	{		
 		// May wanna change to a function
 		if (!TDS::GetCameraComponent(entityID))
 		{

@@ -14,11 +14,14 @@ using System;
 public class PlayButton : Script
 {
     public AudioComponent bgm;
+    private AudioComponent buttonSfx;
     public string bgmName;
+    private string buttonSfxName;
     private UISpriteComponent sprite;
     public GameObject blackScreen;
     private bool fading = false;
     private bool inMainMenu = false;
+    private bool firstHover = true;
     private float incrementFading = Time.deltaTime / 3f;
     bool withinArea(float mouse, float min, float max)
     {
@@ -32,7 +35,9 @@ public class PlayButton : Script
     {
         GraphicsManagerWrapper.ToggleViewFrom2D(true);
         bgmName = "Horror_Menu_Finale_Finale";
+        buttonSfxName = "button_press";
         bgm = gameObject.GetComponent<AudioComponent>();
+        buttonSfx = gameObject.GetComponent<AudioComponent>();
         sprite = gameObject.GetComponent<UISpriteComponent>();
     }
 
@@ -45,15 +50,25 @@ public class PlayButton : Script
     {
         if (bgm.finished(bgmName) && inMainMenu)
         {
-            bgm.play(bgmName);
-            
+            bgm.FadeIn(3, bgmName);
         }
-        
+
+        if(sprite.IsMouseCollided() && firstHover)
+        {
+            //set scale logic here
+            firstHover = false;
+            buttonSfx.play("buttonhover");
+        }
+        if(!sprite.IsMouseCollided())
+        {
+            firstHover = true;
+        }
         
         if (Input.GetMouseButtonDown(Keycode.M1) && sprite.IsMouseCollided())
         {
             fading = true;
             inMainMenu = false;
+            buttonSfx.play(buttonSfxName);
             bgm.FadeOut(3, bgmName);
         }
 

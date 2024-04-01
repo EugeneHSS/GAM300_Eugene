@@ -16,17 +16,18 @@ public class OptionsBgmVolume : Script
     public bool BGMpressedVolUp;
     private float BgmVolume;
     private UISpriteComponent sprite;
-    //private string bgmSoundName;
     private AudioComponent bgmVol;
-
+    private AudioComponent buttonSfx;
+    private string buttonSfxName = "";
     public GameObject bgmText;
 
     public override void Awake()
     {
-        //GraphicsManagerWrapper.ToggleViewFrom2D(true);
         sprite = gameObject.GetComponent<UISpriteComponent>();
         bgmVol = gameObject.GetComponent<AudioComponent>();
-        //bgmSoundName = "basement_music";
+        buttonSfxName = "button_press";
+        buttonSfx = gameObject.GetComponent<AudioComponent>();
+
     }
 
     public override void Update()
@@ -48,6 +49,7 @@ public class OptionsBgmVolume : Script
             //Console.WriteLine(bgmVol.getBGMVol());
             BgmVolume = Math.Clamp(BgmVolume, 0, 100);
             bgmText.GetComponent<UISpriteComponent>().SetFontMessage(((int)BgmVolume).ToString());
+            buttonSfx.play(buttonSfxName);
         }
     }
 

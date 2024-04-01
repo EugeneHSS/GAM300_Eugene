@@ -76,6 +76,7 @@ namespace TDS
 	{
 		rttr::variant currVar = var;
 		rttr::type t = var.get_type();
+		rttr::type base_type = t.get_raw_type();
 		while (t.is_wrapper())
 		{
 			t = t.get_wrapped_type();
@@ -100,7 +101,7 @@ namespace TDS
 			auto child_props = t.get_properties();
 			if (!child_props.empty())
 			{
-				SerializeRecursion(var);
+				SerializeRecursion(currVar);
 			}
 			else
 			{
@@ -281,6 +282,9 @@ namespace TDS
 		m_Writer->EndObject();
 	}
 
+	
+
+
 	void JSONSerializer::WriteAssociative(const rttr::variant& var)
 	{
 		rttr::variant_associative_view view = var.create_associative_view();
@@ -362,7 +366,9 @@ namespace TDS
 
 	void JSONSerializer::DeserializeRecursion(rttr::instance inst, rapidjson::Value& json_obj)
 	{
-		rttr::type t = inst.get_derived_type();
+		rttr::instance obj = inst.get_type().get_raw_type().is_wrapper() ? inst.get_wrapped_instance() : inst;
+
+		rttr::type t = obj.get_derived_type();
 		for (auto& x : t.get_properties(rttr::filter_item::non_public_access | rttr::filter_item::public_access | rttr::filter_item::instance_item))
 		{
 
@@ -378,120 +384,124 @@ namespace TDS
 			{
 				case rapidjson::kArrayType:
 				{
-					rttr::variant var = x.get_value(inst);
+					rttr::variant var{};
 					if (value_type.is_sequential_container())
 					{
-						ReadSequential(var, jsonValue);
+						var = x.get_value(obj);
+						auto arrayView = var.create_sequential_view();
+						ReadSequential(arrayView, jsonValue);
 					}
 					else if (value_type.is_associative_container())
 					{
-						ReadAssociative(var, jsonValue);
+						var = x.get_value(obj);
+						auto associativeView = var.create_associative_view();
+						ReadAssociative(associativeView, jsonValue);
 					}
-					x.set_value(inst, var);
+					x.set_value(obj, var);
 					break;
 				}
 				case rapidjson::kObjectType:
 				{
-					rttr::variant var = x.get_value(inst);
+					rttr::variant var = x.get_value(obj);
 					DeserializeRecursion(var, jsonValue);
-					x.set_value(inst, var);
+					x.set_value(obj, var);
 					break;
 				}
 				default:
 				{
 					rttr::variant extractedVal = extract_basic_types(jsonValue);
 					if (extractedVal.convert(value_type))
-						x.set_value(inst, extractedVal);
+						x.set_value(obj, extractedVal);
 				}
 			}
 		}
 	}
 
-	void JSONSerializer::ReadSequential(rttr::variant& var, rapidjson::Value& json_array_value)
+	void JSONSerializer::ReadSequential(rttr::variant_sequential_view& view, rapidjson::Value& json_array_value)
 	{
-		rttr::variant_sequential_view m_view = var.create_sequential_view();
-		m_view.set_size(json_array_value.Size());
+		view.set_size(json_array_value.Size());
+		const rttr::type valueType = view.get_rank_type(1);
 		for (rapidjson::SizeType i = 0; i < json_array_value.Size(); ++i)
 		{
-			if (json_array_value[i].IsArray())
+			auto& jsonValue = json_array_value[i];
+			if (jsonValue.IsArray())
 			{
-				rttr::variant internalVariant = m_view.get_value(i);
-				ReadSequential(internalVariant, json_array_value[i]);
+				auto internalArray = view.get_value(i).create_sequential_view();
+				ReadSequential(internalArray, jsonValue);
 			}
-			else if (json_array_value[i].IsObject())
+			else if (jsonValue.IsObject())
 			{
-				rttr::variant tempObj = m_view.get_value(i);
+				rttr::variant tempObj = view.get_value(i);
 				rttr::variant wrappedObj = tempObj.extract_wrapped_value();
 				DeserializeRecursion(wrappedObj, json_array_value[i]);
-				m_view.set_value(i, wrappedObj);
+				view.set_value(i, wrappedObj);
 			}
 			else
 			{
-				rttr::variant extractedVar = extract_basic_types(json_array_value[i]);
-				if (extractedVar.convert(m_view.get_rank_type(1)))
-					m_view.set_value(i, extractedVar);
+				rttr::variant extractedVar = extract_basic_types(jsonValue);
+				if (extractedVar.convert(valueType))
+					view.set_value(i, extractedVar);
 			}
 		}
 	}
 
-	void JSONSerializer::ReadAssociative(rttr::variant& var, rapidjson::Value& json_map)
+	void JSONSerializer::ReadAssociative(rttr::variant_associative_view& view, rapidjson::Value& json_map)
 	{
 		for (rapidjson::SizeType i = 0; i < json_map.Size(); ++i)
 		{
-			if (json_map[i].IsObject())
+			auto& jasonValue = json_map[i];
+			if (jasonValue.IsObject())
 			{
 				rapidjson::Value::MemberIterator keyItr = json_map[i].FindMember("key");
 				rapidjson::Value::MemberIterator valItr = json_map[i].FindMember("value");
+
 				if (keyItr != json_map[i].MemberEnd() &&
 					valItr != json_map[i].MemberEnd())
 				{
-					rttr::variant extractedKey = extract_basic_types(keyItr->value);
-					if (!extractedKey.convert(var.create_associative_view().get_key_type()))
+					auto keyVariant = ExtractValue(keyItr, view.get_key_type());
+					auto ValueVariant = ExtractValue(valItr, view.get_value_type());
+					if (keyVariant && ValueVariant)
 					{
-						if (keyItr->value.IsObject())
-						{
-							rttr::constructor ctor = var.create_associative_view().get_key_type().get_constructor();
-							for (auto& ctor1 : var.create_associative_view().get_key_type().get_constructors())
-							{
-								if (ctor1.get_instantiated_type() == var.create_associative_view().get_key_type())
-								{
-									ctor = ctor1;
-								}
-							}
-							extractedKey = ctor.invoke();
-							DeserializeRecursion(extractedKey, keyItr->value);
-						}
+						view.insert(keyVariant, ValueVariant);
 					}
-					rttr::variant extractedVal = extract_basic_types(valItr->value);
-					if (!extractedVal.convert(var.create_associative_view().get_key_type()))
-					{
-						if (valItr->value.IsObject())
-						{
-							rttr::constructor ctor = var.create_associative_view().get_key_type().get_constructor();
-							for (auto& ctor1 : var.create_associative_view().get_key_type().get_constructors())
-							{
-								if (ctor1.get_instantiated_type() == var.create_associative_view().get_key_type())
-								{
-									ctor = ctor1;
-								}
-							}
-							extractedVal = ctor.invoke();
-							DeserializeRecursion(extractedVal, valItr->value);
-						}
-					}
-					var.create_associative_view().insert(extractedKey, extractedVal);
 
 				}
-				else
+			}
+			else
+			{
+				rttr::variant extract_val = extract_basic_types(jasonValue);
+				if (extract_val && extract_val.convert(view.get_key_type()))
 				{
-					rttr::variant extract_val = extract_basic_types(json_map[i]);
-					if (extract_val && extract_val.convert(var.create_associative_view().get_key_type()))
-					{
-						var.create_associative_view().insert(extract_val);
-					}
+					view.insert(extract_val);
 				}
 			}
 		}
+	}
+
+	rttr::variant JSONSerializer::ExtractValue(rapidjson::Value::MemberIterator& itr, const rttr::type& t)
+	{
+		auto& value = itr->value;
+		rttr::variant extractedVal = extract_basic_types(value);
+		const bool convert = extractedVal.convert(t);
+
+		if (!convert)
+		{
+			if (value.IsObject())
+			{
+				rttr::constructor ctor = t.get_constructor();
+				for (auto& items : t.get_constructors())
+				{
+					if (items.get_instantiated_type() == t)
+					{
+						ctor = items;
+					}
+					extractedVal = ctor.invoke();
+					DeserializeRecursion(extractedVal, value);
+					
+				}
+			}
+		}
+		return extractedVal;
 	}
 
 	bool JSONSerializer::WritePair(const rttr::variant& var)

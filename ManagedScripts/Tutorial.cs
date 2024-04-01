@@ -8,7 +8,6 @@ public class Tutorial : Script
     String[] Subtitles;
     String[] LockSoundEffects;
     String[] lockVO;
-    String[] rattleSoundEffects;
     public static int counter;
 
     [SerializeField]

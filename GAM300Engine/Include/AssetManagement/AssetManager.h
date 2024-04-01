@@ -27,6 +27,8 @@ namespace TDS
 		std::vector<std::string>	m_AnimationName;
 	};
 
+	class MaterialManager;
+
 	class AssetManager
 	{
 	private:
@@ -35,6 +37,7 @@ namespace TDS
 		AssetFactory<FontAtlas>						m_FontFactory;
 		AssetFactory<MeshController>				m_MeshFactory;
 		AssetFactory<AnimationData>					m_AnimationFactory;
+		
 		AssetMeta									m_AssetMeta;
 	public:
 		DLL_API AssetManager();

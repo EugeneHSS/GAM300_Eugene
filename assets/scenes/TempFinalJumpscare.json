@@ -1,0 +1,880 @@
+{
+    "Archetype Sizes": {
+        "1100001000000000000": {
+            "0": 672,
+            "1": 2304,
+            "6": 1824
+        },
+        "1100001000000000010": {
+            "0": 112,
+            "1": 384,
+            "6": 304,
+            "17": 56
+        },
+        "1100101000000000000": {
+            "0": 112,
+            "1": 384,
+            "4": 64,
+            "6": 304
+        }
+    },
+    "Entity Data": {
+        "1": {
+            "ArchetypeID": "1100001000000000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "JumpscareMonster",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 0,
+                "HierarchyChildren": [
+                    2
+                ]
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                },
+                "Scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "male1591MeshSurface_Color.dds",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "testJumpScape_Bin.bin",
+                "MeshName": "testJumpScape_Bin.bin",
+                "MeshNodeName": "testJumpScape_Bin.bin",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            }
+        },
+        "2": {
+            "ArchetypeID": "1100001000000000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "pasted__pCube2",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 1,
+                "HierarchyIndex": 1,
+                "HierarchyChildren": [
+                    3,
+                    4,
+                    5
+                ]
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                },
+                "Scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -30.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -30.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "testJumpScape_Bin.bin",
+                "MeshName": "",
+                "MeshNodeName": "pasted__pCube2",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            }
+        },
+        "3": {
+            "ArchetypeID": "1100001000000000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "pasted__pCube2",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 2,
+                "HierarchyIndex": 1,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                },
+                "Scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -30.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -30.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "testJumpScape_Bin.bin",
+                "MeshName": "pasted__pCube2",
+                "MeshNodeName": "pasted__pCube2",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            }
+        },
+        "4": {
+            "ArchetypeID": "1100001000000000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "pasted__pCube2__1",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 2,
+                "HierarchyIndex": 1,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                },
+                "Scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -30.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -30.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "testJumpScape_Bin.bin",
+                "MeshName": "pasted__pCube2__1",
+                "MeshNodeName": "pasted__pCube2",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            }
+        },
+        "5": {
+            "ArchetypeID": "1100001000000000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "pasted__pCube2__2",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 2,
+                "HierarchyIndex": 1,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                },
+                "Scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -30.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -30.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": -60.0,
+                    "z": -35.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "male1591MeshSurface_Color.dds",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "testJumpScape_Bin.bin",
+                "MeshName": "pasted__pCube2__2",
+                "MeshNodeName": "pasted__pCube2",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            }
+        },
+        "6": {
+            "ArchetypeID": "1100001000000000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "player",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 1,
+                "HierarchyChildren": [
+                    8
+                ]
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "",
+                "MeshName": "",
+                "MeshNodeName": "",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            }
+        },
+        "7": {
+            "ArchetypeID": "1100001000000000010",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "light",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 2,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": true,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "",
+                "MeshName": "",
+                "MeshNodeName": "",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            },
+            "PointLight": {
+                "Position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Attenuation": {
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                }
+            }
+        },
+        "8": {
+            "ArchetypeID": "1100101000000000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "playerCamera",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 6,
+                "HierarchyIndex": 0,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 25.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 25.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 25.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 25.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                }
+            },
+            "Camera Component": {
+                "Yaw": -90.0,
+                "Pitch": 0.0,
+                "Position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "Speed": 1.0,
+                "FOV": 45.0,
+                "MouseSensitivity": 0.10000000149011612
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "",
+                "MeshName": "",
+                "MeshNodeName": "",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            }
+        }
+    },
+    "Scripts": {
+        "1": {
+            "JumpscareScript": {
+                "player": {
+                    "ScriptAPI.GameObject": 6
+                },
+                "jumpscareSequenceIndex": {
+                    "System.Int32": "0"
+                },
+                "playerCamera": {
+                    "ScriptAPI.GameObject": 8
+                },
+                "gameObject": {
+                    "ScriptAPI.GameObject": 1
+                }
+            },
+            "JumpscareScript": {
+                "player": {
+                    "ScriptAPI.GameObject": 6
+                },
+                "jumpscareSequenceIndex": {
+                    "System.Int32": "0"
+                },
+                "playerCamera": {
+                    "ScriptAPI.GameObject": 8
+                },
+                "gameObject": {
+                    "ScriptAPI.GameObject": 1
+                }
+            }
+        },
+        "2": {},
+        "3": {},
+        "4": {},
+        "5": {},
+        "6": {},
+        "7": {},
+        "8": {}
+    },
+    "Active Archetype": {
+        "1": "1100001000000000000",
+        "2": "1100001000000000000",
+        "3": "1100001000000000000",
+        "4": "1100001000000000000",
+        "5": "1100001000000000000",
+        "6": "1100001000000000000",
+        "7": "1100001000000000010",
+        "8": "1100101000000000000"
+    }
+}

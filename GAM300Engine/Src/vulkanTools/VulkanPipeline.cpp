@@ -50,10 +50,11 @@ namespace TDS
 		CreateDescriptors(m_PipelineEntry.m_ShaderInputs, m_PipelineEntry.m_NumDescriptorSets);
 
 		std::vector<VkDescriptorSetLayout> layouts;
-		layouts.push_back(m_PipelineDescriptor.m_DescSetLayout);
-		if (!m_PipelineDescriptor.m_TextureOrBindless.empty())
+		layouts.push_back(m_DescSetLayout);
+		//Just check the first one
+		if (!m_PipelineDescriptor[0].m_TextureOrBindless.empty())
 		{
-			layouts.push_back(m_PipelineDescriptor.m_ArrayTextureLayout);
+			layouts.push_back(m_ArrayTextureLayout);
 		}
 
 		VkPipelineLayoutCreateInfo pipelineLayoutCI = { VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
@@ -462,10 +463,15 @@ namespace TDS
 		VK_ASSERT(vkCreateDescriptorPool(device, &descriptorPoolInfo, nullptr, &m_DescriptorPool), "Failed to create descriptor Pool!");
 
 
-		CreateDescriptorSet(shaderInputs, m_PipelineDescriptor);
-		CreateUniformBuffers(shaderInputs, m_PipelineDescriptor);
-		CreateSamplerDescriptors(shaderInputs, m_PipelineDescriptor);
-
+		m_PipelineDescriptor.resize(numDescriptorSets);
+		std::uint32_t index = 0;
+		for (auto& descriptor : m_PipelineDescriptor)
+		{
+			CreateDescriptorSet(shaderInputs, descriptor, index);
+			CreateUniformBuffers(shaderInputs, descriptor, index);
+			CreateSamplerDescriptors(shaderInputs, descriptor);
+			++index;
+		}
 
 
 
@@ -504,11 +510,11 @@ namespace TDS
 		VkShaderStageFlags stage = GetShaderFlag(flags);
 		vkCmdPushConstants(m_CommandBuffer, m_PipelineLayout, stage, 0, std::uint32_t(size), data);
 	}
-	void VulkanPipeline::UpdateUBO(void* data, size_t size, std::uint32_t binding, std::uint32_t frameIndex, std::uint32_t offset, bool readOnly)
+	void VulkanPipeline::UpdateUBO(void* data, size_t size, std::uint32_t binding, std::uint32_t frameIndex, std::uint32_t offset, bool readOnly, std::uint32_t DescIndex)
 	{
 		if (GlobalBufferPool::GetInstance()->BindingExist(binding))
 		{
-			std::vector<std::shared_ptr<UBO>>* pUBOs = GlobalBufferPool::GetInstance()->GetBufferContainer(binding);
+			std::vector<std::shared_ptr<UBO>>* pUBOs = GlobalBufferPool::GetInstance()->GetBufferContainer(binding, DescIndex);
 			if (pUBOs)
 			{
 				if (readOnly == false)
@@ -518,8 +524,8 @@ namespace TDS
 				return;
 			}
 		}
-		auto findItr = m_PipelineDescriptor.m_UpdateBufferFrames.find(binding);
-		if (findItr != m_PipelineDescriptor.m_UpdateBufferFrames.end())
+		auto findItr = m_PipelineDescriptor[DescIndex].m_UpdateBufferFrames.find(binding);
+		if (findItr != m_PipelineDescriptor[DescIndex].m_UpdateBufferFrames.end())
 		{
 			if (readOnly == false)
 				findItr->second.at(frameIndex)->m_Buffer->MapData(data, size, offset);
@@ -575,12 +581,12 @@ namespace TDS
 	//			, 1, &findItr->second, 0, 0);
 	//	}
 	//}
-	void VulkanPipeline::UpdateTextureArray(std::uint32_t binding, VkDescriptorType descriptorType, std::vector<Texture*>& texture)
+	void VulkanPipeline::UpdateTextureArray(std::uint32_t binding, VkDescriptorType descriptorType, std::vector<Texture*>& texture, std::uint32_t DescIndex)
 	{
 		std::int32_t frame = GraphicsManager::getInstance().GetSwapchainRenderer().getFrameIndex();
 		bool invalid = false;
-		auto findItr = m_PipelineDescriptor.m_WriteSetFrames.find(binding);
-		if (findItr != m_PipelineDescriptor.m_WriteSetFrames.end())
+		auto findItr = m_PipelineDescriptor[DescIndex].m_WriteSetFrames.find(binding);
+		if (findItr != m_PipelineDescriptor[DescIndex].m_WriteSetFrames.end())
 		{
 			VkWriteDescriptorSet write{};
 			std::uint32_t ArrayCnt = std::uint32_t(texture.size());
@@ -599,7 +605,7 @@ namespace TDS
 
 			}
 
-			findItr->second.dstSet = m_PipelineDescriptor.m_DescriptorSets[frame];
+			findItr->second.dstSet = m_PipelineDescriptor[DescIndex].m_DescriptorSets[frame];
 			findItr->second.descriptorType = descriptorType;
 			findItr->second.dstBinding = binding;
 			findItr->second.dstArrayElement = 0;
@@ -610,12 +616,12 @@ namespace TDS
 				, 1, &findItr->second, 0, 0);
 		}
 	}
-	void VulkanPipeline::UpdateTextureArray(std::uint32_t binding, VkDescriptorType descriptorType, std::array<Texture, 1000>& texture)
+	void VulkanPipeline::UpdateTextureArray(std::uint32_t binding, VkDescriptorType descriptorType, std::array<Texture, 1000>& texture, std::uint32_t DescIndex)
 	{
 		std::int32_t frame = GraphicsManager::getInstance().GetSwapchainRenderer().getFrameIndex();
 		bool invalid = false;
-		auto findItr = m_PipelineDescriptor.m_WriteSetFrames.find(binding);
-		if (findItr != m_PipelineDescriptor.m_WriteSetFrames.end())
+		auto findItr = m_PipelineDescriptor[DescIndex].m_WriteSetFrames.find(binding);
+		if (findItr != m_PipelineDescriptor[DescIndex].m_WriteSetFrames.end())
 		{
 			VkWriteDescriptorSet write{};
 			std::uint32_t ArrayCnt = std::uint32_t(texture.size());
@@ -635,7 +641,7 @@ namespace TDS
 
 			for (int i = 0; i < 1; ++i)
 			{
-				findItr->second.dstSet = m_PipelineDescriptor.m_TextureOrBindless[i];
+				findItr->second.dstSet = m_PipelineDescriptor[DescIndex].m_TextureOrBindless[i];
 				findItr->second.descriptorType = descriptorType;
 				findItr->second.dstBinding = binding;
 				findItr->second.dstArrayElement = 0;
@@ -645,15 +651,7 @@ namespace TDS
 				vkUpdateDescriptorSets(GraphicsManager::getInstance().getInstance().getVkInstance().getVkLogicalDevice()
 					, 1, &findItr->second, 0, 0);
 			}
-			//findItr->second.dstSet = m_PipelineDescriptor.m_DescriptorSets[frame];
-			//findItr->second.descriptorType = descriptorType;
-			//findItr->second.dstBinding = binding;
-			//findItr->second.dstArrayElement = 0;
-			//findItr->second.descriptorCount = static_cast<uint32_t>(Infos.size());
-			//findItr->second.pImageInfo = Infos.data();
 
-			//vkUpdateDescriptorSets(GraphicsManager::getInstance().getInstance().getVkInstance().getVkLogicalDevice()
-			//	, 1, &findItr->second, 0, 0);
 		}
 	}
 	void VulkanPipeline::UpdateTexture(std::uint32_t binding, VkDescriptorType descriptorType, VulkanTexture& texture)
@@ -664,10 +662,10 @@ namespace TDS
 	{
 		vkCmdBindPipeline(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_Pipelines[drawMode]);
 	}
-	void VulkanPipeline::BindDescriptor(std::int32_t frame, std::uint32_t numOfSet, std::uint32_t firstSet, bool Compute)
+	void VulkanPipeline::BindDescriptor(std::int32_t frame, std::uint32_t numOfSet, std::uint32_t firstSet, bool Compute, std::uint32_t DescIndex)
 	{
 		VkPipelineBindPoint bindingPoint = Compute ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS;
-		vkCmdBindDescriptorSets(m_CommandBuffer, bindingPoint, m_PipelineLayout, firstSet, numOfSet, &m_PipelineDescriptor.m_DescriptorSets[frame], 0, nullptr);
+		vkCmdBindDescriptorSets(m_CommandBuffer, bindingPoint, m_PipelineLayout, firstSet, numOfSet, &m_PipelineDescriptor[DescIndex].m_DescriptorSets[frame], 0, nullptr);
 	}
 	void VulkanPipeline::BindAllDescriptors(std::int32_t frame)
 	{
@@ -677,9 +675,9 @@ namespace TDS
 		vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_PipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
 	}
 
-	void VulkanPipeline::BindArrayDescriptorSet(std::uint32_t FrameIndex, std::uint32_t numOfSet, std::uint32_t firstSet)
+	void VulkanPipeline::BindArrayDescriptorSet(std::uint32_t FrameIndex, std::uint32_t numOfSet, std::uint32_t firstSet, std::uint32_t DescIndex)
 	{
-		vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_PipelineLayout, firstSet, numOfSet, &m_PipelineDescriptor.m_TextureOrBindless[FrameIndex], 0, nullptr);
+		vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_PipelineLayout, firstSet, numOfSet, &m_PipelineDescriptor[DescIndex].m_TextureOrBindless[FrameIndex], 0, nullptr);
 	}
 
 	void VulkanPipeline::BindVertexBuffer(VMABuffer& vertexBuffer)
@@ -746,9 +744,9 @@ namespace TDS
 		return m_BlendingEnabled;
 	}
 
-	VulkanPipelineDescriptor& VulkanPipeline::GetPipelineDescriptor()
+	VulkanPipelineDescriptor& VulkanPipeline::GetPipelineDescriptor(std::uint32_t DescIndex)
 	{
-		return m_PipelineDescriptor;
+		return m_PipelineDescriptor[DescIndex];
 	}
 	PipelineCreateEntry& VulkanPipeline::GetCreateEntry()
 	{
@@ -758,14 +756,14 @@ namespace TDS
 		return m_CommandBuffer;
 	}
 
-	std::uint32_t VulkanPipeline::GetBufferBinding(std::string_view bufferName)
+	std::uint32_t VulkanPipeline::GetBufferBinding(std::string_view bufferName, std::uint32_t descIndex)
 	{
 		if (GlobalBufferPool::GetInstance()->BindingExist(bufferName))
 			return GlobalBufferPool::GetInstance()->GetBinding(bufferName.data());
 
 
-		auto itr = m_PipelineDescriptor.m_LocalBufferNames.find(bufferName.data());
-		if (itr != m_PipelineDescriptor.m_LocalBufferNames.end())
+		auto itr = m_PipelineDescriptor[descIndex].m_LocalBufferNames.find(bufferName.data());
+		if (itr != m_PipelineDescriptor[descIndex].m_LocalBufferNames.end())
 			return itr->second;
 
 
@@ -778,21 +776,27 @@ namespace TDS
 	void VulkanPipeline::FreeDescriptors()
 	{
 		VkDevice device = GraphicsManager::getInstance().getVkInstance().getVkLogicalDevice();
+		
 
-		if (m_PipelineDescriptor.m_DescSetLayout)
+
+		if (m_DescSetLayout)
 		{
-			vkDestroyDescriptorSetLayout(device, m_PipelineDescriptor.m_DescSetLayout, nullptr);
-			m_PipelineDescriptor.m_DescSetLayout = nullptr;
+			vkDestroyDescriptorSetLayout(device, m_DescSetLayout, nullptr);
+			m_DescSetLayout = nullptr;
 		}
-		if (m_PipelineDescriptor.m_ArrayTextureLayout)
+		if (m_ArrayTextureLayout)
 		{
-			vkDestroyDescriptorSetLayout(device, m_PipelineDescriptor.m_ArrayTextureLayout, nullptr);
-			m_PipelineDescriptor.m_DescSetLayout = nullptr;
+			vkDestroyDescriptorSetLayout(device, m_ArrayTextureLayout, nullptr);
+			m_ArrayTextureLayout = nullptr;
 		}
-		m_PipelineDescriptor.m_UpdateBufferFrames.clear();
-		m_PipelineDescriptor.m_StaticBuffers.clear();
+
+		for (auto& desc : m_PipelineDescriptor)
+		{
+			desc.m_UpdateBufferFrames.clear();
+			desc.m_StaticBuffers.clear();
+		}
 	}
-	void VulkanPipeline::CreateDescriptorSet(ShaderInputs& shaderInput, VulkanPipelineDescriptor& descriptor)
+	void VulkanPipeline::CreateDescriptorSet(ShaderInputs& shaderInput, VulkanPipelineDescriptor& descriptor, std::uint32_t descIndex)
 	{
 		bool UseTextureArrayLayout = false;
 		std::vector<VkDescriptorSetLayoutBinding> layouts;
@@ -804,7 +808,7 @@ namespace TDS
 			ShaderMetaData& metaData = ShaderLoader::GetInstance()->getReflectedLookUp();
 			for (auto& uniforms : metaData.m_ShaderDatas[full_path.filename().string()].m_ReflectedData.m_UniformBuffers)
 			{
-				bool Global = GlobalBufferPool::GetInstance()->BindingExist(uniforms.second.m_BindingPoint);
+				bool Global = GlobalBufferPool::GetInstance()->BindingExist(uniforms.second.m_BindingPoint, descIndex);
 
 				if (binded.find(uniforms.second.m_BindingPoint) != binded.end())
 				{
@@ -868,16 +872,21 @@ namespace TDS
 		layoutInfo.bindingCount = static_cast<uint32_t>(layouts.size());
 		layoutInfo.pBindings = layouts.data();
 		VkDevice device = GraphicsManager::getInstance().getVkInstance().getVkLogicalDevice();
-		VK_ASSERT(vkCreateDescriptorSetLayout(device, &layoutInfo, 0, &descriptor.m_DescSetLayout), "Failed to create Descriptor Layout!");
-		DescSetlayouts.push_back(descriptor.m_DescSetLayout);
+
+		if (m_DescSetLayout == 0)
+			VK_ASSERT(vkCreateDescriptorSetLayout(device, &layoutInfo, 0, &m_DescSetLayout), "Failed to create Descriptor Layout!");
+
+		DescSetlayouts.push_back(m_DescSetLayout);
 		if (UseTextureArrayLayout)
 		{
 			VkDescriptorSetLayoutCreateInfo layoutInfo = { VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
 			layoutInfo.bindingCount = static_cast<uint32_t>(textureArrayLayout.size());
 			layoutInfo.pBindings = textureArrayLayout.data();
 			VkDevice device = GraphicsManager::getInstance().getVkInstance().getVkLogicalDevice();
-			VK_ASSERT(vkCreateDescriptorSetLayout(device, &layoutInfo, 0, &descriptor.m_ArrayTextureLayout), "Failed to create Descriptor Layout!");
-			TextureArrayLayouts.push_back(descriptor.m_ArrayTextureLayout);
+
+			if (m_ArrayTextureLayout == 0)
+				VK_ASSERT(vkCreateDescriptorSetLayout(device, &layoutInfo, 0, &m_ArrayTextureLayout), "Failed to create Descriptor Layout!");
+			TextureArrayLayouts.push_back(m_ArrayTextureLayout);
 		}
 
 		VkDescriptorSetAllocateInfo allocateInfo = { VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
@@ -912,7 +921,7 @@ namespace TDS
 		}
 
 	}
-	void VulkanPipeline::CreateUniformBuffers(ShaderInputs& shaderInput, VulkanPipelineDescriptor& descriptor)
+	void VulkanPipeline::CreateUniformBuffers(ShaderInputs& shaderInput, VulkanPipelineDescriptor& descriptor, std::uint32_t descIndex)
 	{
 		VulkanInstance& instance = GraphicsManager::getInstance().getVkInstance();
 		ShaderMetaData& reflectedMeta = ShaderLoader::GetInstance()->getReflectedLookUp();
@@ -932,7 +941,7 @@ namespace TDS
 					//Before adding, we check if its a global buffer.
 					//You should specify what is your global buffers before creating your pipelines. If not,
 					//If not they will default to local buffers. Then u gonna waste memory and rendering cycles
-					if (GlobalBufferPool::GetInstance()->BindingExist(uniform.second.m_BindingPoint))
+					if (GlobalBufferPool::GetInstance()->BindingExist(uniform.second.m_BindingPoint, descIndex))
 					{
 						//TDS_INFO("This is a global buffer!\n");
 						GlobalBuffer = true;
@@ -1007,7 +1016,7 @@ namespace TDS
 								buffers->m_BufferInfo.range = uniform.second.m_Size;
 							}
 						}
-						m_PipelineDescriptor.m_LocalBufferNames[uniform.second.m_InstanceName] = uniform.second.m_BindingPoint;
+						descriptor.m_LocalBufferNames[uniform.second.m_InstanceName] = uniform.second.m_BindingPoint;
 					}
 				}
 				VkWriteDescriptorSet writeSet = { VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
@@ -1047,11 +1056,11 @@ namespace TDS
 				}
 				else
 				{
-					std::uint32_t GlobalFrameSize = (std::uint32_t)GlobalBufferPool::GetInstance()->GetBufferContainer(uniform.second.m_BindingPoint)->size();
+					std::uint32_t GlobalFrameSize = (std::uint32_t)GlobalBufferPool::GetInstance()->GetBufferContainer(uniform.second.m_BindingPoint, descIndex)->size();
 					for (std::uint32_t i = 0; i < GlobalFrameSize; ++i)
 					{
 
-						VkDescriptorBufferInfo bufferInfo = GlobalBufferPool::GetInstance()->GetBufferContainer(uniform.second.m_BindingPoint)->at(i)->m_BufferInfo;
+						VkDescriptorBufferInfo bufferInfo = GlobalBufferPool::GetInstance()->GetBufferContainer(uniform.second.m_BindingPoint, descIndex)->at(i)->m_BufferInfo;
 
 						writeSet.dstSet = descriptor.m_DescriptorSets[i];
 						writeSet.dstBinding = uniform.second.m_BindingPoint;
@@ -1102,7 +1111,7 @@ namespace TDS
 						vkUpdateDescriptorSets(instance.getVkLogicalDevice(), 1, &writeSet, 0, nullptr);
 					}
 					descriptor.m_WriteSetFrames[samplers.second.m_BindingPoint] = writeSet;
-					m_PipelineDescriptor.m_LocalBufferNames[samplers.second.m_Name] = samplers.second.m_BindingPoint;
+					descriptor.m_LocalBufferNames[samplers.second.m_Name] = samplers.second.m_BindingPoint;
 				}
 				else
 				{
@@ -1143,7 +1152,7 @@ namespace TDS
 						vkUpdateDescriptorSets(instance.getVkLogicalDevice(), 1, &writeSet, 0, nullptr);
 					}
 					descriptor.m_WriteSetFrames[samplers.second.m_BindingPoint] = writeSet;
-					m_PipelineDescriptor.m_LocalBufferNames[samplers.second.m_Name] = samplers.second.m_BindingPoint;
+					descriptor.m_LocalBufferNames[samplers.second.m_Name] = samplers.second.m_BindingPoint;
 				}
 
 			}
@@ -1177,7 +1186,7 @@ namespace TDS
 					vkUpdateDescriptorSets(instance.getVkLogicalDevice(), 1, &writeSet, 0, nullptr);
 				}
 				descriptor.m_WriteSetFrames[storage.second.m_BindingPoint] = writeSet;
-				m_PipelineDescriptor.m_LocalBufferNames[storage.second.m_Name] = storage.second.m_BindingPoint;
+				descriptor.m_LocalBufferNames[storage.second.m_Name] = storage.second.m_BindingPoint;
 			}
 		}
 
@@ -1185,10 +1194,10 @@ namespace TDS
 	void VulkanPipeline::UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint)
 	{
 		std::int32_t frame = GraphicsManager::getInstance().GetSwapchainRenderer().getFrameIndex();
-		auto findItr = m_PipelineDescriptor.m_WriteSetFrames.find(bindingPoint);
-		if (findItr != m_PipelineDescriptor.m_WriteSetFrames.end())
+		auto findItr = m_PipelineDescriptor[0].m_WriteSetFrames.find(bindingPoint);
+		if (findItr != m_PipelineDescriptor[0].m_WriteSetFrames.end())
 		{
-			findItr->second.dstSet = m_PipelineDescriptor.m_DescriptorSets[frame];
+			findItr->second.dstSet = m_PipelineDescriptor[0].m_DescriptorSets[frame];
 			findItr->second.descriptorType = type;
 			findItr->second.dstBinding = bindingPoint;
 			findItr->second.dstArrayElement = 0;
@@ -1199,12 +1208,12 @@ namespace TDS
 				, 1, &findItr->second, 0, 0);
 		}
 	}
-	void VulkanPipeline::UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint, std::uint32_t frame)
+	void VulkanPipeline::UpdateDescriptor(VkDescriptorImageInfo& imageInfo, VkDescriptorType type, std::uint32_t bindingPoint, std::uint32_t frame, std::uint32_t DescIndex)
 	{
-		auto findItr = m_PipelineDescriptor.m_WriteSetFrames.find(bindingPoint);
-		if (findItr != m_PipelineDescriptor.m_WriteSetFrames.end())
+		auto findItr = m_PipelineDescriptor[DescIndex].m_WriteSetFrames.find(bindingPoint);
+		if (findItr != m_PipelineDescriptor[DescIndex].m_WriteSetFrames.end())
 		{
-			findItr->second.dstSet = m_PipelineDescriptor.m_DescriptorSets[frame];
+			findItr->second.dstSet = m_PipelineDescriptor[DescIndex].m_DescriptorSets[frame];
 			findItr->second.descriptorType = type;
 			findItr->second.dstBinding = bindingPoint;
 			findItr->second.dstArrayElement = 0;
@@ -1217,11 +1226,11 @@ namespace TDS
 	}
 	VkDescriptorSetLayout VulkanPipeline::GetLayout() const
 	{
-		return m_PipelineDescriptor.m_DescSetLayout;
+		return m_DescSetLayout;
 	}
-	const std::vector<VkDescriptorSet>& VulkanPipeline::GetDescriptorSets() const
+	const std::vector<VkDescriptorSet>& VulkanPipeline::GetDescriptorSets(std::uint32_t descIndex) const
 	{
-		return m_PipelineDescriptor.m_DescriptorSets;
+		return m_PipelineDescriptor[descIndex].m_DescriptorSets;
 	}
 	void VulkanPipeline::SetRenderTarget(VkRenderPass renderTarget)
 	{

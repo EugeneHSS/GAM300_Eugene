@@ -1,10 +1,15 @@
 #include "components/graphicsComponent.h"
+#include "components/CompReflectionMacro.h"
 
 RTTR_REGISTRATION
 {
 	using namespace TDS;
 
+
+
+
 	rttr::registration::class_<GraphicsComponent>("Graphics Component")
+		.constructor<>()
 		.method("IsPointLight", &GraphicsComponent::IsPointLight)
 		.method("TogglePointLight", &GraphicsComponent::TogglePointLight)
 		.property("PointLight", &GraphicsComponent::m_Pointlight)
@@ -25,20 +30,24 @@ RTTR_REGISTRATION
 		.method("GetColor", &GraphicsComponent::GetColor)
 		.property("Color", &GraphicsComponent::m_Color)
 		.property("Used In 2D", &GraphicsComponent::m_UsedIn2D)
-		.property("Model UID", &GraphicsComponent::m_modelUID);
-	//.property("Color", &GraphicsComponent::GetColor, rttr::select_overload<void(Vec4)>(&GraphicsComponent::SetColor));
+		.property("Model UID", &GraphicsComponent::m_modelUID)
+		.property("m_UsePreloadAlbedo", &GraphicsComponent::m_UsePreloadMaterials)
+		.property("use materials", &GraphicsComponent::m_UseMaterials)
+		.property("MaterialAttributes", &GraphicsComponent::m_MaterialAttributes);
+
+
 }
 
 namespace TDS
 {
 	GraphicsComponent::GraphicsComponent() : m_AssetReference(),
-		m_TextureReference(),
+		m_TextureReference(), m_MeshControllerRef(), m_ModelName(), m_MeshName(), m_MeshNodeName(), m_TextureName(), m_modelUID(),
+		m_UsedIn2D(false), m_IsAnimated(false), m_UseMaterials(false), m_UsePreloadMaterials(false),/* m_MaterialAttributes(),*/
 		m_ShowMesh(true),
 		m_Color(1.f, 1.f, 1.f, 1.f),
 		m_PointLightID(-1.f),
 		m_Pointlight(false),
-		m_Debug(false),
-		m_UsedIn2D(false)
+		m_Debug(false)
 
 	{ }
 
@@ -53,7 +62,10 @@ namespace TDS
 		m_Color(toMove.m_Color),
 		m_PointLightID(toMove.m_PointLightID),
 		m_Pointlight(toMove.m_Pointlight),
-		m_Debug(toMove.m_Debug)
+		m_Debug(toMove.m_Debug),
+		m_IsAnimated(toMove.m_IsAnimated), 
+		m_UseMaterials(toMove.m_UseMaterials),
+		m_UsePreloadMaterials(toMove.m_UsePreloadMaterials)
 
 
 	{ }

@@ -672,9 +672,9 @@ namespace TDS
 		samplerCreateInfo.magFilter = textureInfo.m_ImageFilter;
 		samplerCreateInfo.minFilter = textureInfo.m_ImageFilter;
 		samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-		samplerCreateInfo.addressModeU = textureInfo.m_SampleAddressMode;
-		samplerCreateInfo.addressModeV = textureInfo.m_SampleAddressMode;
-		samplerCreateInfo.addressModeW = textureInfo.m_SampleAddressMode;
+		samplerCreateInfo.addressModeU = textureInfo.m_USampleAddressMode;
+		samplerCreateInfo.addressModeV = textureInfo.m_VSampleAddressMode;
+		samplerCreateInfo.addressModeW = textureInfo.m_USampleAddressMode;
 		samplerCreateInfo.compareOp = VK_COMPARE_OP_NEVER;
 		samplerCreateInfo.borderColor = textureInfo.m_BorderClr;
 		samplerCreateInfo.mipLodBias = 0.0f;

@@ -112,10 +112,10 @@ namespace TDS
     void TextureCompressor::SetCompressionSetting(TextureCompilerSetting setting)
     {
         memset(&m_Options, 0, sizeof(KernelOptions));
-        m_Options.encodeWith = CMP_HPC;
+        m_Options.encodeWith = GetComputeType(setting.m_Desc.m_EncoderString);
         m_Options.format = GetCompressorFormat(setting.m_Desc.m_FormatString);
         m_Options.fquality = setting.m_Desc.m_FloatQuality;
-        m_Options.threads = 6;
+        m_Options.threads = setting.m_Desc.m_NumberOfThreads;
     }
 
     bool TextureCompilerSetting::SerializeSettings(std::string_view FilePath, bool Read)

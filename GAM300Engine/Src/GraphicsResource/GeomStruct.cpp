@@ -1,11 +1,12 @@
 #include "GraphicsResource/GeomStruct.h"
 #include "Logger/Logger.h"
-
+#include "Serialization/BinarySerializor.h"
 namespace TDS
 {
 
 	void TDSModel::Serialize(std::string_view outPath)
 	{
+
 		std::ofstream fileStream(outPath.data(), std::ios::binary);
 		if (!fileStream)
 		{
@@ -265,6 +266,33 @@ namespace TDS
 		deserializeVector(m_Indices, [&](std::uint32_t& index) { fileStream.read(reinterpret_cast<char*>(&index), sizeof(index)); });
 		
 		fileStream.close();
+	}
+	
+	void TDSSOAModel::Serialize(TDSSOAModel& model, std::string_view outPath)
+	{
+		BinarySerializor serializer{};
+
+
+		if (serializer.OpenData(outPath, false) == BinarySerializor::ERROR_TYPE::FAILED)
+			return;
+
+		serializer.StartSerializer(&model);
+
+		serializer.CloseData(false);
+
+
+	}
+	void TDSSOAModel::Deserialize(TDSSOAModel& model, std::string_view inPath)
+	{
+		BinarySerializor serializer{};
+
+
+		if (serializer.OpenData(inPath, true) == BinarySerializor::ERROR_TYPE::FAILED)
+			return;
+
+		serializer.StartDeserializer(&model);
+
+		serializer.CloseData(true);
 	}
 
 }

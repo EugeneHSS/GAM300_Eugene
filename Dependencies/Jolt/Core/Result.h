@@ -129,7 +129,7 @@ public:
 
 		mState = EState::Invalid;
 	}
-
+	
 	/// Checks if the result is still uninitialized
 	bool				IsEmpty() const								{ return mState == EState::Invalid; }
 

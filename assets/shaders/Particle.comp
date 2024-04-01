@@ -1,0 +1,133 @@
+#version 450
+
+//combined vector of all the particles (inactive and active) are sent in here
+//spawning logic is done in the cpu side
+
+struct Particle {
+    //transform params
+    //vec3 OriginalPosition;
+    vec3 Size;//xyz scale of the particle
+    vec3 Rotation;
+    vec3 CurrentPosition;// constant transform position of the entity, position of particle is an offset from here based on velocity and acceleration
+    
+    //movement params
+    vec3 Velocity;
+    vec3 Acceleration;
+    float Age;//how long has the particle been active
+    
+    //aesthetics params
+    vec3 Color;//rgb color of the particle
+    //bool Active;//is the particle active
+};
+
+//need one more struct for emitter? which 
+
+//readonly data of the particle array being sent in
+layout(std140, binding = 1) readonly buffer ParticleIn{
+    Particle List[];
+}v_ParticleIn;
+
+//updated particle array to be returned and replace particlein
+layout(std140, binding = 2) writeonly buffer ParticleOut{
+    Particle List[];
+}v_ParticleOut;
+
+//vector of matrix to be sent to vertex buffer
+layout(std140, binding = 3) writeonly buffer ParticleXform{
+    mat4 List[];
+}v_ParticleXform;
+
+//256 bytes max
+//mainly emitter data
+layout(push_constant) uniform Push{
+    float deltaTime; //4
+    float Lifetime;//how long is the particle supposed to last
+    float SpawnTimer;//how long since the last particle was spawned(1st issue)
+    float SpawnRate;//how many particles are spawned per second
+    vec3 DecayRate;//how fast the particle decays
+    //16
+    vec3 EmitterPosition;//where the emitter is in the world
+}push;
+
+//
+layout(local_size_x = 256, local_size_y = 1, local_size_z =1) in;
+
+
+mat4 GenerateTransform(vec3 Scale, vec3 Rotate, vec3 Translate){
+    mat4 Scalemat = mat4(
+        Scale.x, 0.0, 0.0, 0.0,
+        0.0, Scale.y, 0.0, 0.0,
+        0.0, 0.0, Scale.z, 0.0,
+        0.0, 0.0, 0.0, 1.0);
+    
+    mat4 rotationX = mat4(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, cos(Rotate.x), -sin(Rotate.x), 0.0,
+        0.0, sin(Rotate.x), cos(Rotate.x), 0.0,
+        0.0, 0.0, 0.0, 1.0
+    );
+
+    mat4 rotationY= mat4(
+        cos(Rotate.y), 0.0, sin(Rotate.y), 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        -sin(Rotate.y), 0.0, cos(Rotate.y), 0.0,
+        0.0, 0.0, 0.0, 1.0
+    );
+
+    mat4 rotationZ = mat4(
+        cos(Rotate.z), -sin(Rotate.z), 0.0, 0.0,
+        sin(Rotate.z), cos(Rotate.z), 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    );
+
+    mat4 Rotmat = rotationZ * rotationY * rotationX;
+
+    mat4 Translatemat = mat4(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        Translate.x, Translate.y, Translate.z, 1.0
+    );
+
+    mat4 Xform = Translatemat* Rotmat* Scalemat;
+    return Xform;
+}
+
+
+void main() {
+    // Particle update loop
+    uint particleindex = gl_GlobalInvocationID.x;
+
+    /*
+    //check if invocation id within the particlevectorIn
+    if (particleindex < v_ActiveParticleIn.List.length() ){
+        //get the particle settings and particle age from the relevant sources
+        Particle currentparticle = v_ActiveParticleIn.List[particleindex];
+        
+        if (currentparticle.Active){//if particle is active, update its position
+            currentparticle.Age += push.deltaTime;
+            vec3 newposition;
+            if (currentparticle.Age >= currentparticle.Lifetime){
+                //current particle exceeded lifetime, reset age and position
+                currentparticle.Age = 0.0;
+                newposition = currentparticle.OriginalPosition;
+                currentparticle.Active = false;
+
+            }else{
+                //calculate the position based on acceleration and velocity using the age to determine how much time has passed from its spawn
+                vec3 accel = currentparticle.Acceleration * exp(-currentparticle.DecayRate* currentparticle.Age);//acceleration value that has decreased in total
+                vec3 vel  = currentparticle.Velocity + (accel* currentparticle.Age);
+                newposition = currentparticle.OriginalPosition + (vel* push.deltaTime);
+            }
+
+            //update the particle settings
+            v_ParticleOut[particleindex] = currentparticle;
+            //generating a vector of transforms for rendering
+            mat4 currentXform = GenerateTransform(currentparticle.Size, currentparticle.Rotation, newposition);
+            v_ParticleXform[particleindex] = currentXform;
+        }
+        //can just ignore all non-active particles, checking of spawning logic is done 
+    }
+    */
+}

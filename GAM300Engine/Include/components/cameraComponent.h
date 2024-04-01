@@ -61,6 +61,7 @@ namespace TDS
 		DLL_API Vec3 getForwardVector() { return m_Front; }
 		DLL_API void setForwardVector(Vec3 front) { m_Front = front; }
 		DLL_API Vec3 getRightVector() { return m_Right; }
+		DLL_API void setRightVector(Vec3 right) { m_Right = right; }
 		RTTR_ENABLE(IComponent);
 		RTTR_REGISTRATION_FRIEND
 				

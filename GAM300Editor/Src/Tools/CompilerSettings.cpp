@@ -119,62 +119,62 @@ bool TDS::GeomDescriptor::Serialize(std::string_view FilePath, bool Read)
     return false;
 }
 
-bool TDS::TextureDescriptor::Serialize(std::string_view FilePath, bool Read)
-{
-    if (Read)
-    {
-        std::ifstream inFile(std::string(FilePath), std::ios::in);
-        if (!inFile.is_open())
-        {
-            return false;
-        }
-
-        std::string line{}, temp{};
-        while (std::getline(inFile, line))
-        {
-            if (line == "[ FilePath ]")
-            {
-                if (std::getline(inFile, m_Descriptor.m_BitMapPath))
-                {
-                    m_Descriptor.m_BitMapPath.erase(0, 3);
-                    if (m_Descriptor.m_BitMapPath.back() == '\"')
-                    {
-                        m_Descriptor.m_BitMapPath.pop_back();
-                    }
-                }
-            }
-            else if (line == "[ CompresstionType ]")
-            {
-                if (std::getline(inFile, m_Descriptor.m_Format))
-                {
-                    m_Descriptor.m_Format.erase(0, 3);
-                    if (m_Descriptor.m_Format.back() == '\"')
-                    {
-                        m_Descriptor.m_Format.pop_back();
-                    }
-                }
-            }
-        }
-
-        inFile.close();
-        return true;
-    }
-    else
-    {
-        std::ofstream outFile(std::string(FilePath), std::ios::out | std::ios::trunc);
-        if (!outFile.is_open())
-        {
-            return false;
-        }
-
-        outFile << "[ FilePath ]\n"
-            << "  \"" << m_Descriptor.m_BitMapPath << "\"\n\n"
-            << "[ CompressionType ]\n"
-            << "  \"" << m_Descriptor.m_Format << "\"\n";
-
-
-        outFile.close();
-        return true;
-    }
-    return false;
-}
+//bool TDS::TextureDescriptor::Serialize(std::string_view FilePath, bool Read)
+//{
+//    if (Read)
+//    {
+//        std::ifstream inFile(std::string(FilePath), std::ios::in);
+//        if (!inFile.is_open())
+//        {
+//            return false;
+//        }
+//
+//        std::string line{}, temp{};
+//        while (std::getline(inFile, line))
+//        {
+//            if (line == "[ FilePath ]")
+//            {
+//                if (std::getline(inFile, m_Descriptor.m_BitMapPath))
+//                {
+//                    m_Descriptor.m_BitMapPath.erase(0, 3);
+//                    if (m_Descriptor.m_BitMapPath.back() == '\"')
+//                    {
+//                        m_Descriptor.m_BitMapPath.pop_back();
+//                    }
+//                }
+//            }
+//            else if (line == "[ CompresstionType ]")
+//            {
+//                if (std::getline(inFile, m_Descriptor.m_Format))
+//                {
+//                    m_Descriptor.m_Format.erase(0, 3);
+//                    if (m_Descriptor.m_Format.back() == '\"')
+//                    {
+//                        m_Descriptor.m_Format.pop_back();
+//                    }
+//                }
+//            }
+//        }
+//
+//        inFile.close();
+//        return true;
+//    }
+//    else
+//    {
+//        std::ofstream outFile(std::string(FilePath), std::ios::out | std::ios::trunc);
+//        if (!outFile.is_open())
+//        {
+//            return false;
+//        }
+//
+//        outFile << "[ FilePath ]\n"
+//            << "  \"" << m_Descriptor.m_BitMapPath << "\"\n\n"
+//            << "[ CompressionType ]\n"
+//            << "  \"" << m_Descriptor.m_Format << "\"\n";
+//
+//
+//        outFile.close();
+//        return true;
+//    }
+//    return false;
+//}

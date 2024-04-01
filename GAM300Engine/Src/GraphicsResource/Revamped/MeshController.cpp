@@ -10,6 +10,10 @@ namespace TDS
     {
         std::map<std::string, int> duplicates;
 
+        if (m_ModelPack->m_ModelName == "Bucket - Copy_Bin.bin")
+        {
+            std::cout << "Styop here" << std::endl;
+        }
         for (size_t i = 0; i < m_ModelPack->m_ModelHandle.m_Mesh.size(); ++i)
         {
             auto& Mesh = m_ModelPack->m_ModelHandle.m_Mesh[i];
@@ -19,8 +23,16 @@ namespace TDS
             size_t end = start + SubMesh.m_nVertices;
 
             std::vector<TDSModel::Vertex> vertexData;
+
+            for (auto& vert : m_ModelPack->m_ModelHandle.m_ModelVertex)
+            {
+                vert.m_MeshID.y = vert.m_Color.w;
+                vert.m_Color.w = 1.f;
+            }
+
             vertexData.insert(vertexData.end(), m_ModelPack->m_ModelHandle.m_ModelVertex.begin() + start, m_ModelPack->m_ModelHandle.m_ModelVertex.begin() + end);
 
+           
 
             Vec3 minBoundingBox(FLT_MAX, FLT_MAX, FLT_MAX);
             Vec3 maxBoundingBox(-FLT_MAX, -FLT_MAX, -FLT_MAX);
@@ -217,7 +229,7 @@ namespace TDS
             m_RootNodes[mesh.m_NodeName].m_SceneTranslation = submesh.m_ScenePos;
             m_RootNodes[mesh.m_NodeName].m_SceneRotation = submesh.m_SceneRotate;
             m_RootNodes[mesh.m_NodeName].m_SceneScale = submesh.m_SceneScale;
-
+            m_RootNodes[mesh.m_NodeName].m_MeshList[mesh.m_Name].m_MaterialID = submesh.m_iMaterial;
             m_RootNodes[mesh.m_NodeName].m_NodeBoundingBox.extend(m_RootNodes[mesh.m_NodeName].m_MeshList[mesh.m_Name].m_MeshBoundingBox);
 
 

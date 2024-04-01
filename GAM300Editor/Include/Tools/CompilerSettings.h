@@ -55,7 +55,9 @@ namespace TDS
 		bool		m_LoadAnimation = false; 
 		bool		m_LoadModelAnimation = false;
 		bool		m_LoadMaterials = false;
+		bool		m_LoadMaterialTextures = false;
 		bool		m_Normalized = false;
+		bool		m_UseStreams = false;
 
 		Desc		m_Descriptor;
 		GenerateLOD m_LodOptions;
@@ -63,14 +65,28 @@ namespace TDS
 		bool Serialize(std::string_view FilePath, bool Read);
 	};
 
-	struct TextureDescriptor
+	struct TextureCompilerSetting
 	{
 		struct Desc
 		{
-			std::string m_BitMapPath;
-			std::string m_Format = "R32G32B32A32_FLOAT";
+			std::string m_EncoderString = "OpenCL";
+			std::string m_FormatString = "BC7";
+			std::int32_t	m_NumberOfThreads = 64;
+			std::int32_t Width = 0, height = 0;
+			float		m_FloatQuality = 1.f;
 		};
-		Desc m_Descriptor;
-		bool Serialize(std::string_view FilePath, bool Read);
+		Desc m_Desc;
+		bool SerializeSettings(std::string_view FilePath, bool Read);
+
 	};
+	//struct TextureDescriptor
+	//{
+	//	struct Desc
+	//	{
+	//		std::string m_BitMapPath;
+	//		std::string m_Format = "R32G32B32A32_FLOAT";
+	//	};
+	//	Desc m_Descriptor;
+	//	bool Serialize(std::string_view FilePath, bool Read);
+	//};
 }

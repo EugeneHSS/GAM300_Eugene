@@ -1,15 +1,20 @@
 {
     "Archetype Sizes": {
-        "110000100000100000": {
+        "1100001000001000000": {
+            "0": 3400,
+            "1": 9600,
+            "6": 9000,
+            "12": 9000
+        },
+        "1100000000001000000": {
             "0": 2584,
             "1": 7296,
-            "6": 6840,
             "12": 6840
         }
     },
     "Entity Data": {
         "1": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "Background",
@@ -139,7 +144,7 @@
             }
         },
         "2": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "Settings Title",
@@ -151,13 +156,13 @@
             },
             "Transform": {
                 "Position": {
-                    "x": -0.4309859871864319,
-                    "y": 0.5647668838500977,
+                    "x": -0.4372360110282898,
+                    "y": 0.5496726036071777,
                     "z": 0.0
                 },
                 "Scale": {
-                    "x": 0.25,
-                    "y": 0.15000000596046448,
+                    "x": 0.20000000298023224,
+                    "y": 0.10000000149011612,
                     "z": 1.0
                 },
                 "Rotation": {
@@ -166,8 +171,8 @@
                     "z": 0.0
                 },
                 "FakePosition": {
-                    "x": -0.4309859871864319,
-                    "y": 0.5647668838500977,
+                    "x": -0.4372360110282898,
+                    "y": 0.5496726036071777,
                     "z": 0.0
                 },
                 "FakeRotation": {
@@ -181,8 +186,8 @@
                     "z": 1.0
                 },
                 "OldPosition": {
-                    "x": -0.4309859871864319,
-                    "y": 0.5647668838500977,
+                    "x": -0.4372360110282898,
+                    "y": 0.5496726036071777,
                     "z": 0.0
                 },
                 "OldScale": {
@@ -191,13 +196,13 @@
                     "z": 0.0
                 },
                 "OldRotation": {
-                    "x": 0.2599993944168091,
-                    "y": 0.13684192299842834,
+                    "x": 0.20000000298023224,
+                    "y": 0.10000000149011612,
                     "z": 1.0
                 },
                 "OldFakePosition": {
-                    "x": -0.4309859871864319,
-                    "y": 0.5647668838500977,
+                    "x": -0.4372360110282898,
+                    "y": 0.5496726036071777,
                     "z": 0.0
                 },
                 "OldFakeScale": {
@@ -259,17 +264,17 @@
                     "w": 1.0
                 },
                 "BoundingBoxMin": {
-                    "x": -0.5559859871864319,
-                    "y": 0.4897668957710266
+                    "x": -0.5372360348701477,
+                    "y": 0.4996725916862488
                 },
                 "BoundingBoxMax": {
-                    "x": -0.3059859871864319,
-                    "y": 0.6397668719291687
+                    "x": -0.3372360169887543,
+                    "y": 0.5996726155281067
                 }
             }
         },
         "3": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "AudioTitle",
@@ -399,7 +404,7 @@
             }
         },
         "4": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "MasterVolumeTitle",
@@ -529,7 +534,7 @@
             }
         },
         "5": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "BgmTitle",
@@ -659,7 +664,7 @@
             }
         },
         "6": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "SfxTitle",
@@ -677,7 +682,7 @@
                 },
                 "Scale": {
                     "x": 0.0675664097070694,
-                    "y": 0.06149483099579811,
+                    "y": 0.05999999865889549,
                     "z": 1.0
                 },
                 "Rotation": {
@@ -780,16 +785,16 @@
                 },
                 "BoundingBoxMin": {
                     "x": -0.7500225901603699,
-                    "y": -0.13702774047851563
+                    "y": -0.13628032803535461
                 },
                 "BoundingBoxMax": {
                     "x": -0.6824561953544617,
-                    "y": -0.07553291320800781
+                    "y": -0.07628032565116882
                 }
             }
         },
         "7": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "MasterVolUp",
@@ -919,7 +924,7 @@
             }
         },
         "8": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "MasterVolDown",
@@ -1049,7 +1054,7 @@
             }
         },
         "9": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "BgmVolUp",
@@ -1179,7 +1184,7 @@
             }
         },
         "10": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "BgmVolDown",
@@ -1309,7 +1314,7 @@
             }
         },
         "11": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "SfxVolUp",
@@ -1439,7 +1444,7 @@
             }
         },
         "12": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "SfxVolDown",
@@ -1569,7 +1574,7 @@
             }
         },
         "13": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "MasterVolBox",
@@ -1699,7 +1704,7 @@
             }
         },
         "14": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "BgmBox",
@@ -1829,7 +1834,7 @@
             }
         },
         "15": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "SfxBox",
@@ -1959,7 +1964,7 @@
             }
         },
         "16": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "BackButton",
@@ -2089,7 +2094,7 @@
             }
         },
         "17": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "MasterText",
@@ -2219,7 +2224,7 @@
             }
         },
         "18": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "BgmText",
@@ -2349,7 +2354,7 @@
             }
         },
         "19": {
-            "ArchetypeID": "110000100000100000",
+            "ArchetypeID": "1100001000001000000",
             "Enabled": true,
             "Name Tag": {
                 "Name": "SfxText",
@@ -2477,6 +2482,2946 @@
                     "y": 0.5
                 }
             }
+        },
+        "20": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "GammaTitle",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 19,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.6625001430511475,
+                    "y": -0.28030312061309814,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.17727310955524445,
+                    "y": 0.10841105133295059,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": -0.6625001430511475,
+                    "y": -0.28030312061309814,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.17727310955524445,
+                    "y": 0.10841105133295059,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.6625001430511475,
+                    "y": -0.28030312061309814,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.17727310955524445,
+                    "y": 0.10841105133295059,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": -0.6625001430511475,
+                    "y": -0.28030312061309814,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.17727310955524445,
+                    "y": 0.10841105133295059,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_Gamma_Header.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.7511367201805115,
+                    "y": -0.33450865745544434
+                },
+                "BoundingBoxMax": {
+                    "x": -0.5738635659217834,
+                    "y": -0.22609759867191315
+                }
+            }
+        },
+        "21": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "GammaHeader",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 20,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.6791666150093079,
+                    "y": -0.40867018699645996,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.14204567670822144,
+                    "y": 0.07124149054288864,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": -0.6791666150093079,
+                    "y": -0.40867018699645996,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.14204567670822144,
+                    "y": 0.07124149054288864,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.6791666150093079,
+                    "y": -0.40867018699645996,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.14204567670822144,
+                    "y": 0.07124149054288864,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": -0.6791666150093079,
+                    "y": -0.40867018699645996,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.14204567670822144,
+                    "y": 0.07124149054288864,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_Gamma.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.7501894235610962,
+                    "y": -0.4442909359931946
+                },
+                "BoundingBoxMax": {
+                    "x": -0.6081438064575195,
+                    "y": -0.37304943799972534
+                }
+            }
+        },
+        "22": {
+            "ArchetypeID": "1100001000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "GammaUp",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 21,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.1899999976158142,
+                    "y": -0.40656566619873047,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.07999999821186066,
+                    "y": 0.15000000596046448,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": -0.40656566619873047,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.1899999976158142,
+                    "y": -0.40656566619873047,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.07999999821186066,
+                    "y": 0.15000000596046448,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": -0.40656566619873047,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "",
+                "MeshName": "",
+                "MeshNodeName": "",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            },
+            "UI Sprite": {
+                "Texture": "optionsVolUp.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.22999998927116394,
+                    "y": -0.4815656542778015
+                },
+                "BoundingBoxMax": {
+                    "x": -0.15000000596046448,
+                    "y": -0.3315656781196594
+                }
+            }
+        },
+        "23": {
+            "ArchetypeID": "1100001000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "GammaDown",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 22,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.37400001287460327,
+                    "y": -0.40611106157302856,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.07999999821186066,
+                    "y": 0.15000000596046448,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": 0.13888895511627197,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.37400001287460327,
+                    "y": -0.40611106157302856,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.07999999821186066,
+                    "y": 0.15000000596046448,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": 0.13888895511627197,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "",
+                "MeshName": "",
+                "MeshNodeName": "",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            },
+            "UI Sprite": {
+                "Texture": "optionsVolDown.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.414000004529953,
+                    "y": -0.4811110496520996
+                },
+                "BoundingBoxMax": {
+                    "x": -0.33400002121925354,
+                    "y": -0.3311110734939575
+                }
+            }
+        },
+        "24": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "GammaBox",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 23,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.28299999237060547,
+                    "y": -0.40611106157302856,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.1120000034570694,
+                    "y": 0.11500000208616257,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.0,
+                    "y": -0.4027777910232544,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.28299999237060547,
+                    "y": -0.40611106157302856,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.1120000034570694,
+                    "y": 0.11500000208616257,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.0,
+                    "y": -0.4027777910232544,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "optionsVolBox.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.33899998664855957,
+                    "y": -0.46361106634140015
+                },
+                "BoundingBoxMax": {
+                    "x": -0.22699999809265137,
+                    "y": -0.348611056804657
+                }
+            }
+        },
+        "25": {
+            "ArchetypeID": "1100001000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "GammaText",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 24,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.32668188214302063,
+                    "y": -0.43771040439605713,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.04600000008940697,
+                    "y": 0.06599999964237213,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": -0.005681872367858887,
+                    "y": -0.43771040439605713,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.32668188214302063,
+                    "y": -0.43771040439605713,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.04600000008940697,
+                    "y": 0.06599999964237213,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": -0.005681872367858887,
+                    "y": -0.43771040439605713,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "",
+                "MeshName": "",
+                "MeshNodeName": "",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            },
+            "UI Sprite": {
+                "Texture": "",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": true,
+                "message": "1.5",
+                "Font Texture": "Roboto-Medium.dds",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.5,
+                    "y": -0.5
+                },
+                "BoundingBoxMax": {
+                    "x": 0.5,
+                    "y": 0.5
+                }
+            }
+        },
+        "26": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "ControlsTitle",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 25,
+                "HierarchyChildren": [
+                    27,
+                    28,
+                    29,
+                    30,
+                    31,
+                    32,
+                    33,
+                    34,
+                    35,
+                    36
+                ]
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.1899999976158142,
+                    "y": 0.07000000029802322,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.1899999976158142,
+                    "y": 0.07000000029802322,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_controls.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.28170445561408997,
+                    "y": 0.037347521632909775
+                },
+                "BoundingBoxMax": {
+                    "x": 0.4717044532299042,
+                    "y": 0.1073475182056427
+                }
+            }
+        },
+        "27": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "WASD",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 0,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.15624940395355225,
+                    "y": -0.013446584343910217,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.15557150542736053,
+                    "y": 0.17238029837608337,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.15624940395355225,
+                    "y": -0.013446584343910217,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.15557150542736053,
+                    "y": 0.17238032817840576,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.15624940395355225,
+                    "y": -0.009547963738441467,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.15557150542736053,
+                    "y": 0.17238029837608337,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.15624940395355225,
+                    "y": -0.009547963738441467,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.15557150542736053,
+                    "y": 0.17238032817840576,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_wasd.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.07846365123987198,
+                    "y": -0.0996367335319519
+                },
+                "BoundingBoxMax": {
+                    "x": 0.2340351641178131,
+                    "y": 0.07274356484413147
+                }
+            }
+        },
+        "28": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "MoveText",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 1,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.3083327114582062,
+                    "y": -0.0477839857339859,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.11805810034275055,
+                    "y": 0.05930539220571518,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.3083327114582062,
+                    "y": -0.0477839857339859,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.11805810034275055,
+                    "y": 0.05930539220571518,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.3083327114582062,
+                    "y": -0.04388536512851715,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.11805810034275055,
+                    "y": 0.05930539220571518,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.3083327114582062,
+                    "y": -0.04388536512851715,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.11805810034275055,
+                    "y": 0.05930539220571518,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_move.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.2493036687374115,
+                    "y": -0.07743668556213379
+                },
+                "BoundingBoxMax": {
+                    "x": 0.36736175417900085,
+                    "y": -0.01813128963112831
+                }
+            }
+        },
+        "29": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "E",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 2,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.154166117310524,
+                    "y": -0.20300129055976868,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.09200000017881393,
+                    "y": 0.12600000202655792,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.154166117310524,
+                    "y": -0.20300129055976868,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.09200000017881393,
+                    "y": 0.12600000202655792,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.154166117310524,
+                    "y": -0.19910266995429993,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.09200000017881393,
+                    "y": 0.12600000202655792,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.154166117310524,
+                    "y": -0.19910266995429993,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.09200000017881393,
+                    "y": 0.12600000202655792,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_E.dds",
+                "EnableSprite": true,
+                "LayerID": 2,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.10816611349582672,
+                    "y": -0.26600128412246704
+                },
+                "BoundingBoxMax": {
+                    "x": 0.20016612112522125,
+                    "y": -0.1400012969970703
+                }
+            }
+        },
+        "30": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "InteractText",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 3,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.4062497913837433,
+                    "y": -0.23733854293823242,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.32538866996765137,
+                    "y": 0.09169209003448486,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.4062497913837433,
+                    "y": -0.23733854293823242,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.32538866996765137,
+                    "y": 0.09169209003448486,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.4062497913837433,
+                    "y": -0.23343992233276367,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.32538866996765137,
+                    "y": 0.09169209003448486,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.4062497913837433,
+                    "y": -0.23343992233276367,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.32538866996765137,
+                    "y": 0.09169209003448486,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_interact.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.2435554563999176,
+                    "y": -0.28318458795547485
+                },
+                "BoundingBoxMax": {
+                    "x": 0.5689440965652466,
+                    "y": -0.19149249792099
+                }
+            }
+        },
+        "31": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "I",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 4,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.15416644513607025,
+                    "y": -0.3699144721031189,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.09200000017881393,
+                    "y": 0.12600000202655792,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.15416644513607025,
+                    "y": -0.3699144721031189,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.09200000017881393,
+                    "y": 0.12600001692771912,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.15416644513607025,
+                    "y": -0.36601585149765015,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.09200000017881393,
+                    "y": 0.12600000202655792,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.15416644513607025,
+                    "y": -0.36601585149765015,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.09200000017881393,
+                    "y": 0.12600001692771912,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_I.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.10816644132137299,
+                    "y": -0.43291446566581726
+                },
+                "BoundingBoxMax": {
+                    "x": 0.20016644895076752,
+                    "y": -0.30691447854042053
+                }
+            }
+        },
+        "32": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "InventoryText",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 5,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.33124983310699463,
+                    "y": -0.38828250765800476,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.17287343740463257,
+                    "y": 0.08852706849575043,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.33124983310699463,
+                    "y": -0.38828250765800476,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.17287343740463257,
+                    "y": 0.08852708339691162,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.33124983310699463,
+                    "y": -0.384383887052536,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.17287343740463257,
+                    "y": 0.08852706849575043,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.33124983310699463,
+                    "y": -0.384383887052536,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.17287343740463257,
+                    "y": 0.08852708339691162,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_inventory.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.24481311440467834,
+                    "y": -0.43254604935646057
+                },
+                "BoundingBoxMax": {
+                    "x": 0.4176865518093109,
+                    "y": -0.34401896595954895
+                }
+            }
+        },
+        "33": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "F",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 6,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.154166117310524,
+                    "y": -0.5368276834487915,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.09237749874591827,
+                    "y": 0.12619566917419434,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.154166117310524,
+                    "y": -0.5368276834487915,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.09237749874591827,
+                    "y": 0.12619568407535553,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.154166117310524,
+                    "y": -0.5329290628433228,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.09237749874591827,
+                    "y": 0.12619566917419434,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.154166117310524,
+                    "y": -0.5329290628433228,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.09237749874591827,
+                    "y": 0.12619568407535553,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_F.dds",
+                "EnableSprite": true,
+                "LayerID": 2,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.10797736793756485,
+                    "y": -0.5999255180358887
+                },
+                "BoundingBoxMax": {
+                    "x": 0.20035487413406372,
+                    "y": -0.47372984886169434
+                }
+            }
+        },
+        "34": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "FlashlightText",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 7,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.39166632294654846,
+                    "y": -0.5380118489265442,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.2972796857357025,
+                    "y": 0.07643715292215347,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.39166632294654846,
+                    "y": -0.5380118489265442,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.2972796857357025,
+                    "y": 0.07643715292215347,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.39166632294654846,
+                    "y": -0.5341132283210754,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.2972796857357025,
+                    "y": 0.07643715292215347,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.39166632294654846,
+                    "y": -0.5341132283210754,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.2972796857357025,
+                    "y": 0.07643715292215347,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_flashlight.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.2430264800786972,
+                    "y": -0.5762304067611694
+                },
+                "BoundingBoxMax": {
+                    "x": 0.5403061509132385,
+                    "y": -0.49979326128959656
+                }
+            }
+        },
+        "35": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "Ctrl",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 8,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.16458311676979065,
+                    "y": -0.6950680613517761,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.12341945618391037,
+                    "y": 0.11298471689224243,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.16458311676979065,
+                    "y": -0.6950680613517761,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.12341945618391037,
+                    "y": 0.11298471689224243,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.16458311676979065,
+                    "y": -0.6911694407463074,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.12341945618391037,
+                    "y": 0.11298471689224243,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.16458311676979065,
+                    "y": -0.6911694407463074,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.12341945618391037,
+                    "y": 0.11298471689224243,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_ctrl.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.10287338495254517,
+                    "y": -0.7515604496002197
+                },
+                "BoundingBoxMax": {
+                    "x": 0.22629284858703613,
+                    "y": -0.6385756731033325
+                }
+            }
+        },
+        "36": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "CrouchText",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 26,
+                "HierarchyIndex": 9,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.31041648983955383,
+                    "y": -0.6948177218437195,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.13395491242408752,
+                    "y": 0.07202330976724625,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.31041648983955383,
+                    "y": -0.6948177218437195,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.13395491242408752,
+                    "y": 0.07202327996492386,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.31041648983955383,
+                    "y": -0.6909191012382507,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.13395491242408752,
+                    "y": 0.07202330976724625,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.31041648983955383,
+                    "y": -0.6909191012382507,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.13395491242408752,
+                    "y": 0.07202327996492386,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.37670445442199707,
+                    "y": 0.07234752178192139,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_crouch.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.24343903362751007,
+                    "y": -0.7308293581008911
+                },
+                "BoundingBoxMax": {
+                    "x": 0.3773939609527588,
+                    "y": -0.6588060855865479
+                }
+            }
+        },
+        "37": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "GoalsTitle",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 26,
+                "HierarchyChildren": [
+                    38
+                ]
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.37916672229766846,
+                    "y": 0.6978558301925659,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.1202332153916359,
+                    "y": 0.0709352046251297,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.37916672229766846,
+                    "y": 0.6978558301925659,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.1202332153916359,
+                    "y": 0.0709352046251297,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.37916672229766846,
+                    "y": 0.6978558301925659,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.1202332153916359,
+                    "y": 0.0709352046251297,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.37916672229766846,
+                    "y": 0.6978558301925659,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.1202332153916359,
+                    "y": 0.0709352046251297,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_goals.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.3190501034259796,
+                    "y": 0.6623882055282593
+                },
+                "BoundingBoxMax": {
+                    "x": 0.4392833411693573,
+                    "y": 0.7333234548568726
+                }
+            }
+        },
+        "38": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "GoalsText",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 37,
+                "HierarchyIndex": 0,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": 0.4229166507720947,
+                    "y": 0.39766085147857666,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.6539137959480286,
+                    "y": 0.4188951551914215,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": 0.4229166507720947,
+                    "y": 0.39766085147857666,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.6539137959480286,
+                    "y": 0.4188951551914215,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": 0.4229166507720947,
+                    "y": 0.39766085147857666,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.6539137959480286,
+                    "y": 0.4188951551914215,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": 0.4229166507720947,
+                    "y": 0.39766085147857666,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.6539137959480286,
+                    "y": 0.4188951551914215,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "options_goalText.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": 0.09595975279808044,
+                    "y": 0.1882132738828659
+                },
+                "BoundingBoxMax": {
+                    "x": 0.7498735189437866,
+                    "y": 0.6071084141731262
+                }
+            }
+        },
+        "39": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "MouseSensTitle",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 27,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.5909090042114258,
+                    "y": -0.5555555820465088,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.32083195447921753,
+                    "y": 0.12638840079307556,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": -0.5909090042114258,
+                    "y": -0.5555555820465088,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.32083195447921753,
+                    "y": 0.12638840079307556,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.5909090042114258,
+                    "y": -0.5555555820465088,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.32083195447921753,
+                    "y": 0.12638840079307556,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": -0.5909090042114258,
+                    "y": -0.5555555820465088,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.32083195447921753,
+                    "y": 0.12638840079307556,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "MainMenuOptions_MouseSensTitle.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.7513250112533569,
+                    "y": -0.6187497973442078
+                },
+                "BoundingBoxMax": {
+                    "x": -0.430493026971817,
+                    "y": -0.4923613667488098
+                }
+            }
+        },
+        "40": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "MouseSensText",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 28,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.6022728085517883,
+                    "y": -0.6990739107131958,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.2949305474758148,
+                    "y": 0.10720446705818176,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": -0.6022728085517883,
+                    "y": -0.6990739107131958,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 0.2949305474758148,
+                    "y": 0.10720446705818176,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.6022728085517883,
+                    "y": -0.6990739107131958,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.2949305474758148,
+                    "y": 0.10720446705818176,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": -0.6022728085517883,
+                    "y": -0.6990739107131958,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 0.2949305474758148,
+                    "y": 0.10720446705818176,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "MainMenuOptions_MouseSensText.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.7497380971908569,
+                    "y": -0.7526761293411255
+                },
+                "BoundingBoxMax": {
+                    "x": -0.4548075199127197,
+                    "y": -0.6454716920852661
+                }
+            }
+        },
+        "41": {
+            "ArchetypeID": "1100001000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "MouseSensUp",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 29,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.1899999976158142,
+                    "y": -0.6990740299224854,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.07999999821186066,
+                    "y": 0.15000000596046448,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": -0.17613643407821655,
+                    "y": -0.6990740299224854,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.1732954978942871,
+                    "y": -0.6990740299224854,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.07999999821186066,
+                    "y": 0.15000000596046448,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": -0.1732954978942871,
+                    "y": -0.6990740299224854,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "",
+                "MeshName": "",
+                "MeshNodeName": "",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            },
+            "UI Sprite": {
+                "Texture": "optionsVolUp.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.22999998927116394,
+                    "y": -0.7740740180015564
+                },
+                "BoundingBoxMax": {
+                    "x": -0.15000000596046448,
+                    "y": -0.6240740418434143
+                }
+            }
+        },
+        "42": {
+            "ArchetypeID": "1100001000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "MouseSensDown",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 30,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.37400001287460327,
+                    "y": -0.6990000009536743,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.07999999821186066,
+                    "y": 0.15000000596046448,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": -0.06818187236785889,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.06818187236785889,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.07999999821186066,
+                    "y": 0.15000000596046448,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": -0.06818187236785889,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "",
+                "MeshName": "",
+                "MeshNodeName": "",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            },
+            "UI Sprite": {
+                "Texture": "optionsVolDown.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.414000004529953,
+                    "y": -0.7739999890327454
+                },
+                "BoundingBoxMax": {
+                    "x": -0.33400002121925354,
+                    "y": -0.6240000128746033
+                }
+            }
+        },
+        "43": {
+            "ArchetypeID": "1100000000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "MouseSensBox",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 31,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.2812499403953552,
+                    "y": -0.6990740299224854,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.1120000034570694,
+                    "y": 0.11500000208616257,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": -0.2812499403953552,
+                    "y": -0.6990740299224854,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.2812499403953552,
+                    "y": -0.6990740299224854,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.1120000034570694,
+                    "y": 0.11500000208616257,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": -0.2812499403953552,
+                    "y": -0.6990740299224854,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "UI Sprite": {
+                "Texture": "optionsVolBox.dds",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": false,
+                "message": "",
+                "Font Texture": "",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.3372499346733093,
+                    "y": -0.7565740346908569
+                },
+                "BoundingBoxMax": {
+                    "x": -0.22524994611740112,
+                    "y": -0.6415740251541138
+                }
+            }
+        },
+        "44": {
+            "ArchetypeID": "1100001000001000000",
+            "Enabled": true,
+            "Name Tag": {
+                "Name": "MouseSensText",
+                "Tag": "",
+                "IsActive": true,
+                "HierarchyParent": 0,
+                "HierarchyIndex": 32,
+                "HierarchyChildren": []
+            },
+            "Transform": {
+                "Position": {
+                    "x": -0.31534087657928467,
+                    "y": -0.7222222089767456,
+                    "z": 0.0
+                },
+                "Scale": {
+                    "x": 0.04600000008940697,
+                    "y": 0.06599999964237213,
+                    "z": 1.0
+                },
+                "Rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "FakePosition": {
+                    "x": -0.31534087657928467,
+                    "y": -0.7222222089767456,
+                    "z": 0.0
+                },
+                "FakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "FakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldPosition": {
+                    "x": -0.31534087657928467,
+                    "y": -0.7222222089767456,
+                    "z": 0.0
+                },
+                "OldScale": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "OldRotation": {
+                    "x": 0.04600000008940697,
+                    "y": 0.06599999964237213,
+                    "z": 1.0
+                },
+                "OldFakePosition": {
+                    "x": -0.31534087657928467,
+                    "y": -0.7222222089767456,
+                    "z": 0.0
+                },
+                "OldFakeScale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "OldFakeRotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ParentPosition": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "Graphics Component": {
+                "PointLight": false,
+                "TextureName": "",
+                "Show Mesh": true,
+                "Debug": false,
+                "ModelName": "",
+                "MeshName": "",
+                "MeshNodeName": "",
+                "Color": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0,
+                    "w": 1.0
+                },
+                "Used In 2D": false,
+                "Model UID": 0
+            },
+            "UI Sprite": {
+                "Texture": "",
+                "EnableSprite": true,
+                "LayerID": 1,
+                "is Font": true,
+                "message": "0.1",
+                "Font Texture": "Roboto-Medium.dds",
+                "ForeGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "Sprite Color": {
+                    "x": 0.10000000149011612,
+                    "y": 0.10000000149011612,
+                    "z": 0.10000000149011612,
+                    "w": 1.0
+                },
+                "BackGroundColour": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                },
+                "BoundingBoxMin": {
+                    "x": -0.023000000044703484,
+                    "y": -0.5
+                },
+                "BoundingBoxMax": {
+                    "x": 0.023000000044703484,
+                    "y": 0.5
+                }
+            }
         }
     },
     "Scripts": {
@@ -2579,27 +5524,125 @@
         },
         "17": {},
         "18": {},
-        "19": {}
+        "19": {},
+        "20": {},
+        "21": {},
+        "22": {
+            "OptionsGamma": {
+                "pressedGammaUp": {
+                    "System.Boolean": "True"
+                },
+                "gammaText": {
+                    "ScriptAPI.GameObject": 25
+                },
+                "gameObject": {
+                    "ScriptAPI.GameObject": 22
+                }
+            }
+        },
+        "23": {
+            "OptionsGamma": {
+                "pressedGammaUp": {
+                    "System.Boolean": "False"
+                },
+                "gammaText": {
+                    "ScriptAPI.GameObject": 25
+                },
+                "gameObject": {
+                    "ScriptAPI.GameObject": 23
+                }
+            }
+        },
+        "24": {},
+        "25": {},
+        "26": {},
+        "27": {},
+        "28": {},
+        "29": {},
+        "30": {},
+        "31": {},
+        "32": {},
+        "33": {},
+        "34": {},
+        "35": {},
+        "36": {},
+        "37": {},
+        "38": {},
+        "39": {},
+        "40": {},
+        "41": {
+            "OptionsMouseSensitivity": {
+                "pressedMouseUp": {
+                    "System.Boolean": "True"
+                },
+                "mouseText": {
+                    "ScriptAPI.GameObject": 44
+                },
+                "gameObject": {
+                    "ScriptAPI.GameObject": 41
+                }
+            }
+        },
+        "42": {
+            "OptionsMouseSensitivity": {
+                "pressedMouseUp": {
+                    "System.Boolean": "False"
+                },
+                "mouseText": {
+                    "ScriptAPI.GameObject": 44
+                },
+                "gameObject": {
+                    "ScriptAPI.GameObject": 42
+                }
+            }
+        },
+        "43": {},
+        "44": {}
     },
     "Active Archetype": {
-        "1": "110000100000100000",
-        "2": "110000100000100000",
-        "3": "110000100000100000",
-        "4": "110000100000100000",
-        "5": "110000100000100000",
-        "6": "110000100000100000",
-        "7": "110000100000100000",
-        "8": "110000100000100000",
-        "9": "110000100000100000",
-        "10": "110000100000100000",
-        "11": "110000100000100000",
-        "12": "110000100000100000",
-        "13": "110000100000100000",
-        "14": "110000100000100000",
-        "15": "110000100000100000",
-        "16": "110000100000100000",
-        "17": "110000100000100000",
-        "18": "110000100000100000",
-        "19": "110000100000100000"
+        "1": "1100001000001000000",
+        "2": "1100001000001000000",
+        "3": "1100001000001000000",
+        "4": "1100001000001000000",
+        "5": "1100001000001000000",
+        "6": "1100001000001000000",
+        "7": "1100001000001000000",
+        "8": "1100001000001000000",
+        "9": "1100001000001000000",
+        "10": "1100001000001000000",
+        "11": "1100001000001000000",
+        "12": "1100001000001000000",
+        "13": "1100001000001000000",
+        "14": "1100001000001000000",
+        "15": "1100001000001000000",
+        "16": "1100001000001000000",
+        "17": "1100001000001000000",
+        "18": "1100001000001000000",
+        "19": "1100001000001000000",
+        "20": "1100000000001000000",
+        "21": "1100000000001000000",
+        "22": "1100001000001000000",
+        "23": "1100001000001000000",
+        "24": "1100000000001000000",
+        "25": "1100001000001000000",
+        "26": "1100000000001000000",
+        "27": "1100000000001000000",
+        "28": "1100000000001000000",
+        "29": "1100000000001000000",
+        "30": "1100000000001000000",
+        "31": "1100000000001000000",
+        "32": "1100000000001000000",
+        "33": "1100000000001000000",
+        "34": "1100000000001000000",
+        "35": "1100000000001000000",
+        "36": "1100000000001000000",
+        "37": "1100000000001000000",
+        "38": "1100000000001000000",
+        "39": "1100000000001000000",
+        "40": "1100000000001000000",
+        "41": "1100001000001000000",
+        "42": "1100001000001000000",
+        "43": "1100000000001000000",
+        "44": "1100001000001000000"
     }
 }

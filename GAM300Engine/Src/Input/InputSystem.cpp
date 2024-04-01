@@ -80,8 +80,9 @@ namespace TDS
 			// store current keys state to old keys state buffer
 			::memcpy(m_old_keys_state, m_keys_state, sizeof(unsigned char) * 256);
 		}
-			//PostMessage(hWnd, WM_SETCURSOR, 0, 0);
-		TDS::InputSystem::GetInstance()->hideMouse();
+
+		//PostMessage(hWnd, WM_SETCURSOR, 0, 0);
+		//TDS::InputSystem::GetInstance()->hideMouse();
 			
 	}
 
@@ -264,28 +265,16 @@ namespace TDS
 	void InputSystem::setCursorVisible(bool visible)
 	{
 		mouseVisible = visible;
-		/*POINT p;
-		if (::GetCursorPos(&p))
-		{
-			SetCursorPos(p.x, p.y);
-		}*/
 	}
 
 	void InputSystem::hideMouse()
 	{
-		if (mouseVisible != m_previous)
+		if (mouseVisible)
 		{
-			SendMessage(app_handler, WM_SETCURSOR, app_wparam, app_lparam);
-			if (mouseVisible)
-			{
-				SetCursor(LoadCursor(NULL, IDC_ARROW));
-			}
-			else
-			{
-				SetCursor(NULL);
-			}
-			m_previous = mouseVisible;
+			while (ShowCursor(TRUE) <= 0);
 		}
+		else
+			while (ShowCursor(FALSE) >= 0);
 	}
 
 	bool InputSystem::getCursorVisible()

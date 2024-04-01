@@ -71,6 +71,7 @@ namespace TDS
 		DLL_API void ShutDown();
 		void DLL_API Draw(VkCommandBuffer commandBuffer, int Frame);
 		void DLL_API Update(VkCommandBuffer commandBuffer, int Frame);
+		DLL_API VulkanPipeline& GetPipeline();
 		inline FontBatch& GetBatchList()
 		{
 			return m_FontBatch;

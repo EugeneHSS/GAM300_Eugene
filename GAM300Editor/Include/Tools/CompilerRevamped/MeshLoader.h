@@ -5,12 +5,14 @@
 #include "Tools/CompilerSettings.h"
 #include "TDSMath.h"
 #include "GraphicsResource/GeomStruct.h"
-#include "GraphicsResource/MaterialInfo.h"
+#include "GraphicsResource/Revamped/MaterialAttributes.h"
 #include "../GAM300Engine/Include/GraphicsResource/GraphicsResourceDefines.h"
-#include "GraphicsResource/GeomStruct.h"
 #include "Animation/AnimationLoader.h"
 #include "pch.h"
 #include "rttr/registration.h"
+
+
+
 
 namespace TDS
 {
@@ -19,8 +21,7 @@ namespace TDS
 	struct AnimModel;
 	struct MaterialDataLoaded;
 
-
-
+	
 
 	aiVector3D ExtractEulerAngles(const aiMatrix4x4& mat);
 
@@ -76,6 +77,7 @@ namespace TDS
 				std::vector<Mesh>			m_Meshes;
 
 				void ConvertToTDSModel(TDSModel& model);
+				void ConvertToSOATDSModel(TDSSOAModel& model);
 			};
 
 			struct Request
@@ -84,10 +86,14 @@ namespace TDS
 				std::string				m_OutFile;
 				GeomDescriptor			currSetting;
 				TDSModel				m_Output;
-				MaterialLoader			m_MaterialData;
+				TDSSOAModel				m_SOAOutput;
+
+				//MaterialLoader			m_MaterialData;
+				MaterialData			m_MaterialOut;
 				AnimationData			m_AnimationData;
 				BonelessAnimationData	m_BonelessAnimationData;
 				std::string				m_AnimOutFile;
+				std::string				m_MaterialOutFile;
 			};
 
 			struct AssimpSceneInfo
@@ -145,6 +151,7 @@ namespace TDS
 
 			void	OptimizeMesh(std::vector<RawMeshData>& assimpData);
 
+
 			void	CreateLODs(Request& request, std::vector<RawMeshData>& InputNodes);
 	
 			void	CreateFinalGeom(const std::vector<RawMeshData>& rawMesh, GeomData& geom, Request& request, const AnimModel& model);
@@ -154,7 +161,10 @@ namespace TDS
 
 			void	extractKeyFrame(TDS::AnimationNodes* pNode, aiNodeAnim* AssimpNode);
 
-			void	LoadMaterials(AssimpSceneInfo& assimp, Request& request, std::vector<RawMeshData>& assimpData);
+			//void	LoadMaterials(AssimpSceneInfo& assimp, Request& request, std::vector<RawMeshData>& assimpData);
+
+
+			void	LoadMaterialsMeta(AssimpSceneInfo& assimp, Request& request, std::vector<RawMeshData>& assimpData);
 	};
 
 

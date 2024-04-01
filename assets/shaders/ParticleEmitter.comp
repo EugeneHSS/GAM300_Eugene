@@ -50,7 +50,7 @@ float brownian(float randomseed){
     float persistence = clamp(sin(gl_GlobalInvocationID.x *0.1), 0.1, 0.9);
     float frequency = clamp(cos(gl_GlobalInvocationID.x * 0.1), 0.5,2.0);
     int octaves = int (mod(gl_GlobalInvocationID.x, 10.0)+ 1.0);
-    float time = EmitterStuff.EmitterLifeTime* EmitterStuff.EmitterLifeTime;
+    float time = EmitterStuff.EmitterLifeTime * EmitterStuff.EmitterLifeTime;
 
     float total = 0.0;
     float amp = 1.0;
@@ -75,10 +75,11 @@ vec3 randvec3(vec3 Min, vec3 Max){
     vec3 randomvec3 = vec3(
         rand(Min.x,Max.x,0.555 + sin(time)),
         rand(Min.y,Max.y,0.222 + sin(time)),
-        rand(Min.z,Max.z,0.333 + cos(time))
+        rand(Min.z,Max.z,0.333 + sin(time))
     );  
     
-    return mix(Min, Max, randomvec3);
+    return randomvec3;
+    //return mix(Min, Max, randomvec3);
 }
 
 void MakeParticle(out Particle newparticle){
@@ -88,6 +89,13 @@ void MakeParticle(out Particle newparticle){
     newparticle.Acceleration =  vec4(randvec3(EmitterStuff.Emitter.min_Acceleration.xyz, EmitterStuff.Emitter.max_Acceleration.xyz), 0.0);
     newparticle.Size =          vec4(randvec3(EmitterStuff.Emitter.min_Size.xyz, EmitterStuff.Emitter.max_Size.xyz), 0.0);
     newparticle.CurrentPosition = EmitterStuff.Emitter.Position + vec4(randvec3(EmitterStuff.Emitter.min_Spawnoffset.xyz, EmitterStuff.Emitter.max_Spawnoffset.xyz), 0.0);
+
+    vec3 centerdirection = normalize(EmitterStuff.Emitter.Position.xyz - newparticle.CurrentPosition.xyz);
+    
+    float accelerationMagnitude = length(newparticle.Acceleration.xyz);
+    newparticle.Acceleration.x = centerdirection.x* accelerationMagnitude;
+    newparticle.Acceleration.z = centerdirection.z* accelerationMagnitude;
+    newparticle.Acceleration.y = EmitterStuff.Emitter.min_Acceleration.y;
 
     newparticle.Rotation = vec4(0.0,0.0,0.0,0.0);
     newparticle.Color = EmitterStuff.Emitter.Color;

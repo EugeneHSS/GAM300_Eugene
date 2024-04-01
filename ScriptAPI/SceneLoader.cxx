@@ -65,4 +65,12 @@ namespace ScriptAPI
 		TDS::SceneManager::GetInstance()->start();
 	}
 
+	void SceneLoader::LoadTempJumpscare()
+	{
+		EngineInterface::Reload();
+		TDS::SceneManager::GetInstance()->loadScene("TempFinalJumpscare");
+		TDS::SceneManager::GetInstance()->awake();
+		TDS::SceneManager::GetInstance()->start();
+	}
+
 }

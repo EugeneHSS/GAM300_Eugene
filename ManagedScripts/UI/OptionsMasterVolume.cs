@@ -4,7 +4,7 @@
 \author Matthew Cheung
 \par DP email: j.cheung@digipen.edu
 \par Course: csd3450
-\date 5-33-2024
+\date 5-03-2024
 \brief  Script for settings menu master volume
 ****************************************************************************
 ***/
@@ -18,12 +18,16 @@ public class OptionsMasterVolume : Script
     private UISpriteComponent sprite;
     private string optionsSoundName;
     private AudioComponent masterVol;
+    private AudioComponent buttonSfx;
+    private string buttonSfxName = "";
 
     public GameObject masterText;
     public override void Awake()
     {
        // GraphicsManagerWrapper.ToggleViewFrom2D(true);
         optionsSoundName = "basement_music";
+        buttonSfxName = "button_press";
+        buttonSfx = gameObject.GetComponent<AudioComponent>();
         masterVol = gameObject.GetComponent<AudioComponent>();
         sprite = gameObject.GetComponent<UISpriteComponent>();
     }
@@ -53,7 +57,7 @@ public class OptionsMasterVolume : Script
 
             MasterVolume = Math.Clamp(MasterVolume, 0, 100);
             masterText.GetComponent<UISpriteComponent>().SetFontMessage(((int)MasterVolume).ToString());
-            //Console.WriteLine("Counter: " + Subtitles[counter]);
+            buttonSfx.play(buttonSfxName);
         }
 
 

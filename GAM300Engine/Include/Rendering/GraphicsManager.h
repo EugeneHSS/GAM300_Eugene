@@ -23,6 +23,7 @@ namespace TDS
 	class PointLightSystem;
 	class DeferredController;
 	class Renderer2D;
+	class MaterialManager;
 
 
 
@@ -35,6 +36,7 @@ namespace TDS
 	class MessageSystem;
 	class SkyBoxRenderer;
 	class FontRenderer;
+
 	class DLL_API GraphicsManager
 	{
 	public:
@@ -48,6 +50,7 @@ namespace TDS
 		std::shared_ptr<ObjectPick>				m_ObjectPicking = nullptr;
 		std::shared_ptr<Renderer2D>				m_Renderer2D = nullptr;
 		std::shared_ptr<FontRenderer>			m_FontRenderer = nullptr;
+		std::shared_ptr<MaterialManager>		m_MaterialManager = nullptr;
 		std::vector<RenderLayer*>				m_RenderLayer;
 
 
@@ -87,6 +90,8 @@ namespace TDS
 		void								StopAllRender();
 		void								StartAllRender();
 		bool								IsRenderOn();
+		
+		MaterialManager&					GetMaterialManager();
 
 		inline bool							IsNormalizedView()
 		{

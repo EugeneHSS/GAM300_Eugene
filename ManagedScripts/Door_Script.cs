@@ -49,6 +49,9 @@ public class Door_Script : Script
 
     // basement door
     public bool basementDoor;
+    static public bool basementcheck = false;
+    readonly string monsterChase = "monster chase music";
+    AudioComponent audio;
     float toRadians(float degree)
     {
         return degree * (3.1415926535897931f / 180);
@@ -59,6 +62,7 @@ public class Door_Script : Script
         doorText = GameObjectScriptFind("DoorText");    // Hate this please change after milestone
         blackboard = GameObjectScriptFind("GameBlackboard").GetComponent<GameBlackboard>();    // Hate this please change after milestone
         originalFadeValue = GraphicsManagerWrapper.GetFadeFactor();
+        audio = gameObject.GetComponent<AudioComponent>();
     }
 
     // Update is called once per frame
@@ -80,6 +84,7 @@ public class Door_Script : Script
                 //}
                 if (Input.GetKeyDown(Keycode.E) || fadeOut == true)
                 {
+                    audio.play("door open");
                     fadeOut = true;
                     float fadeValue = GraphicsManagerWrapper.GetFadeFactor();
                     if (fadeOut == true && fadeIn == false)
@@ -92,15 +97,22 @@ public class Door_Script : Script
                             Vector3 rotation = playerGameObject.transform.GetRotation();
                             Quaternion quat = new Quaternion(rotation);
                             Vector3 rotationToVector = new Vector3(-Mathf.Sin(toRadians(rotation.Y)), 0.0f, Mathf.Cos(toRadians(rotation.Y))) * 200;
-                            playerGameObject.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(playerGameObject.transform.GetPosition() + rotationToVector, new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(1, 1, 1).Normalize(), new Vector3(1, 1, 1).Normalize());
+                            //playerGameObject.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(playerGameObject.transform.GetPosition() + rotationToVector, new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(1, 1, 1).Normalize(), new Vector3(1, 1, 1).Normalize());
+
+                            if (playerGameObject.GetComponent<TransformComponent>().GetPosition().Y != 90)
+                            {
+                                playerGameObject.GetComponent<TransformComponent>().SetPositionY(90);
+                            }
+                            playerGameObject.GetComponent<RigidBodyComponent>().SetPosition(playerGameObject.transform.GetPosition() + rotationToVector);
                         }
                         else if (fadeValue <= 0.0f && fadeIn == false && basementDoor == true)
                         {
-                            fadeIn = true;
+                            audio.FadeOut(2, monsterChase);
                             Vector3 newPos = new Vector3(3450, -145, 340);
                             Vector3 rotation = playerGameObject.transform.GetRotation();
                             Quaternion quat = new Quaternion(rotation);
                             playerGameObject.GetComponent<RigidBodyComponent>().SetPositionRotationAndVelocity(newPos, new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(1, 1, 1).Normalize(), new Vector3(1, 1, 1).Normalize());
+                            fadeIn = true;
 
                         }
                     }
@@ -125,6 +137,8 @@ public class Door_Script : Script
         }
         if (fadeOut == true && fadeIn == true)
         {
+            audio.play("door creak");
+
             float fadeValue = GraphicsManagerWrapper.GetFadeFactor();
             fadeValue += fadeValueIncrement;
             GraphicsManagerWrapper.SetFadeFactor(fadeValue);

@@ -20,7 +20,7 @@ RTTR_REGISTRATION
 		.property("Color", &Particle_Component::GetColor, &Particle_Component::SetColor)
 		.property("ParticleMesh", &Particle_Component::type)
 		.property("SpawnInterval", &Particle_Component::spawninterval)
-		.property("SpawnTimer", &Particle_Component::spawntimer)
+		//.property("SpawnTimer", &Particle_Component::spawntimer)
 		.property("MaxParticles", &Particle_Component::maxparticles);
 
 	rttr::registration::enumeration<ParticleMesh>("ParticleMesh")

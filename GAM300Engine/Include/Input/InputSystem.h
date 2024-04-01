@@ -68,13 +68,8 @@ namespace TDS
 		float getUIMousePosX();
 		float getUIMousePosY();
 
-		float getSensitivity() { return 0.1f; }
+		float getSensitivity() { return m_sensitivity; }
 		void setSensitivity(float value) { m_sensitivity = value; }
-
-		WPARAM app_wparam;
-		LPARAM app_lparam;
-		HWND app_handler;
-
 
 		struct KeyState
 		{

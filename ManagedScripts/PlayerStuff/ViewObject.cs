@@ -80,7 +80,7 @@ public class View_Object : Script
         if(isExamining)
         {
             Console.WriteLine("Examining");
-            GraphicsManagerWrapper.ToggleViewFrom2D(true);
+            //GraphicsManagerWrapper.ToggleViewFrom2D(true);
             CheckMouseInput();
             CheckKeyboardInput();
             UpdateCamera();

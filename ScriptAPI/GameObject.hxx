@@ -12,6 +12,7 @@
 #include "Components/PointlightComponent.hxx"
 #include "Components/DirectionalLightComponent.hxx"
 #include "Components/SpotlightComponent.hxx"
+#include "Components/AnimatedComponent.hxx"
 #include "ecs/ecs.h"
 
 namespace ScriptAPI
@@ -24,6 +25,7 @@ namespace ScriptAPI
 
         bool ActiveInHierarchy();
         void SetActive(bool status);
+        bool GetActive();
 
         TDS::EntityID GetEntityID();
 

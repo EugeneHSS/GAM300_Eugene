@@ -1,0 +1,125 @@
+{
+    "materialAttributes": [
+        {
+            "key": 0,
+            "value": {
+                "shading": "SHADING_PHONG_BLINN",
+                "PBRAttributes": {
+                    "NormalTex": "",
+                    "RoughnessTex": "",
+                    "MetallicTex": "",
+                    "EmissiveTex": "",
+                    "AOTex": "",
+                    "Metalness": 0.0,
+                    "Roughness": 0.45358389616012573,
+                    "Emissive": 0.0
+                },
+                "MaterialName": "frame",
+                "phongBlinn": {
+                    "DiffuseTex": "FrameColor.dds",
+                    "SpecularTex": "",
+                    "AmbientTex": "",
+                    "EmissiveTex": "",
+                    "ShininessTex": "",
+                    "DiffuseColor": {
+                        "x": 0.800000011920929,
+                        "y": 0.800000011920929,
+                        "z": 0.800000011920929
+                    },
+                    "SpecularColor": {
+                        "x": 0.800000011920929,
+                        "y": 0.800000011920929,
+                        "z": 0.800000011920929
+                    },
+                    "EmissiveColor": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "AmbientColor": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "Shininess": 29.8570556640625,
+                    "ShininessStrength": 1.0
+                },
+                "AlbedoTex": "FrameColor.dds",
+                "Reflectivity": 0.0,
+                "Reflectance": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ReflectanceTexture": ""
+            }
+        },
+        {
+            "key": 1,
+            "value": {
+                "shading": "SHADING_PHONG_BLINN",
+                "PBRAttributes": {
+                    "NormalTex": "",
+                    "RoughnessTex": "",
+                    "MetallicTex": "",
+                    "EmissiveTex": "",
+                    "AOTex": "",
+                    "Metalness": 0.0,
+                    "Roughness": 0.4343146085739136,
+                    "Emissive": 0.0
+                },
+                "MaterialName": "Art.1",
+                "phongBlinn": {
+                    "DiffuseTex": "p07.dds",
+                    "SpecularTex": "",
+                    "AmbientTex": "",
+                    "EmissiveTex": "",
+                    "ShininessTex": "",
+                    "DiffuseColor": {
+                        "x": 0.800000011920929,
+                        "y": 0.800000011920929,
+                        "z": 0.800000011920929
+                    },
+                    "SpecularColor": {
+                        "x": 0.20000000298023224,
+                        "y": 0.20000000298023224,
+                        "z": 0.20000000298023224
+                    },
+                    "EmissiveColor": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "AmbientColor": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "Shininess": 32.0,
+                    "ShininessStrength": 1.0
+                },
+                "AlbedoTex": "p07.dds",
+                "Reflectivity": 0.0,
+                "Reflectance": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "ReflectanceTexture": ""
+            }
+        }
+    ],
+    "TextureToload": [
+        {
+            "TexturePath": "FrameColor.png",
+            "UMode": 0,
+            "VMode": 0
+        },
+        {
+            "TexturePath": "p07.png",
+            "UMode": 0,
+            "VMode": 0
+        }
+    ],
+    "ModelName": "Painting_Living_copy_Bin.bin"
+}

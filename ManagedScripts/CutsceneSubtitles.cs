@@ -102,7 +102,7 @@ public class CutsceneSubtitle : Script
         else
         {
             audio.play(BGMfile);
-            //audio.playQueue();
+            //audio.playplay();
 
             if (counter > 16)//cutscene over
             {

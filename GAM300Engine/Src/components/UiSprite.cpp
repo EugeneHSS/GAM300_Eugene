@@ -55,7 +55,9 @@ namespace TDS
 		m_BackGroundColour(toMove.m_BackGroundColour),
 		m_ForeGroundColour(toMove.m_ForeGroundColour),
 		m_BoundingBoxMin(toMove.m_BoundingBoxMin),
-		m_BoundingBoxMax(toMove.m_BoundingBoxMax)
+		m_BoundingBoxMax(toMove.m_BoundingBoxMax),
+		m_IsFont(toMove.m_IsFont),
+		m_FontName(toMove.m_FontName)
 	{
 		
 	}

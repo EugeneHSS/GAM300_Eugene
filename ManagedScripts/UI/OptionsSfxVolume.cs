@@ -17,16 +17,16 @@ public class OptionsSfxVolume : Script
     private float SfxVolume;
     private UISpriteComponent sprite;
     private AudioComponent sfxVol;
-    private string sfxName;
-
+    private AudioComponent buttonSfx;
+    private string buttonSfxName = "";
     public GameObject sfxText;
     public override void Awake()
     {
-        //GraphicsManagerWrapper.ToggleViewFrom2D(true);
         sprite = gameObject.GetComponent<UISpriteComponent>();
         sfxVol = gameObject.GetComponent<AudioComponent>();
+        buttonSfxName = "button_press";
+        buttonSfx = gameObject.GetComponent<AudioComponent>();
         // sfxName = "fireplace";
-
     }
 
     public override void Update()
@@ -48,6 +48,7 @@ public class OptionsSfxVolume : Script
             //Console.WriteLine("sfx vol: " + sfxVol.getSFXVol());
             SfxVolume = Math.Clamp(SfxVolume, 0, 100);
             sfxText.GetComponent<UISpriteComponent>().SetFontMessage(((int)SfxVolume).ToString());
+            buttonSfx.play(buttonSfxName);
         }
     }
 

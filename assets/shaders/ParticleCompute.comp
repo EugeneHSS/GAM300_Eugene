@@ -22,10 +22,11 @@ layout (std430, binding = 32) buffer Freelist{
     int indices[];
 }v_Freelist;
 
+/*
 layout (std140, binding = 34) writeonly buffer TransformMatrix{
     mat4 List[];
 }v_TransformMatrix;
-
+*/
 layout(std430, binding = 35) buffer TimeBlock {
     float DeltaTime;
 }Time;
@@ -74,6 +75,8 @@ mat4 GenerateTransform(vec4 Scale, vec4 Rotate, vec4 Translate){
 void ComputeParticle(inout Particle p, int index){
     if (p.Age > 0.0){
         p.Age -= Time.DeltaTime;
+
+
         p.Velocity += p.Acceleration * Time.DeltaTime;
         p.CurrentPosition += p.Velocity * Time.DeltaTime;
 
@@ -96,8 +99,5 @@ void main(){
     }
 
     ComputeParticle(v_Particles.List[index], int(index));
-    
-    
 
-    //v_TransformMatrix.List[index] = GenerateTransform(v_Particles.List[index].Size, v_Particles.List[index].Rotation, v_Particles.List[index].CurrentPosition);
 }

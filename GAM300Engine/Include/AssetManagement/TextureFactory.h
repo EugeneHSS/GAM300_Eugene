@@ -64,6 +64,38 @@ namespace TDS
 			return m_InstanceCnt;
 		}
 
+
+		void LoadTextureWithInfo(std::string_view path, TextureInfo& info)
+		{
+			std::filesystem::path FilePath(path);
+			std::string fileName = FilePath.filename().string();
+
+
+			auto itr = m_TextureIndices.find(fileName);
+			if (itr != m_TextureIndices.end())
+			{
+				/*if (m_InstanceCnt[fileName] == 0)
+				{*/
+				std::uint32_t index = m_TextureIndices[fileName];
+
+				m_TextureArray[index].Destroy();
+				m_TextureArray[index].m_TextureInfo = info;
+				m_TextureArray[index].LoadTexture(path);
+				m_UpdateTextureArray3D = true;
+				m_UpdateTextureArray2D = true;
+				m_UpdateArrayInstance = true;
+				m_UpdateArrayBatch = true;
+
+				return;
+			}
+			std::uint32_t& newIndex = m_CurrentIndex;
+			m_TextureArray[newIndex].m_TextureInfo = info;
+			m_TextureArray[newIndex].LoadTexture(path);
+			m_UpdateTextureArray3D = true;
+			m_UpdateTextureArray2D = true;
+			m_TextureIndices[fileName] = newIndex++;
+		}
+
 		void Preload()
 		{
 			std::uint32_t NumOfLoadedTexture = 0;
@@ -146,22 +178,24 @@ namespace TDS
 			auto itr = m_TextureIndices.find(fileName);
 			if (itr != m_TextureIndices.end())
 			{
-				if (m_InstanceCnt[fileName] == 0)
-				{
-					std::uint32_t index = m_TextureIndices[fileName];
-					m_TextureArray[index].Destroy();
-					m_TextureArray[index].LoadTexture(path);
-					m_UpdateTextureArray3D = true;
-					m_UpdateTextureArray2D = true;
-					m_UpdateArrayInstance = true;
-					m_UpdateArrayBatch = true;
-					return;
+				/*if (m_InstanceCnt[fileName] == 0)
+				{*/
+				std::uint32_t index = m_TextureIndices[fileName];
+				m_TextureArray[index].Destroy();
+				m_TextureArray[index].LoadTexture(path);
+				m_UpdateTextureArray3D = true;
+				m_UpdateTextureArray2D = true;
+				m_UpdateArrayInstance = true;
+				m_UpdateArrayBatch = true;
+
+				return;
+				/*	return;
 				}
 				else
 				{
 					TDS_INFO("texture {} has {} entity using it.", fileName, m_InstanceCnt[fileName]);
 					return;
-				}
+				}*/
 			}
 			std::uint32_t& newIndex = m_CurrentIndex;
 			m_TextureArray[newIndex].LoadTexture(path);
@@ -200,6 +234,19 @@ namespace TDS
 				texture.Destroy();
 			}
 			m_TextureIndices.clear();
+		}
+
+		std::uint32_t GetTextureID(std::string_view TextureName)
+		{
+			auto itr = m_TextureIndices.find(TextureName.data());
+
+			if (itr != m_TextureIndices.end())
+			{
+				return itr->second;
+			}
+
+			return -1;
+
 		}
 	};
 

@@ -71,6 +71,8 @@ namespace TDS
 			GraphicsManager::getInstance().GetSwapchainRenderer().getAspectRatio(), 0.1f, 1000000.f);
 
 		deferredController->GetSceneUniform().m_Proj.m[1][1] *= -1;
+
+		
 		for (size_t i = 0; i < entities.size(); ++i)
 		{
 
@@ -89,7 +91,6 @@ namespace TDS
 
 			}
 
-			
 			//if (_Graphics[i].ShowMesh() == false)
 			//	continue;
 			if (!ecs.getEntityIsEnabled(entities[i]) || !ecs.getComponentIsEnabled<GraphicsComponent>(entities[i]))

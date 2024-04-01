@@ -65,7 +65,7 @@ namespace TDS
 	};
 
 
-	struct MaterialInfo
+	/*struct MaterialInfo
 	{
 		std::string		m_MaterialName;
 		size_t			m_MaterialGUID;
@@ -139,7 +139,7 @@ namespace TDS
 
 		DLL_API static bool Serialize(MaterialLoader& materials, std::string_view path, bool read = false);
 
-	};
+	};*/
 
 
 }

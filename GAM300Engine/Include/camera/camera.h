@@ -29,6 +29,7 @@ namespace TDS
 		DLL_API void setSpeed(float speed) { m_Speed = speed; }
 		DLL_API void setMouseSensitivity(float sensitivity) { m_mouseSensitivity = sensitivity; }
 		DLL_API void setForwardVector(Vec3 fwdvector) { m_Front = fwdvector; }
+		DLL_API void setRightVector(Vec3 rgtvector) { m_Right = rgtvector; }
 		DLL_API void setFov(float fov) { m_Fov = fov; }
 		DLL_API void GetUpdateViewMatrix() { updateViewMatrix(); } // calling updateViewMatrix() for CameraSystem
 		DLL_API void setEditorCamera(bool editorCamera) { m_EditorCamera = editorCamera; }

@@ -22,6 +22,7 @@ namespace TDS
 		bool												m_FirstRender;
 		std::string											m_MeshName;
 		AABB												m_MeshBoundingBox;
+		int													m_MaterialID;
 	};
 
 	struct SceneNode

@@ -221,7 +221,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NO_LEGACY_BEHAVIOR;BUILD_MTd;MSDFGEN_PUBLIC=__declspec(dllimport);MSDF_ATLAS_PUBLIC=__declspec(dllimport);_DEBUG;_CONSOLE;_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NO_LEGACY_BEHAVIOR;BUILD_MTd;MSDFGEN_PUBLIC=__declspec(dllimport);MSDF_ATLAS_PUBLIC=__declspec(dllimport);_DEBUG;_CONSOLE;_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS;RTTR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\;$(SolutionDir)GAM300Engine\Include;$(SolutionDir)GAM300Editor\Include;$(SolutionDir)Dependencies\spdlog\include;$(SolutionDir)Shared_Libs;$(SolutionDir)Dependencies\dds;$(SolutionDir)ToolsDependencies;$(SolutionDir)ToolsDependencies\DirectXTex-main\DirectXTex;$(SolutionDir)ToolsDependencies\DirectXTex-main;$(SolutionDir)ToolsDependencies\DirectXTex-main\DDSTextureLoader;$(SolutionDir)ToolsDependencies\spirv_cross;$(SolutionDir)ToolsDependencies\spirv-headers;$(SolutionDir)ToolsDependencies\spirv-tools;$(SolutionDir)ToolsDependencies\meshoptimizer-master;$(SolutionDir)ToolsDependencies\assimp\include;$(SolutionDir)ToolsDependencies\Compressonator\cmp_compressonatorlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -248,7 +248,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS;RTTR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\;$(SolutionDir)GAM300Engine\Include;$(SolutionDir)GAM300Editor\Include;$(SolutionDir)Dependencies\spdlog\include;$(SolutionDir)Shared_Libs;$(SolutionDir)Dependencies\dds;$(SolutionDir)ToolsDependencies;$(SolutionDir)ToolsDependencies\DirectXTex-main\DirectXTex;$(SolutionDir)ToolsDependencies\DirectXTex-main;$(SolutionDir)ToolsDependencies\DirectXTex-main\DDSTextureLoader;$(SolutionDir)ToolsDependencies\spirv_cross;$(SolutionDir)ToolsDependencies\spirv-headers;$(SolutionDir)ToolsDependencies\spirv-tools;$(SolutionDir)ToolsDependencies\meshoptimizer-master;$(SolutionDir)ToolsDependencies\assimp\include;$(SolutionDir)ToolsDependencies\Compressonator\cmp_compressonatorlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>

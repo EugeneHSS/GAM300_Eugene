@@ -87,6 +87,8 @@ namespace TDS
 			return m_SpriteTexture;
 		}
 		void DLL_API ShutDown();
+
+		DLL_API VulkanPipeline& GetPipeline();
 	private:
 		std::shared_ptr<VulkanPipeline> m_Pipeline = nullptr;
 		SpriteBatch m_BatchList{};

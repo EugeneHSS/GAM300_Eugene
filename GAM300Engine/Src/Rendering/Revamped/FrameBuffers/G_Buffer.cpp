@@ -68,6 +68,31 @@ namespace TDS
 				false,
 				VK_SAMPLE_COUNT_1_BIT)
 		);
+		m_RenderAttachmentInfo.emplace_back(
+			RenderTargetCI(VK_FORMAT_R32G32B32A32_SFLOAT,
+				VK_IMAGE_ASPECT_COLOR_BIT,
+				VK_IMAGE_VIEW_TYPE_2D,
+				Dim,
+				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+				VK_IMAGE_USAGE_SAMPLED_BIT,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				RenderTargetType::COLOR,
+				false,
+				VK_SAMPLE_COUNT_1_BIT)
+		);
+		m_RenderAttachmentInfo.emplace_back(
+			RenderTargetCI(VK_FORMAT_R32G32B32A32_SFLOAT,
+				VK_IMAGE_ASPECT_COLOR_BIT,
+				VK_IMAGE_VIEW_TYPE_2D,
+				Dim,
+				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+				VK_IMAGE_USAGE_SAMPLED_BIT,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				RenderTargetType::COLOR,
+				false,
+				VK_SAMPLE_COUNT_1_BIT)
+		);
+
 	}
 	G_Buffer::~G_Buffer()
 	{
@@ -178,7 +203,7 @@ namespace TDS
 
 	void G_Buffer::GetBlendAttachments(BlendContainer& blendCont, PipelineCreateEntry& createEntry)
 	{
-		blendCont.resize(4);
+		blendCont.resize(6);
 
 		if (createEntry.m_PipelineConfig.m_SrcClrBlend != VkBlendFactor::VK_BLEND_FACTOR_ZERO ||
 			createEntry.m_PipelineConfig.m_DstClrBlend != VkBlendFactor::VK_BLEND_FACTOR_ZERO ||
@@ -222,6 +247,27 @@ namespace TDS
 		blendCont[3].srcAlphaBlendFactor = createEntry.m_PipelineConfig.m_SrcAlphaBlend;
 		blendCont[3].dstAlphaBlendFactor = createEntry.m_PipelineConfig.m_DstAlphaBlend;
 		blendCont[3].alphaBlendOp = createEntry.m_PipelineConfig.m_AlphaBlend;
+
+		blendCont[4].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+		blendCont[4].blendEnable = VK_FALSE;
+		blendCont[4].srcColorBlendFactor = createEntry.m_PipelineConfig.m_SrcClrBlend;
+		blendCont[4].dstColorBlendFactor = createEntry.m_PipelineConfig.m_DstClrBlend;
+		blendCont[4].colorBlendOp = createEntry.m_PipelineConfig.m_ColorBlend;
+		blendCont[4].srcAlphaBlendFactor = createEntry.m_PipelineConfig.m_SrcAlphaBlend;
+		blendCont[4].dstAlphaBlendFactor = createEntry.m_PipelineConfig.m_DstAlphaBlend;
+		blendCont[4].alphaBlendOp = createEntry.m_PipelineConfig.m_AlphaBlend;
+
+		blendCont[5].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+		blendCont[5].blendEnable = VK_FALSE;
+		blendCont[5].srcColorBlendFactor = createEntry.m_PipelineConfig.m_SrcClrBlend;
+		blendCont[5].dstColorBlendFactor = createEntry.m_PipelineConfig.m_DstClrBlend;
+		blendCont[5].colorBlendOp = createEntry.m_PipelineConfig.m_ColorBlend;
+		blendCont[5].srcAlphaBlendFactor = createEntry.m_PipelineConfig.m_SrcAlphaBlend;
+		blendCont[5].dstAlphaBlendFactor = createEntry.m_PipelineConfig.m_DstAlphaBlend;
+		blendCont[5].alphaBlendOp = createEntry.m_PipelineConfig.m_AlphaBlend;
+
+
+	
 	}
 
 

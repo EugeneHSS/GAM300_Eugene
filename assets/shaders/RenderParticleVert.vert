@@ -30,10 +30,11 @@ layout (std140 ,binding = 5) buffer Camera{
     mat4 ProjectionMatrix;
 }Cam;
 
+/*
 layout (std140, binding = 34) buffer TransformMatrix{
     mat4 List[];
 }v_TransformMatrix;
-
+*/
 
 //output to fragment shader
 layout (location = 0) out vec3 out_Color;

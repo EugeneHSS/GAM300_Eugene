@@ -1,4 +1,5 @@
 #include "AssetManagement/AssetManager.h"
+#include "Rendering/Revamped/MaterialManager.h"
 #include "Serialization/JSONSerializer.h"
 namespace TDS
 {
@@ -6,6 +7,7 @@ namespace TDS
 
 	AssetManager::AssetManager()
 	{
+	
 	}
 	AssetManager::~AssetManager()
 	{
@@ -19,6 +21,7 @@ namespace TDS
 		m_TextureFactory.Preload();
 		m_FontFactory.Preload();
 		m_AnimationFactory.Preload();
+
 	}
 
 	void AssetManager::ShutDown()

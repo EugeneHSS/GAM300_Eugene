@@ -22,6 +22,7 @@
 
 #include "GraphicsResource/Revamped/MeshController.h"
 
+
 namespace TDS
 {
 	/*!*************************************************************************
@@ -1233,6 +1234,7 @@ namespace TDS
 		}
 	}
 
+
 	/*!*************************************************************************
 	This function is the helper function for Properties panel
 	****************************************************************************/
@@ -1267,6 +1269,383 @@ namespace TDS
 				bool newValue = propertyName.get_value(componentInstance).convert<bool>();
 				ImguiInput(propertyName.get_name().to_string(), newValue);
 				propertyName.set_value(componentInstance, newValue);
+			}
+			else if (propertyName.get_type() == rttr::type::get<MaterialAttributes>())
+			{
+				if (componentName == "Graphics Component")
+				{
+					GraphicsComponent* g = reinterpret_cast<GraphicsComponent*>(componentBase);
+
+					#undef ADD_SHADING_ENUM
+
+
+					#define ADD_SHADING_ENUM(x, y) \
+								materialShadingEnum[y] = #x;
+
+
+					if (g->m_UseMaterials)
+					{
+						static std::vector<std::string> materialShadingEnum;
+
+						if (materialShadingEnum.empty())
+						{
+							materialShadingEnum.resize(3);
+							MATERIAL_SHADING_LIST
+						}
+						
+						static int newValue = g->m_MaterialAttributes.m_shading;
+						
+						if (ImGui::BeginCombo("Shading", materialShadingEnum[newValue].c_str()))
+						{
+							for (int i = 0; i < materialShadingEnum.size(); i++)
+							{
+								bool isSelected = (newValue == i);
+								if (ImGui::Selectable(materialShadingEnum[i].c_str(), isSelected))
+								{
+									newValue = i;
+								}
+								if (isSelected)
+								{
+									ImGui::SetItemDefaultFocus();
+								}
+							}
+							ImGui::EndCombo();
+						}
+						g->m_MaterialAttributes.m_shading = (MaterialAttributes::SHADING_TYPE)newValue;
+					
+						if (g->m_MaterialAttributes.m_shading == MaterialAttributes::SHADING_PHONG_BLINN)
+						{
+	
+							Vec3 newDiffuseColor = g->m_MaterialAttributes.m_phongBlinn.m_DiffuseColor;
+							ImguiInput("Diffuse Color", newDiffuseColor);
+							g->m_MaterialAttributes.m_phongBlinn.m_DiffuseColor = newDiffuseColor;
+
+							Vec3 newSpecularColor = g->m_MaterialAttributes.m_phongBlinn.m_SpecularColor;
+							ImguiInput("Specular Color", newSpecularColor);
+							g->m_MaterialAttributes.m_phongBlinn.m_SpecularColor = newSpecularColor;
+
+							Vec3 newEmissiveColor = g->m_MaterialAttributes.m_phongBlinn.m_EmissiveColor;
+							ImguiInput("Emissive Color", newEmissiveColor);
+							g->m_MaterialAttributes.m_phongBlinn.m_EmissiveColor = newEmissiveColor;
+
+							Vec3 newAmbientColor = g->m_MaterialAttributes.m_phongBlinn.m_AmbientColor;
+							ImguiInput("Ambient Color", newAmbientColor);
+							g->m_MaterialAttributes.m_phongBlinn.m_AmbientColor = newAmbientColor;
+
+							float newShininess = g->m_MaterialAttributes.m_phongBlinn.m_Shininess;
+							ImguiInput("Shininess", newShininess);
+							g->m_MaterialAttributes.m_phongBlinn.m_Shininess = newShininess;
+
+							float newShininessStrength = g->m_MaterialAttributes.m_phongBlinn.m_ShininessStrength;
+							ImguiInput("Shininess Strength", newShininessStrength);
+							g->m_MaterialAttributes.m_phongBlinn.m_ShininessStrength = newShininessStrength;
+
+							std::string diffuseTex = g->m_MaterialAttributes.m_phongBlinn.m_DiffuseTex;
+							ImguiInput("Diffuse Texture", diffuseTex);
+							if (ImGui::BeginDragDropTarget())
+							{
+								std::string finaltexture = g->m_MaterialAttributes.m_phongBlinn.m_DiffuseTex;
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+								{
+									const wchar_t* path = (const wchar_t*)payload->Data;
+									std::wstring ws(path);
+									// your new String
+									std::string str(ws.begin(), ws.end());
+									const std::filesystem::path filesystempath = str;
+									if (filesystempath.extension() == ".dds")
+									{
+										std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+										Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finaltexture, nullptr);
+										
+										if (filesystempath.extension() == ".dds")
+										{
+											g->m_MaterialAttributes.m_phongBlinn.m_DiffuseTex = finaltexture;
+										}
+										std::wcout << " Path of dragged file is: " << path << std::endl;
+									}
+								}
+							}
+
+							std::string specularTex = g->m_MaterialAttributes.m_phongBlinn.m_SpecularTex;
+							ImguiInput("Specular Texture", specularTex);
+							//Do the same for the drag and drop for the rest of the textures
+							if (ImGui::BeginDragDropTarget())
+							{
+								std::string finaltexture = g->m_MaterialAttributes.m_phongBlinn.m_SpecularTex;
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+								{
+									const wchar_t* path = (const wchar_t*)payload->Data;
+									std::wstring ws(path);
+									// your new String
+									std::string str(ws.begin(), ws.end());
+									const std::filesystem::path filesystempath = str;
+									if (filesystempath.extension() == ".dds")
+									{
+										std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+										Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finaltexture, nullptr);
+										if (filesystempath.extension() == ".dds")
+										{
+											g->m_MaterialAttributes.m_phongBlinn.m_SpecularTex = finaltexture;
+										}
+										std::wcout << " Path of dragged file is: " << path << std::endl;
+									}
+								}
+							}
+
+							std::string ambientTex = g->m_MaterialAttributes.m_phongBlinn.m_AmbientTex;
+							ImguiInput("Ambient Texture", ambientTex);
+
+							if (ImGui::BeginDragDropTarget())
+							{
+								std::string finaltexture = g->m_MaterialAttributes.m_phongBlinn.m_AmbientTex;
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+								{
+									const wchar_t* path = (const wchar_t*)payload->Data;
+									std::wstring ws(path);
+									// your new String
+									std::string str(ws.begin(), ws.end());
+									const std::filesystem::path filesystempath = str;
+									if (filesystempath.extension() == ".dds")
+									{
+										std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+										Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finaltexture, nullptr);
+										if (filesystempath.extension() == ".dds")
+										{
+											g->m_MaterialAttributes.m_phongBlinn.m_AmbientTex = finaltexture;
+										}
+										std::wcout << " Path of dragged file is: " << path << std::endl;
+									}
+								}
+							}
+
+							std::string emissiveTex = g->m_MaterialAttributes.m_phongBlinn.m_EmissiveTex;
+							ImguiInput("Emissive Texture", emissiveTex);
+
+							if (ImGui::BeginDragDropTarget())
+							{
+								std::string finaltexture = g->m_MaterialAttributes.m_phongBlinn.m_EmissiveTex;
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+								{
+									const wchar_t* path = (const wchar_t*)payload->Data;
+									std::wstring ws(path);
+									// your new String
+									std::string str(ws.begin(), ws.end());
+									const std::filesystem::path filesystempath = str;
+									if (filesystempath.extension() == ".dds")
+									{
+										std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+										Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finaltexture, nullptr);
+										if (filesystempath.extension() == ".dds")
+										{
+											g->m_MaterialAttributes.m_phongBlinn.m_EmissiveTex = finaltexture;
+										}
+										std::wcout << " Path of dragged file is: " << path << std::endl;
+									}
+								}
+							}
+
+							std::string shininessTex = g->m_MaterialAttributes.m_phongBlinn.m_ShininessTex;
+							ImguiInput("Shininess Texture", shininessTex);
+
+							if (ImGui::BeginDragDropTarget())
+							{
+								std::string finaltexture = g->m_MaterialAttributes.m_phongBlinn.m_ShininessTex;
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+								{
+									const wchar_t* path = (const wchar_t*)payload->Data;
+									std::wstring ws(path);
+									// your new String
+									std::string str(ws.begin(), ws.end());
+									const std::filesystem::path filesystempath = str;
+									if (filesystempath.extension() == ".dds")
+									{
+										std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+										Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finaltexture, nullptr);
+										if (filesystempath.extension() == ".dds")
+										{
+											g->m_MaterialAttributes.m_phongBlinn.m_ShininessTex = finaltexture;
+										}
+										std::wcout << " Path of dragged file is: " << path << std::endl;
+									}
+								}
+							}
+
+						}
+						//else if (g->m_MaterialAttributes.m_shading == MaterialAttributes::SHADING_PBR)
+						//{
+						//
+						//    float newMetalness = g->m_MaterialAttributes.m_PBRAttributes.m_Metalness;
+						//	ImguiInput("Metalness", newMetalness);
+
+						//	float newRoughness = g->m_MaterialAttributes.m_PBRAttributes.m_Roughness;
+						//	ImguiInput("Roughness", newRoughness);
+
+						//	float newEmissive = g->m_MaterialAttributes.m_PBRAttributes.m_Emissive;
+						//	ImguiInput("Emissive", newEmissive);
+
+						//	std::string normalTex = g->m_MaterialAttributes.m_PBRAttributes.m_NormalTex;
+						//	ImguiInput("normal Texture", normalTex);
+						//	if (ImGui::BeginDragDropTarget())
+						//	{
+						//		std::string finalNormalTex = g->m_MaterialAttributes.m_PBRAttributes.m_NormalTex;
+						//		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						//		{
+						//			const wchar_t* path = (const wchar_t*)payload->Data;
+						//			std::wstring ws(path);
+						//			// your new String
+						//			std::string str(ws.begin(), ws.end());
+						//			const std::filesystem::path filesystempath = str;
+						//			if (filesystempath.extension() == ".dds")
+						//			{
+						//				std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+						//				Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finalNormalTex, nullptr);
+						//				if (filesystempath.extension() == ".dds")
+						//				{
+						//					g->m_MaterialAttributes.m_PBRAttributes.m_NormalTex = finalNormalTex;
+						//				}
+						//				std::wcout << " Path of dragged file is: " << path << std::endl;
+						//			}
+						//		}
+						//	}
+
+						//	std::string roughnessTex = g->m_MaterialAttributes.m_PBRAttributes.m_RoughnessTex;
+						//	ImguiInput("Roughness Texture", roughnessTex);
+						//	if (ImGui::BeginDragDropTarget())
+						//	{
+						//		std::string finalRoughnessTex = g->m_MaterialAttributes.m_PBRAttributes.m_RoughnessTex;
+						//		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						//		{
+						//			const wchar_t* path = (const wchar_t*)payload->Data;
+						//			std::wstring ws(path);
+						//			// your new String
+						//			std::string str(ws.begin(), ws.end());
+						//			const std::filesystem::path filesystempath = str;
+						//			if (filesystempath.extension() == ".dds")
+						//			{
+						//				std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+						//				Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finalRoughnessTex, nullptr);
+						//				if (filesystempath.extension() == ".dds")
+						//				{
+						//					g->m_MaterialAttributes.m_PBRAttributes.m_RoughnessTex = finalRoughnessTex;
+						//				}
+						//				std::wcout << " Path of dragged file is: " << path << std::endl;
+						//			}
+						//		}
+						//	}
+
+						//	std::string metallicTex = g->m_MaterialAttributes.m_PBRAttributes.m_MetallicTex;
+						//	ImguiInput("Metallic Texture", metallicTex);
+						//	if (ImGui::BeginDragDropTarget())
+						//	{
+						//		std::string finalMetallicTex = g->m_MaterialAttributes.m_PBRAttributes.m_MetallicTex;
+						//		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						//		{
+						//			const wchar_t* path = (const wchar_t*)payload->Data;
+						//			std::wstring ws(path);
+						//			// your new String
+						//			std::string str(ws.begin(), ws.end());
+						//			const std::filesystem::path filesystempath = str;
+						//			if (filesystempath.extension() == ".dds")
+						//			{
+						//				std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+						//				Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finalMetallicTex, nullptr);
+						//				if (filesystempath.extension() == ".dds")
+						//				{
+						//					g->m_MaterialAttributes.m_PBRAttributes.m_MetallicTex = finalMetallicTex;
+						//				}
+						//				std::wcout << " Path of dragged file is: " << path << std::endl;
+						//			}
+						//		}
+						//	}
+
+						//	std::string emissiveTex = g->m_MaterialAttributes.m_PBRAttributes.m_EmissiveTex;
+						//	ImguiInput("Emissive Texture", emissiveTex);
+						//	if (ImGui::BeginDragDropTarget())
+						//	{
+						//		std::string finalEmissiveTex = g->m_MaterialAttributes.m_PBRAttributes.m_EmissiveTex;
+						//		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						//		{
+						//			const wchar_t* path = (const wchar_t*)payload->Data;
+						//			std::wstring ws(path);
+						//			// your new String
+						//			std::string str(ws.begin(), ws.end());
+						//			const std::filesystem::path filesystempath = str;
+						//			if (filesystempath.extension() == ".dds")
+						//			{
+						//				std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+						//				Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finalEmissiveTex, nullptr);
+						//				if (filesystempath.extension() == ".dds")
+						//				{
+						//					g->m_MaterialAttributes.m_PBRAttributes.m_EmissiveTex = finalEmissiveTex;
+						//				}
+						//				std::wcout << " Path of dragged file is: " << path << std::endl;
+						//			}
+						//		}
+						//	}
+
+						//	std::string aoTex = g->m_MaterialAttributes.m_PBRAttributes.m_AOTex;
+						//	ImguiInput("AO Texture", aoTex);
+						//	if (ImGui::BeginDragDropTarget())
+						//	{
+						//		std::string finalAOTex = g->m_MaterialAttributes.m_PBRAttributes.m_AOTex;
+						//		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						//		{
+						//			const wchar_t* path = (const wchar_t*)payload->Data;
+						//			std::wstring ws(path);
+						//			// your new String
+						//			std::string str(ws.begin(), ws.end());
+						//			const std::filesystem::path filesystempath = str;
+						//			if (filesystempath.extension() == ".dds")
+						//			{
+						//				std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+						//				Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finalAOTex, nullptr);
+						//				if (filesystempath.extension() == ".dds")
+						//				{
+						//					g->m_MaterialAttributes.m_PBRAttributes.m_AOTex = finalAOTex;
+						//				}
+						//				std::wcout << " Path of dragged file is: " << path << std::endl;
+						//			}
+						//		}
+						//	}
+
+						//}
+
+						float newReflectivity = g->m_MaterialAttributes.m_Reflectivity;
+						ImguiInput("Reflectivity", newReflectivity);
+						g->m_MaterialAttributes.m_Reflectivity = newReflectivity;
+
+						Vec3 newReflectance = g->m_MaterialAttributes.m_Reflectance;
+						ImguiInput("Reflectance", newReflectance);
+						g->m_MaterialAttributes.m_Reflectance = newReflectance;
+
+						std::string reflectanceTex = g->m_MaterialAttributes.m_ReflectanceTexture;
+						ImguiInput("Reflectance Texture", reflectanceTex);
+						if (ImGui::BeginDragDropTarget())
+						{
+							std::string finalAOTex = g->m_MaterialAttributes.m_ReflectanceTexture;
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+							{
+								const wchar_t* path = (const wchar_t*)payload->Data;
+								std::wstring ws(path);
+								// your new String
+								std::string str(ws.begin(), ws.end());
+								const std::filesystem::path filesystempath = str;
+								if (filesystempath.extension() == ".dds")
+								{
+									std::shared_ptr<AssetBrowser> Assetbrowser = static_pointer_cast<AssetBrowser>(LevelEditorManager::GetInstance()->panels[PanelTypes::ASSETBROWSER]);
+									Assetbrowser->getFileNameFromPath(str.c_str(), nullptr, nullptr, &finalAOTex, nullptr);
+									if (filesystempath.extension() == ".dds")
+									{
+										g->m_MaterialAttributes.m_ReflectanceTexture = finalAOTex;
+									}
+									std::wcout << " Path of dragged file is: " << path << std::endl;
+								}
+							}
+						}
+						
+
+					}
+				}
 			}
 			else if (propertyName.get_type() == rttr::type::get<std::string>())
 			{

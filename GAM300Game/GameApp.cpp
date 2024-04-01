@@ -24,7 +24,7 @@
 #include "vulkanTools/VulkanTexture.h"
 #include "Rendering/renderPass.h"
 #include "vulkanTools/FrameBuffer.h"
-
+#include "Rendering/Revamped/MaterialManager.h"
 
 #include "Physics/PhysicsSystem.h"
 #include "Rendering/ObjectPicking.h"
@@ -53,7 +53,9 @@ namespace TDS
 
         switch (uMsg)
         {
-
+        case WM_CREATE:
+            TDS::InputSystem::GetInstance()->setWindowCenter(GetSystemMetrics(SM_CXSCREEN) / 2, GetSystemMetrics(SM_CYSCREEN) / 2);
+            break;
         case WM_DESTROY:
             PostQuitMessage(0);
             break;
@@ -75,45 +77,32 @@ namespace TDS
 
             }
             break;
-        case WM_LBUTTONDOWN:
-        case WM_LBUTTONUP:
-        case WM_RBUTTONDOWN:
-        case WM_RBUTTONUP:
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-        case WM_XBUTTONDOWN:
         case WM_XBUTTONUP:
         {
             //Input::processMouseInput(wParam, lParam);
         }break;
 
-        case WM_MOUSEWHEEL: {
-            InputSystem::GetInstance()->processMouseScroll(wParam);
-        }break;
-        case WM_MOUSEMOVE:
+        /*case WM_MOUSEMOVE:
         {
-            POINT p;
-            GetCursorPos(&p);
-            ScreenToClient(GetActiveWindow(), &p);
-            InputSystem::GetInstance()->setLocalMousePos(p.x, p.y);
-            if (TDS::InputSystem::GetInstance()->getMouseLock())
-            {
-                HWND activeWindow = GetForegroundWindow();
-                if (activeWindow != nullptr) {
-                    RECT windowRect;
-                    if (GetWindowRect(activeWindow, &windowRect)) {
-                        TDS::InputSystem::GetInstance()->setWindowCenter((windowRect.left + windowRect.right) / 2, (windowRect.top + windowRect.bottom) / 2);
-                    }
-                }
-                TDS::InputSystem::GetInstance()->lockMouseCenter(hWnd);
-            }
+            Input::updateMousePosition(lParam);
+        }break;*/
 
-        }break;
-
-        case WM_SYSKEYDOWN:
-        case WM_SYSKEYUP:
         case WM_KEYDOWN:
         {
+            if (wParam == VK_F11)
+            {
+                if (m_window.IsFullScreen() == false && !GraphicsManager::getInstance().IfFrameHasBegin())
+                {
+                    m_window.IsFullScreen() = true;
+                    m_window.ToggleFullScreen(true);
+                }
+                else if (m_window.IsFullScreen() == true && !GraphicsManager::getInstance().IfFrameHasBegin())
+                {
+                    m_window.IsFullScreen() = false;
+                    m_window.ToggleFullScreen(false);
+                }
+                else {}
+            }
             uint32_t VKcode = static_cast<uint32_t>(wParam);
             WORD keyflags = HIWORD(lParam);
             if (!(keyflags & KF_REPEAT))
@@ -138,6 +127,7 @@ namespace TDS
             Input::keystatus = Input::KeyStatus::IDLE;
         }break;
 
+        // Input System Stuff
         case WM_INPUT: {
 
             RAWINPUT rawInput;
@@ -158,9 +148,30 @@ namespace TDS
 
             }
 
+            POINT p;
+            GetCursorPos(&p);
+            ScreenToClient(GetActiveWindow(), &p);
+            InputSystem::GetInstance()->setLocalMousePos(p.x, p.y);
+            if (TDS::InputSystem::GetInstance()->getMouseLock())
+            {
+                HWND activeWindow = GetForegroundWindow();
+                if (activeWindow != nullptr) {
+                    RECT windowRect;
+                    if (GetWindowRect(activeWindow, &windowRect)) {
+                        TDS::InputSystem::GetInstance()->setWindowCenter((windowRect.left + windowRect.right) / 2, (windowRect.top + windowRect.bottom) / 2);
+                    }
+                }
+                TDS::InputSystem::GetInstance()->lockMouseCenter(activeWindow);
+            }
+
         }break;
-
-
+        case WM_MOUSEWHEEL: {
+            InputSystem::GetInstance()->processMouseScroll(wParam);
+        }break;
+        case WM_SETCURSOR:
+        {
+            TDS::InputSystem::GetInstance()->hideMouse();
+        }break;
         }
     }
     void GamApp::SetWindowHandle(HWND hWnd)
@@ -176,6 +187,7 @@ namespace TDS
     {
         GraphicsManager::getInstance().Init(&m_window);
         AssetManager::GetInstance()->PreloadAssets();
+        GraphicsManager::getInstance().GetMaterialManager().PreloadMaterialInfos();
         /*skyboxrender.Init();*/
         GraphicsManager::getInstance().GetDebugRenderer().Init();
         GraphicsManager::getInstance().InitSkyBox();
@@ -338,6 +350,8 @@ namespace TDS
 
                 if (startPlaying)
                 {
+                    InputSystem::GetInstance()->setMouseLock(false);
+                    InputSystem::GetInstance()->setCursorVisible(true);
                     SceneManager::GetInstance()->isPlaying = true;
                     SceneManager::GetInstance()->loadScene(SceneManager::GetInstance()->getCurrentScene());
                     startPlaying = false;
@@ -382,16 +396,6 @@ namespace TDS
 
                 GraphicsManager::getInstance().EndFrame();
             }
-            // Reloading
-            //if (GetKeyState(VK_F5) & 0x8000)
-            //{
-            //    isPlaying = false;
-            //    compileScriptAssembly();
-            //    SceneManager::GetInstance()->saveCurrentScene();
-            //    reloadScripts();
-            //    SceneManager::GetInstance()->loadScene(SceneManager::GetInstance()->getCurrentScene());
-            //}
-
             Input::scrollStop();
             TDS::InputSystem::GetInstance()->setRawMouseInput(0, 0);
             InputSystem::GetInstance()->accumulatedMouseX = 0;
@@ -422,8 +426,8 @@ namespace TDS
     void GamApp::Run()
     {
         startScriptEngine();
-        buildManagedScriptCsProj();
-        compileScriptAssembly();
+        /*buildManagedScriptCsProj();
+        compileScriptAssembly();*/
 
         // Step 1: Get Functions
         auto init = GetFunctionPtr<void(*)(void)>
@@ -490,78 +494,6 @@ namespace TDS
                 "ScriptAPI.EngineInterface",
                 "RemoveEntity"
             );
-
-        /*
-        SceneManager::GetInstance()->setBool = GetFunctionPtr<void(*)(EntityID, std::string, std::string, bool)>
-            (
-                "ScriptAPI",
-                "ScriptAPI.EngineInterface",
-                "SetValueBool"
-            );
-
-        SceneManager::GetInstance()->setInt = GetFunctionPtr<void(*)(EntityID, std::string, std::string, int, bool)>
-            (
-                "ScriptAPI",
-                "ScriptAPI.EngineInterface",
-                "SetValueInt"
-            );
-
-        SceneManager::GetInstance()->setDouble = GetFunctionPtr<void(*)(EntityID, std::string, std::string, double)>
-            (
-                "ScriptAPI",
-                "ScriptAPI.EngineInterface",
-                "SetValueDouble"
-            );
-
-        SceneManager::GetInstance()->setFloat = GetFunctionPtr<void(*)(EntityID, std::string, std::string, float)>
-            (
-                "ScriptAPI",
-                "ScriptAPI.EngineInterface",
-                "SetValueFloat"
-            );
-
-        SceneManager::GetInstance()->setString = GetFunctionPtr<void(*)(EntityID, std::string, std::string, std::string)>
-            (
-                "ScriptAPI",
-                "ScriptAPI.EngineInterface",
-                "SetValueString"
-            );
-
-        //SceneManager::GetInstance()->setChar = GetFunctionPtr<void(*)(EntityID, std::string, std::string, char)>
-        //    (
-        //        "ScriptAPI",
-        //        "ScriptAPI.EngineInterface",
-        //        "SetValueChar"
-        //    );
-
-        SceneManager::GetInstance()->setVector3 = GetFunctionPtr<void(*)(EntityID, std::string, std::string, Vec3)>
-            (
-                "ScriptAPI",
-                "ScriptAPI.EngineInterface",
-                "SetVector3"
-            );
-
-        SceneManager::GetInstance()->setGameObject = GetFunctionPtr<void(*)(EntityID, std::string, std::string, EntityID)>
-            (
-                "ScriptAPI",
-                "ScriptAPI.EngineInterface",
-                "SetGameObject"
-            );
-
-        SceneManager::GetInstance()->setComponent = GetFunctionPtr<void(*)(EntityID, std::string, std::string, EntityID)>
-            (
-                "ScriptAPI",
-                "ScriptAPI.EngineInterface",
-                "SetComponent"
-            );
-
-        SceneManager::GetInstance()->setScriptReference = GetFunctionPtr<void(*)(EntityID, std::string, std::string, EntityID, std::string)>
-            (
-                "ScriptAPI",
-                "ScriptAPI.EngineInterface",
-                "SetScript"
-            );
-        */
 
         SceneManager::GetInstance()->setScriptValue = GetFunctionPtr<void(*)(EntityID, std::string, ScriptValues)>
             (

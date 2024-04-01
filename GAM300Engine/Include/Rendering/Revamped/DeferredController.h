@@ -1,5 +1,6 @@
 #pragma once
 #include "vulkanTools/FrameInfo.h"
+#include "GraphicsResource/Revamped/MaterialAttributes.h"
 namespace TDS
 {
 	const uint32_t MAX_BONES = 1000;
@@ -9,6 +10,7 @@ namespace TDS
 		STAGE_G_BUFFER_BATCH = 0,
 		STAGE_G_BUFFER_INSTANCE,
 		STAGE_LIGTHING,
+		STAGE_SHADOW,
 		//STAGE_SHADOW,
 		//STAGE_DEPTH_SHADOW,
 		//STAGE_SHADOW_OMNI,
@@ -22,6 +24,7 @@ namespace TDS
 	enum RENDER_PASS
 	{
 		RENDER_G_BUFFER = 0,
+		RENDER_SHADOW,
 		//RENDER_SHADOW_MAPPING,
 		//RENDER_SHADOW_OMNI,
 		RENDER_LIGTHING,
@@ -33,7 +36,6 @@ namespace TDS
 
 
 	class VulkanPipeline;
-	class MaterialBase;
 	class DeferredFrames;
 
 	struct Transform;
@@ -41,7 +43,7 @@ namespace TDS
 	struct MeshBuffer;
 
 	class FrameBufferObject;
-
+	static constexpr int MAX_MATERIALS = 1000;
 	static constexpr int MAX_INSTANCE_BUFFER = 10000;
 	static constexpr int MAX_POSSIBLE_BATCH = 10000;
 	static constexpr int MAX_POINT_LIGHTS = 100;
@@ -52,18 +54,65 @@ namespace TDS
 
 	class AnimationPlayer;
 
+	struct alignas(16) MaterialBuffer
+	{
+		
+		typedef Vec3 vec3;
+		
+		vec3 diffuse = vec3(0.0);
+		int diffuseTex = -1;
+
+		vec3 specular = vec3(0.0);
+		int specularTex = -1;
+
+		vec3 emissive = vec3(0.0);
+		int emissiveTex = -1;
+
+		vec3 ambient = vec3(0.0);
+		int ambientTex = -1;
+
+		int shininessTex = -1;
+		float shininess = 0.0;
+		float shininessStrength = 0.0;
+		float reflectivity = 0.0;
+
+		//General Material
+		vec3 reflectance = vec3(0.0);
+		int reflectanceTex = -1;
+
+		//PBR 
+		//int normalTex = -1;
+		//int RoughnessTex = -1;
+		//int MetallicTex = -1;
+		//int aoTex = -1;
+
+		//float metalness;
+		//float roughness;
+		//float emission;
+		//int  albedoTex = -1;
+
+		int  MaterialID = -1;
+		int  ShadingModel = 0;
+		int  UseMaterialTextures = 0;
+		int  UseMaterialNormal = 0;
+	};
 
 
 	struct MeshUpdate
 	{
+		std::string				m_ModelName = "";
 		Transform*				m_pTransform = nullptr;
 		AnimationPlayer*		m_pAnimationPlayer = nullptr;
+		MaterialAttributes*		m_pMaterialAttribute = nullptr;
 		int						m_MeshID;
 		int						m_EntityID = -1;
 		int						m_TextureID = -1;
+		int						m_MaterialID = -1;
 		bool					m_IsAnimated = false;
 		bool					m_ShowMesh = false;
 		bool					m_RenderIn2D = false;
+		bool					m_UseMaterials = false;
+		bool					m_UsePreloadedMaterials = false;
 	};
 
 	struct UpdateData
@@ -78,15 +127,18 @@ namespace TDS
 	{
 		Mat4			m_modelMatrix;
 
-		std::uint32_t	m_MaterialID;
+		std::int32_t	m_MaterialID;
 		std::uint32_t	m_TextureID;
 		std::uint32_t	m_IsRender;
 		std::uint32_t	m_EntityID;
 
 		std::uint32_t	m_AnimOffset;
 		std::uint32_t	m_IsAnimated;
+		std::uint32_t   m_UseMeshMatID;
+		std::uint32_t	m_UseMaterials;
 
-		
+
+		MaterialBuffer  m_ComponentMaterial;
 	};
 
 
@@ -96,6 +148,7 @@ namespace TDS
 	{
 
 		std::array<BatchData, MAX_POSSIBLE_BATCH>												m_BatchBuffers;
+		/*std::array<MaterialBuffer, MAX_POSSIBLE_BATCH>	m_MaterialList;*/
 		std::map<std::string, UpdateData>														m_BatchUpdateInfo;
 		std::uint32_t																			m_BatchCnt;
 
@@ -118,6 +171,7 @@ namespace TDS
 			struct InstanceRequest
 			{
 				MeshBuffer* m_MeshBuffer = nullptr;
+				std::string						m_ModelName;
 				RenderInstanceInfo				m_RenderInstanceInfo;
 			};
 
@@ -128,12 +182,14 @@ namespace TDS
 				std::vector<MeshUpdate>		m_Updates;
 			};
 			std::map<MeshBuffer*, InstanceUpdatePack>	m_InstanceUpdateInfo;
+			
 		};
 		std::uint32_t																m_TotalInstances = 0;
 		std::uint32_t																m_GroupIdx = 0;
 		InstanceRenderManager														m_instanceRenderManager;
 		std::array<InstanceRenderManager::InstanceRequest, MAX_INSTANCE_BUFFER>		m_InstanceRequests;
 		std::array<BatchData, MAX_INSTANCE_BUFFER>									m_InstanceBuffers;
+		/*std::array<MaterialBuffer, MAX_INSTANCE_BUFFER>	m_MaterialList;*/
 
 
 	};
@@ -211,9 +267,6 @@ namespace TDS
 	//{
 	//	alignas(16) Mat4 m_Bones[MAX_BONES];
 	//};
-
-
-
 	class FBO;
 	class PointLightComponent;
 	class DirectionalLightComponent;
@@ -257,6 +310,9 @@ namespace TDS
 		void											ShutDown();
 		void											SetClearColour(Vec4 clearColor);
 		void											UpdateClearColur();
+		void											UpdateAllTextureArrays();
+		void											UpdateMaterialList();
+		void											UploadMaterialsList(std::string_view modelName);
 		FBO* GetFrameBuffer(RENDER_PASS renderpassType);
 
 		SceneUniform& GetSceneUniform();
@@ -268,7 +324,7 @@ namespace TDS
 	private:
 
 		//Lighting pass data
-		float											m_ScreenFadeFactor = 1.f;
+		float											m_ScreenFadeFactor = 0.1f;
 		std::uint32_t									m_LightSrcInstance = 0;
 
 		LightingPushConstant							m_LightingPushConstant;
@@ -290,6 +346,7 @@ namespace TDS
 		std::array<FBO*, RENDER_TOTAL>					m_FrameBuffers;
 
 		std::array<Mat4, MAX_BONES>						m_Bones;
+		std::array<MaterialBuffer, MAX_MATERIALS>		m_MaterialList;
 		/*BoneUniform									m_BonesUniform;*/
 
 	};
