@@ -15,8 +15,8 @@ public class FireplaceAudio : Script
 
     public override void Update()
     {
-        Vector3 fireplace_pos = gameObject.GetComponent<TransformComponent>().GetPosition();
-        audioComponent.set3DCoords(fireplace_pos, "fireplace");
-        audioComponent.play("fireplace");
+        //audioComponent.play("fireplace");
+        audioComponent.setVolume(0.6f, "fireplace");
+        audioComponent.set3DCoords(transform.GetPosition(), "fireplace");
     }
 }

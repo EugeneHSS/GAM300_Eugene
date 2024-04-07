@@ -48,7 +48,7 @@ public class MainMenuOptions : Script
         if (Input.GetMouseButtonDown(Keycode.M1) && sprite.IsMouseCollided())
         {
             buttonSfx.play(buttonSfxName);
-            mainmenubgm.stop("Horror_Menu_Finale_Finale"); //stop main menu music when going into options menu
+           // mainmenubgm.stop("Horror_Menu_Finale_Finale"); //stop main menu music when going into options menu
             isOpened = true;
             SceneLoader.LoadOptionsScreen();
         }

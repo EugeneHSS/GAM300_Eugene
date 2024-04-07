@@ -19,7 +19,7 @@ public class p01 : Script
     public string Painting_Texture;
 
     public GameObject _InteractUI;
-
+    public GameObject paintingLight;
     [Header("AudioStuff")]
     public AudioComponent AudioPlayer;
 
@@ -74,6 +74,9 @@ public class p01 : Script
                     ghost.GetComponent<GhostMovement>().PlayMonsterWalkingSoundInitial();
                     paintingMoved = false;
                     timer = 2.0f;
+
+                    paintingLight.GetComponent<Blinking>().SetEnabled(false);
+                    paintingLight.GetComponent<PointlightComponent>().SetColorAlpha(0.0f);
                 }
             }
             else

@@ -481,19 +481,23 @@ namespace TDS
 
 				if (meshUpdateData.m_IsAnimated)
 				{
-					if (meshUpdateData.m_pAnimationPlayer == nullptr)
+
+					auto AnimComp = ecs.getComponent<AnimationComponent>(meshUpdateData.m_EntityID);
+
+					if (AnimComp)
 					{
-						meshUpdateData.m_pAnimationPlayer = &ecs.getComponent<AnimationComponent>(meshUpdateData.m_EntityID)->m_AnimationPlayer;
+
+						auto bones = AnimComp->m_AnimationPlayer.getCurrentBonesMatrices();
+						for (size_t i = 0; i < bones->size() && i < MAX_BONES_PER_MESH; ++i)
+						{
+							m_Bones[totalAnimationOffset] = bones->at(i);
+							totalAnimationOffset++;
+						}
+
+						meshUpdateData.m_IsAnimated = false;
+
+						meshUpdateData.m_pAnimationPlayer = nullptr;
 					}
-
-					auto bones = meshUpdateData.m_pAnimationPlayer->getCurrentBonesMatrices();
-					for (size_t i = 0; i < bones->size() && i < MAX_BONES_PER_MESH; ++i)
-					{
-						m_Bones[totalAnimationOffset] = bones->at(i);
-						totalAnimationOffset++;
-					}
-
-
 				}
 
 

@@ -34,6 +34,8 @@ public class PlayButton : Script
     public override void Awake()
     {
         GraphicsManagerWrapper.ToggleViewFrom2D(true);
+        Input.HideMouse(false);
+        Input.Lock(false);
         bgmName = "Horror_Menu_Finale_Finale";
         buttonSfxName = "button_press";
         bgm = gameObject.GetComponent<AudioComponent>();

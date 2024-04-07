@@ -68,6 +68,13 @@ public class Door_Script : Script
     // Update is called once per frame
     override public void Update()
     {
+        Vector3 listenerpos = gameObject.GetComponent<AudioComponent>().getListenerPos();
+        float TEMP_originalFadeValue = GraphicsManagerWrapper.GetFadeFactor();
+        if (originalFadeValue <= TEMP_originalFadeValue)
+        {
+            originalFadeValue = TEMP_originalFadeValue;
+        }
+
         if (!forcedLocked && gameObject.GetComponent<RigidBodyComponent>().IsRayHit())
         {
             doorStates.GetComponent<DoorState>().doorLookedAt = true;
@@ -85,6 +92,7 @@ public class Door_Script : Script
                 if (Input.GetKeyDown(Keycode.E) || fadeOut == true)
                 {
                     audio.play("door open");
+                    audio.set3DCoords(listenerpos, "door open");
                     fadeOut = true;
                     float fadeValue = GraphicsManagerWrapper.GetFadeFactor();
                     if (fadeOut == true && fadeIn == false)
@@ -138,6 +146,7 @@ public class Door_Script : Script
         if (fadeOut == true && fadeIn == true)
         {
             audio.play("door creak");
+            audio.set3DCoords(listenerpos, "door creak");
 
             float fadeValue = GraphicsManagerWrapper.GetFadeFactor();
             fadeValue += fadeValueIncrement;

@@ -61,7 +61,7 @@ public class InGameOptionsButton : Script
             Console.WriteLine("Options Button Pressed");
             buttonSfx.play(buttonSfxName);
             AudioComponent audio = gameObject.GetComponent<AudioComponent>();
-            audio.pauseAll();
+            //audio.pauseAll();
             openedOptionsMenu = true;
             gameBlackboard.gameState = GameBlackboard.GameState.Options;
             PopupUI.changeDisplayed = true;

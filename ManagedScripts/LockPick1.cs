@@ -36,7 +36,6 @@ public class LockPick1 : Script
     [SerializeField]
     public static int counter;
 
-    public AudioSource myVOSource;
     public string startingVOstr;
     public string[] endVOstr;
     public bool _TutorialCompleted;

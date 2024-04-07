@@ -19,6 +19,8 @@ public class p02 : Script
     public string Painting_Texture;
 
     public GameObject _InteractUI;
+    public GameObject paintingLight;
+    public GameObject gallerySwitchLight;
 
     [Header("AudioStuff")]
     public AudioComponent AudioPlayer;
@@ -61,6 +63,9 @@ public class p02 : Script
 
                     paintingMoved = false;
                     timer = 2.0f;
+
+                    paintingLight.GetComponent<Blinking>().SetEnabled(false);
+                    paintingLight.GetComponent<PointlightComponent>().SetColorAlpha(0.0f);
                 }
             }
             else
@@ -81,6 +86,7 @@ public class p02 : Script
                 {
                     Console.WriteLine("Moving done p02");
                     paintingMoved = true;
+                    gallerySwitchLight.GetComponent<Blinking>().SetEnabled(true); // only enable switch light after moving painting
                 }
             }
         }

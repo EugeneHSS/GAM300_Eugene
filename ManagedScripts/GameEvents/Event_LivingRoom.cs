@@ -8,7 +8,7 @@ public class EventLivingRoom : Script
     public GameObject? player;
     private Vector3 lookAmount = new Vector3();
     public float timer = 1.0f;
-    public bool doOnce = true;
+    public static bool doOnce = true;
     public bool timerStart = false;
 
     public override void Update()

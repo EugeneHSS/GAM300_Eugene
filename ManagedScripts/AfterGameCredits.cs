@@ -90,6 +90,7 @@ public class AfterGameCredits : Script
             {
                 //Console.WriteLine("Switching to mainMenu");
                 SceneLoader.LoadMainMenu();
+                audio.stop("Horror_Menu_Finale_Finale");
             }
 
         }

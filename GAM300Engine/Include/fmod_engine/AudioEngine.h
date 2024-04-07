@@ -320,6 +320,16 @@ namespace TDS
             DLL_API  bool isMuted();
 
             /**
+             * Set loop for a sound
+             */
+            DLL_API  void setLoop(SoundInfo& soundInfo, bool set);
+
+            /**
+             * Returns if sound is looping
+             */
+            DLL_API  bool GetLoop(SoundInfo& soundInfo);
+
+            /**
              * Get container of sounds that's loaded
              */
             DLL_API  std::map<unsigned int, FMOD::Sound*> getSoundContainer();
@@ -380,7 +390,7 @@ namespace TDS
             /**
              * Sets the 3D position of a sound
              */
-            void set3dChannelPosition(SoundInfo soundInfo, FMOD::Channel* channel);
+            void set3dChannelPosition(SoundInfo& soundInfo, FMOD::Channel* channel);
 
             /**
              * Initializes the reverb effect
@@ -402,10 +412,10 @@ namespace TDS
             static const unsigned int MAX_AUDIO_CHANNELS = 1024;
 
             // Units per meter.  I.e feet would = 3.28.  centimeters would = 100.
-            const float DISTANCEFACTOR = 150.0f;
+            const float DISTANCEFACTOR = 200.0f;
 
             // Listener head position, initialized to default value
-            FMOD_VECTOR listenerpos = { 0.0f, 0.0f, -1.0f * DISTANCEFACTOR };
+            FMOD_VECTOR listenerpos = { 0.0f, 0.0f, -1.0f };
 
             FMOD_VECTOR listenervelocity = { 0.f, 0.f, 0.f * DISTANCEFACTOR };
 
@@ -492,6 +502,7 @@ namespace TDS
         static void ScriptUnload(std::string pathing);
         static SoundInfo* ScriptGetSound(std::string pathing);
         static unsigned int ScriptGetID(std::string pathing);
+        static bool ScriptGetLoop(std::string pathing);
 
         static bool CheckPlaying(std::string pathing); //to be changed
         static bool CheckPause(std::string pathing); //to be changed
@@ -503,6 +514,7 @@ namespace TDS
         static void ScriptFadeIn(unsigned int duration, std::string pathing);
         static void ScriptSetPosition(Vec3 pos, std::string pathing);
         static void ScriptSetListenerPos(Vec3 pos, Vec3 for_vec, Vec3 up_vec);
+        static void ScriptSetLoop(bool set, std::string pathing);
 
         static SoundInfo* find_sound_info(std::string str);
         static void Add_to_Queue(std::string str = "");
@@ -514,6 +526,7 @@ namespace TDS
         static float getMasterVolume();
         static float getBGMVolume();
         static float getSFXVolume();
+        static Vec3 getListenerPos();
 
         static void SetVolume(float vol, std::string pathing);
         static void SetMasterVolume(float vol);

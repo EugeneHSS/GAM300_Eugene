@@ -17,6 +17,8 @@ public class p03 : Script
     [SerializeField]
     public string Painting_Name;
     public string Painting_Texture;
+    public GameObject paintingLight;
+
     bool doOnce = true;
 
     public GameObject _InteractUI;
@@ -82,6 +84,10 @@ public class p03 : Script
                     ghost.GetComponent<GhostMovement>().PlayMonsterWalkingSoundInitial();
                     paintingMoved = false;
                     timer = 2.0f;
+
+                    paintingLight.GetComponent<Blinking>().SetEnabled(false);
+                    paintingLight.GetComponent<PointlightComponent>().SetColorAlpha(0.0f);
+
                 }
             }
             else

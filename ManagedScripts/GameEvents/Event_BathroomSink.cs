@@ -32,9 +32,11 @@ public class EventBathroomSink : Script
     public override void Update()
     {
         audio = gameObject.GetComponent<AudioComponent>();
+        Vector3 listenerpos = gameObject.GetComponent<AudioComponent>().getListenerPos();
         if (!battery.ActiveInHierarchy() && doOnce)
         {
             audio.play("pick up item_metal");
+            audio.set3DCoords(listenerpos, "pick up item_metal");
             // Martin (Internal): At least this will help.
             flicker = true;
             lastPlayerRot = player.transform.GetRotation();
@@ -52,7 +54,7 @@ public class EventBathroomSink : Script
             {
                 flicker = false;
                 bathroomLights.SetActive(flicker);
-                audio.stop("shower_running");
+                audio.stop("shower_running_louderversion");
                 // Play light bulb exploding?
             }
         }
@@ -61,7 +63,8 @@ public class EventBathroomSink : Script
             {
                 monster.GetComponent<AnimatedComponent>().SetEnabled(true);
                 monster.SetActive(true);
-                audio.play("smallscare2");
+                audio.play("smallscare1");
+                audio.set3DCoords(listenerpos, "smallscare1");
                 if (player.transform.GetRotation().Y >= lastPlayerRot.Y + 150 || player.transform.GetRotation().Y <= lastPlayerRot.Y - 150)
                 {
                     ghostTimer -= Time.deltaTime;
@@ -97,8 +100,8 @@ public class EventBathroomSink : Script
 
     void MoveShowerCurtain()
     {
-        audio.set3DCoords(transform.GetPosition(), "showerpull");
         audio.play("showerpull");
+        audio.set3DCoords(transform.GetPosition(), "showerpull");
         bathroomCurtains.transform.SetPositionX(bathroomCurtains.transform.GetPosition().X + (showerCuratinMoveSpeed * Time.deltaTime));
     }
 }

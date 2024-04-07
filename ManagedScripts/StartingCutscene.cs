@@ -89,6 +89,8 @@ public class StartingCutscene : Script
             {
                 int randomInt = (int)ScriptAPI.Random.Range(0, 4);
                 audio.play(changeSlideSfx[randomInt]);
+                Input.HideMouse(true);
+                Input.Lock(true);
                 playOnce = false;
             }
             Sprite.SetTextureName(Textures[0]);//change texture

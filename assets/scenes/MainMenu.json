@@ -1,15 +1,15 @@
 {
     "Archetype Sizes": {
         "1100001000001000000": {
-            "0": 952,
+            "0": 784,
             "1": 2688,
-            "6": 2520,
-            "12": 2520
+            "6": 5880,
+            "12": 2240
         },
         "1100000000001000000": {
-            "0": 680,
+            "0": 560,
             "1": 1920,
-            "12": 1800
+            "12": 1600
         }
     },
     "Entity Data": {
@@ -106,7 +106,60 @@
                     "w": 0.003921568859368563
                 },
                 "Used In 2D": false,
-                "Model UID": 0
+                "Model UID": 0,
+                "m_UsePreloadAlbedo": false,
+                "use materials": false,
+                "MaterialAttributes": {
+                    "shading": "SHADING_NONE",
+                    "PBRAttributes": {
+                        "NormalTex": "",
+                        "RoughnessTex": "",
+                        "MetallicTex": "",
+                        "EmissiveTex": "",
+                        "AOTex": "",
+                        "Metalness": 0.0,
+                        "Roughness": 0.0,
+                        "Emissive": 0.0
+                    },
+                    "MaterialName": "",
+                    "phongBlinn": {
+                        "DiffuseTex": "",
+                        "SpecularTex": "",
+                        "AmbientTex": "",
+                        "EmissiveTex": "",
+                        "ShininessTex": "",
+                        "DiffuseColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "SpecularColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "EmissiveColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "AmbientColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Shininess": 0.0,
+                        "ShininessStrength": 0.0
+                    },
+                    "AlbedoTex": "",
+                    "Reflectivity": 0.0,
+                    "Reflectance": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "ReflectanceTexture": ""
+                }
             },
             "UI Sprite": {
                 "Texture": "newmainmenu_bg.dds",
@@ -236,7 +289,60 @@
                     "w": 1.0
                 },
                 "Used In 2D": false,
-                "Model UID": 0
+                "Model UID": 0,
+                "m_UsePreloadAlbedo": false,
+                "use materials": false,
+                "MaterialAttributes": {
+                    "shading": "SHADING_NONE",
+                    "PBRAttributes": {
+                        "NormalTex": "",
+                        "RoughnessTex": "",
+                        "MetallicTex": "",
+                        "EmissiveTex": "",
+                        "AOTex": "",
+                        "Metalness": 0.0,
+                        "Roughness": 0.0,
+                        "Emissive": 0.0
+                    },
+                    "MaterialName": "",
+                    "phongBlinn": {
+                        "DiffuseTex": "",
+                        "SpecularTex": "",
+                        "AmbientTex": "",
+                        "EmissiveTex": "",
+                        "ShininessTex": "",
+                        "DiffuseColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "SpecularColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "EmissiveColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "AmbientColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Shininess": 0.0,
+                        "ShininessStrength": 0.0
+                    },
+                    "AlbedoTex": "",
+                    "Reflectivity": 0.0,
+                    "Reflectance": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "ReflectanceTexture": ""
+                }
             },
             "UI Sprite": {
                 "Texture": "Play_button_2.dds",
@@ -366,7 +472,60 @@
                     "w": 1.0
                 },
                 "Used In 2D": false,
-                "Model UID": 0
+                "Model UID": 0,
+                "m_UsePreloadAlbedo": false,
+                "use materials": false,
+                "MaterialAttributes": {
+                    "shading": "SHADING_NONE",
+                    "PBRAttributes": {
+                        "NormalTex": "",
+                        "RoughnessTex": "",
+                        "MetallicTex": "",
+                        "EmissiveTex": "",
+                        "AOTex": "",
+                        "Metalness": 0.0,
+                        "Roughness": 0.0,
+                        "Emissive": 0.0
+                    },
+                    "MaterialName": "",
+                    "phongBlinn": {
+                        "DiffuseTex": "",
+                        "SpecularTex": "",
+                        "AmbientTex": "",
+                        "EmissiveTex": "",
+                        "ShininessTex": "",
+                        "DiffuseColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "SpecularColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "EmissiveColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "AmbientColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Shininess": 0.0,
+                        "ShininessStrength": 0.0
+                    },
+                    "AlbedoTex": "",
+                    "Reflectivity": 0.0,
+                    "Reflectance": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "ReflectanceTexture": ""
+                }
             },
             "UI Sprite": {
                 "Texture": "Settings_button_1.dds",
@@ -496,7 +655,60 @@
                     "w": 0.0
                 },
                 "Used In 2D": false,
-                "Model UID": 0
+                "Model UID": 0,
+                "m_UsePreloadAlbedo": false,
+                "use materials": false,
+                "MaterialAttributes": {
+                    "shading": "SHADING_NONE",
+                    "PBRAttributes": {
+                        "NormalTex": "",
+                        "RoughnessTex": "",
+                        "MetallicTex": "",
+                        "EmissiveTex": "",
+                        "AOTex": "",
+                        "Metalness": 0.0,
+                        "Roughness": 0.0,
+                        "Emissive": 0.0
+                    },
+                    "MaterialName": "",
+                    "phongBlinn": {
+                        "DiffuseTex": "",
+                        "SpecularTex": "",
+                        "AmbientTex": "",
+                        "EmissiveTex": "",
+                        "ShininessTex": "",
+                        "DiffuseColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "SpecularColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "EmissiveColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "AmbientColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Shininess": 0.0,
+                        "ShininessStrength": 0.0
+                    },
+                    "AlbedoTex": "",
+                    "Reflectivity": 0.0,
+                    "Reflectance": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "ReflectanceTexture": ""
+                }
             },
             "UI Sprite": {
                 "Texture": "Quit_button_1.dds",
@@ -626,7 +838,60 @@
                     "w": 1.0
                 },
                 "Used In 2D": false,
-                "Model UID": 0
+                "Model UID": 0,
+                "m_UsePreloadAlbedo": false,
+                "use materials": false,
+                "MaterialAttributes": {
+                    "shading": "SHADING_NONE",
+                    "PBRAttributes": {
+                        "NormalTex": "",
+                        "RoughnessTex": "",
+                        "MetallicTex": "",
+                        "EmissiveTex": "",
+                        "AOTex": "",
+                        "Metalness": 0.0,
+                        "Roughness": 0.0,
+                        "Emissive": 0.0
+                    },
+                    "MaterialName": "",
+                    "phongBlinn": {
+                        "DiffuseTex": "",
+                        "SpecularTex": "",
+                        "AmbientTex": "",
+                        "EmissiveTex": "",
+                        "ShininessTex": "",
+                        "DiffuseColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "SpecularColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "EmissiveColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "AmbientColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Shininess": 0.0,
+                        "ShininessStrength": 0.0
+                    },
+                    "AlbedoTex": "",
+                    "Reflectivity": 0.0,
+                    "Reflectance": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "ReflectanceTexture": ""
+                }
             },
             "UI Sprite": {
                 "Texture": "team_logo_3.dds",
@@ -756,7 +1021,60 @@
                     "w": 0.0
                 },
                 "Used In 2D": false,
-                "Model UID": 0
+                "Model UID": 0,
+                "m_UsePreloadAlbedo": false,
+                "use materials": false,
+                "MaterialAttributes": {
+                    "shading": "SHADING_NONE",
+                    "PBRAttributes": {
+                        "NormalTex": "",
+                        "RoughnessTex": "",
+                        "MetallicTex": "",
+                        "EmissiveTex": "",
+                        "AOTex": "",
+                        "Metalness": 0.0,
+                        "Roughness": 0.0,
+                        "Emissive": 0.0
+                    },
+                    "MaterialName": "",
+                    "phongBlinn": {
+                        "DiffuseTex": "",
+                        "SpecularTex": "",
+                        "AmbientTex": "",
+                        "EmissiveTex": "",
+                        "ShininessTex": "",
+                        "DiffuseColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "SpecularColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "EmissiveColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "AmbientColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Shininess": 0.0,
+                        "ShininessStrength": 0.0
+                    },
+                    "AlbedoTex": "",
+                    "Reflectivity": 0.0,
+                    "Reflectance": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "ReflectanceTexture": ""
+                }
             },
             "UI Sprite": {
                 "Texture": "game_title_3.dds",
@@ -886,7 +1204,60 @@
                     "w": 1.0
                 },
                 "Used In 2D": false,
-                "Model UID": 0
+                "Model UID": 0,
+                "m_UsePreloadAlbedo": false,
+                "use materials": false,
+                "MaterialAttributes": {
+                    "shading": "SHADING_NONE",
+                    "PBRAttributes": {
+                        "NormalTex": "",
+                        "RoughnessTex": "",
+                        "MetallicTex": "",
+                        "EmissiveTex": "",
+                        "AOTex": "",
+                        "Metalness": 0.0,
+                        "Roughness": 0.0,
+                        "Emissive": 0.0
+                    },
+                    "MaterialName": "",
+                    "phongBlinn": {
+                        "DiffuseTex": "",
+                        "SpecularTex": "",
+                        "AmbientTex": "",
+                        "EmissiveTex": "",
+                        "ShininessTex": "",
+                        "DiffuseColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "SpecularColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "EmissiveColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "AmbientColor": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Shininess": 0.0,
+                        "ShininessStrength": 0.0
+                    },
+                    "AlbedoTex": "",
+                    "Reflectivity": 0.0,
+                    "Reflectance": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "ReflectanceTexture": ""
+                }
             },
             "UI Sprite": {
                 "Texture": "Black.dds",
@@ -925,7 +1296,7 @@
         },
         "8": {
             "ArchetypeID": "1100000000001000000",
-            "Enabled": false,
+            "Enabled": true,
             "Name Tag": {
                 "Name": "QuitConfirmation",
                 "Tag": "",
@@ -1042,7 +1413,7 @@
         },
         "9": {
             "ArchetypeID": "1100000000001000000",
-            "Enabled": false,
+            "Enabled": true,
             "Name Tag": {
                 "Name": "SureText",
                 "Tag": "",
@@ -1155,7 +1526,7 @@
         },
         "10": {
             "ArchetypeID": "1100000000001000000",
-            "Enabled": false,
+            "Enabled": true,
             "Name Tag": {
                 "Name": "Yes",
                 "Tag": "",
@@ -1268,7 +1639,7 @@
         },
         "11": {
             "ArchetypeID": "1100000000001000000",
-            "Enabled": false,
+            "Enabled": true,
             "Name Tag": {
                 "Name": "No",
                 "Tag": "",

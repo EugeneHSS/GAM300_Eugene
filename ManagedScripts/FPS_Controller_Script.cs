@@ -311,6 +311,9 @@ public class FPS_Controller_Script : Script
 
         Vector3 up_vector = Vector3.Normalize(Vector3.Cross(playerCamera.getRightVector(), playerCamera.getForwardVector()));
         audio.setPlayerCoords(transform.GetPosition(), Vector3.Normalize(playerCamera.getForwardVector()), up_vector);
+        audio.set3DCoords(audio.getListenerPos(), "pc_checkreceipt");
+        audio.set3DCoords(audio.getListenerPos(), "pc_shinelightbeforereceipt");
+        audio.set3DCoords(audio.getListenerPos(), "pc_shinelightafterreceipt");
     }
     public override void FixedUpdate()
     {
@@ -455,11 +458,22 @@ public class FPS_Controller_Script : Script
         {
             if (audio.checkPlaying(backgroundMusic[0]))
             {
-                //audio.FadeOut(3, backgroundMusic[0]);
+                audio.stop(backgroundMusic[0]);
             }
             if (audio.finished(backgroundMusic[0]))
             {
                 audio.play("ambientdrone1");
+                if(!audio.isitLoop("ambientdrone1"))
+                {
+                    audio.setLoop(true, "ambientdrone1");
+                }
+            }
+
+            audio.play("window_ambience");
+            audio.set3DCoords(new Vector3(981.70f, 94.99f, 501.68f), "window_ambience");
+            if(audio.isitLoop("window_ambience"))
+            {
+                audio.setLoop(true, "window_ambience");
             }
         }
     }
@@ -612,6 +626,18 @@ public class FPS_Controller_Script : Script
             new Vector3(transform.GetPosition().X, transform.GetPosition().Y + (originalHeight * crouchHeight), transform.GetPosition().Z),
             new Vector4(quat.X, quat.Y, quat.Z, quat.W), new Vector3(0, 0, 0), new Vector3(0, 0, 0));
         if (speedReduction != 0 && walkSpeed < savedWalkSpeed) walkSpeed /= speedReduction;
+        
+        // Safety net
+        if (gameObject.transform.GetPosition().Y >= -100f && gameObject.transform.GetPosition().Y != 90)
+        {
+            gameObject.transform.SetPositionY(90);
+            gameObject.GetComponent<RigidBodyComponent>().SetPosition(gameObject.transform.GetPosition());
+        }
+        else if (gameObject.transform.GetPosition().Y < -100f && gameObject.transform.GetPosition().Y != -145)
+        {
+            gameObject.transform.SetPositionY(-145);
+            gameObject.GetComponent<RigidBodyComponent>().SetPosition(gameObject.transform.GetPosition());
+        }
     }
     #endregion
 

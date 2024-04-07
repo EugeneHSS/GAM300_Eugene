@@ -17,6 +17,9 @@ namespace TDS
 		DLL_API void SetPointLightAttenuation(float x, float y, float z, float w);
 		DLL_API void GetPointLightAttenuation(float& x, float& y, float& z, float& w);
 
+		DLL_API void SetPointLightColorAlpha(float alpha);
+		DLL_API float GetPointLightColorAlpha();
+
 		RTTR_ENABLE(IComponent)
 		RTTR_REGISTRATION_FRIEND
 

@@ -95,7 +95,15 @@ namespace TDS
         void AudioEngine::loadSound(SoundInfo & soundInfo)
         {
             if (!soundLoaded(soundInfo)) {
-                //::cout << "Audio Engine: Loading Sound from file " << soundInfo.getFilePath() << '\n';
+                if (soundInfo.getFilePath().find("music") != std::string::npos)
+                {
+                    soundInfo.is3D = false;
+                }
+                else
+                {
+                    soundInfo.is3D = true;
+                }
+
                 FMOD::Sound* sound;
                 ERRCHECK(lowLevelSystem->createSound(soundInfo.getFilePath_inChar(), soundInfo.is3D ? FMOD_3D : FMOD_2D, 0, &sound));
                 ERRCHECK(sound->setMode(soundInfo.isLoop ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF));
@@ -415,24 +423,9 @@ namespace TDS
 
         void AudioEngine::update3DSoundPosition(Vec3 pos, SoundInfo& soundInfo)
         {
-            if (checkPlaying(soundInfo))
-            {
-                soundInfo.is3D = true;
-                soundInfo.position = pos;
+            soundInfo.position = pos;
 
-                channels[soundInfo.uniqueID]->stop();
-            }
-
-            sounds[soundInfo.uniqueID]->release();
-            channels.erase(soundInfo.uniqueID);
-            sounds.erase(soundInfo.uniqueID);
-            size_t first = soundInfo.getFilePath().find_last_of('\\') + 1,
-                last = soundInfo.getFilePath().find_last_of('.') - first;
-            std::string sound_name = soundInfo.getFilePath().substr(first, last);
-            SoundInfo_Container.erase(soundInfo.filePath);
-
-            loadSound(soundInfo);
-            playSound(soundInfo);
+            set3dChannelPosition(soundInfo, channels[soundInfo.uniqueID]);
         }
 
         bool AudioEngine::checkPlaying(SoundInfo& soundInfo)
@@ -627,6 +620,25 @@ namespace TDS
             return muted;
         }
 
+        void AudioEngine::setLoop(SoundInfo& soundInfo, bool set)
+        {
+            soundInfo.isLoop = set;
+
+            if (soundInfo.isLoop)
+            {
+                ERRCHECK(channels[soundInfo.uniqueID]->setMode(FMOD_LOOP_NORMAL));
+            }
+            else
+            {
+                ERRCHECK(channels[soundInfo.uniqueID]->setMode(FMOD_LOOP_OFF));
+            }
+        }
+
+        bool AudioEngine::GetLoop(SoundInfo& soundInfo)
+        {
+            return soundInfo.isLoop;
+        }
+
         std::map<unsigned int, FMOD::Sound*> AudioEngine::getSoundContainer()
         {
             return sounds;
@@ -689,13 +701,11 @@ namespace TDS
             return (sounds.count(soundInfo.getUniqueID()) > 0);
         }
 
-        void AudioEngine::set3dChannelPosition(SoundInfo soundInfo, FMOD::Channel * channel)
+        void AudioEngine::set3dChannelPosition(SoundInfo& soundInfo, FMOD::Channel * channel)
         {
-            FMOD_VECTOR position = { soundInfo.getX() * DISTANCEFACTOR, soundInfo.getY() * DISTANCEFACTOR, soundInfo.getZ() * DISTANCEFACTOR };
+            FMOD_VECTOR position = { soundInfo.getX(), soundInfo.getY(), soundInfo.getZ() };
             FMOD_VECTOR velocity = { 0.0f, 0.0f, 0.0f }; // TODO Add dopplar (velocity) support
-            ERRCHECK(channel->setPaused(true));
             ERRCHECK(channel->set3DAttributes(&position, &velocity));
-            ERRCHECK(channel->setPaused(false));
         }
 
         void AudioEngine::initReverb()
@@ -710,9 +720,9 @@ namespace TDS
 
         void ERRCHECK_fn(FMOD_RESULT result, const char* file, int line)
         {
-            (void)file;//TODO
-            if (result != FMOD_OK)
-                std::cout << "FMOD ERROR: AudioEngine.cpp [Line " << line << "] " << result << "  - " << FMOD_ErrorString(result) << '\n';
+            //(void)file;//TODO
+            //if (result != FMOD_OK)
+            //    std::cout << "FMOD ERROR: AudioEngine.cpp [Line " << line << "] " << result << "  - " << FMOD_ErrorString(result) << '\n';
         }
 
         void AudioEngine::printEventInfo(FMOD::Studio::EventDescription * eventDescription)
@@ -866,6 +876,11 @@ namespace TDS
         return aud_instance->findSound(pathing)->uniqueID;
     }
 
+    bool proxy_audio_system::ScriptGetLoop(std::string pathing)
+    {
+        return aud_instance->GetLoop(*find_sound_info(pathing));
+    }
+
     bool proxy_audio_system::CheckPlaying(std::string pathing)
     {
         return aud_instance->checkPlaying(*find_sound_info(pathing));
@@ -919,11 +934,6 @@ namespace TDS
     {
         SoundInfo* temp = find_sound_info(pathing);
 
-        if (temp->is3D != true)
-        {
-            temp->is3D = true;
-        }
-
         aud_instance->update3DSoundPosition(pos, *temp);
     }
 
@@ -932,6 +942,11 @@ namespace TDS
         aud_instance->set3DListenerPosition(pos.x, pos.y, pos.z,
             for_vec.x, for_vec.y, for_vec.z,
             up_vec.x, up_vec.y, up_vec.z);
+    }
+
+    void proxy_audio_system::ScriptSetLoop(bool set, std::string pathing)
+    {
+        aud_instance->setLoop(*find_sound_info(pathing), set);
     }
 
     SoundInfo* proxy_audio_system::find_sound_info(std::string str)
@@ -996,6 +1011,14 @@ namespace TDS
     float proxy_audio_system::getSFXVolume()
     {
         return aud_instance->getChannelGroupVolume('S');
+    }
+
+    Vec3 proxy_audio_system::getListenerPos()
+    {
+        Vec3 temppos, tempvel, tempfor, tempup;
+        aud_instance->get3DListenerCharacteristics(temppos, tempvel, tempfor, tempup);
+
+        return temppos;
     }
 
     void proxy_audio_system::SetVolume(float vol, std::string pathing)

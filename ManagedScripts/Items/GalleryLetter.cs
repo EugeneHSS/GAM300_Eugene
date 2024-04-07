@@ -16,7 +16,6 @@ public class GalleryLetter : Script
 {
     //RigidBodyComponent rigidBodyComponent; //for raycast?
     AudioComponent clip;
-    AudioSource player;
     //bool once;
     String[] voClip;
 
@@ -37,7 +36,6 @@ public class GalleryLetter : Script
     {
         //rigidBodyComponent = gameObject.GetComponent<RigidBodyComponent>();
         clip = gameObject.GetComponent<AudioComponent>();
-        player = gameObject.GetComponent<AudioSource>();
     }
 
     public override void Update()
@@ -72,5 +70,6 @@ public class GalleryLetter : Script
         {
             //_InteractUI.SetActive(false);
         }
+        clip.set3DCoords(clip.getListenerPos(), "pc_moreinthebasement");
     }
 }

@@ -70,6 +70,8 @@ public class TempEndScene : Script
         {
             audio.play(runningSFX);
             once = false;
+            Input.HideMouse(true);
+            Input.Lock(true);
         }
 
         if (fadeIn == true)

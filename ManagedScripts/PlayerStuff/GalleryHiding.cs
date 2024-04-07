@@ -49,7 +49,7 @@ public class GalleryHiding : Script
         voClips = new string[3];
         voClips[0] = "pc_hideinclosetfirst";
         voClips[1] = "pc_wanderingcloset";
-        voClips[2] = "pc_monstergoesaway2"; //i have to watch my back
+        //voClips[2] = "pc_monstergoesaway2"; //NOT i have to watch my back
         subtitles = new String[2];
         subtitles[0] = "Nothing inside";
         subtitles[1] = "But I could hide in here in case someone shows up";
@@ -112,8 +112,8 @@ public class GalleryHiding : Script
                 _flashlight.SetActive(true);
                 if (enemyPathfinding.GetComponent<GhostMovement>().galleryHideEventDone)
                 {
-                    audioPlayer.play(voClips[2]);
-                    GameplaySubtitles.counter = 15;
+                    //audioPlayer.play(voClips[2]); // soap: don't repeat this again! 
+                    //GameplaySubtitles.counter = 15;
                     enemyPathfinding.GetComponent<GhostMovement>().galleryHideEventDone = false; // Reset for multiple hiding
                 }
             }

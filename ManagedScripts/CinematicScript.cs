@@ -13,7 +13,7 @@ public class CinematicScript : Script
 	}
 	public override void Update()
 	{
-		if (GallerySwitch.isGallerySwitchActivated && doOnce == false)
+		if (GallerySwitch.isActivated && doOnce == false)
 		{
 			playerCamera.SetActive(false);
 			cinematicCamera.SetActive(true);
@@ -26,7 +26,7 @@ public class CinematicScript : Script
 			cinematicCamera.transform.SetPosition(new Vector3(Mathf.Lerp(cinematicCamera.transform.GetPosition().X, 2200, 1.0f * Time.deltaTime),
 				cinematicCamera.transform.GetPosition().Y, cinematicCamera.transform.GetPosition().Z));
         }
-		if (GallerySwitch.isGallerySwitchActivated == false)
+		if (GallerySwitch.isActivated == false)
 		{
 			cinematicCamera.SetActive(false);
 			playerCamera.SetActive(true);

@@ -79,7 +79,7 @@ public class Hiding : Script
     public override void Update()
     {
         if (dialogueStarted) { timer -= Time.deltaTime; }
-        if (timer <= 0.0f) //make sure text goes away even when u are not looking at closet
+        if (timer <= 0.0f && !audioPlayer.finished(voClips[0])) //make sure text goes away even when u are not looking at closet
         {
             //counter = 1;
             GameplaySubtitles.counter = 10; //but i could hide
@@ -173,8 +173,12 @@ public class Hiding : Script
 
                     if (EventBedroomHiding.doOnce == false)
                     {
-                        audioPlayer.play("pc_monstergoesaway2");
-                        GameplaySubtitles.counter = 15;
+                        if (EventLivingRoom.doOnce) //bobo fix to check that the bedroom hiding has passed
+                        {
+                            audioPlayer.play("pc_monstergoesaway2");
+                            GameplaySubtitles.counter = 15;
+
+                        }// else dont keep repeating this audio for every hide closet!
                     }
                 }
             }
@@ -184,12 +188,7 @@ public class Hiding : Script
                 _ExitTimerUI.SetActive(false);
             }
         }
-        else
-        {
-            //_InteractUI.SetActive(false);
-
-
-        }
+        audioPlayer.set3DCoords(audioPlayer.getListenerPos(), "pc_monstergoesaway2");
     }
 
     void FadeInFadeOut()

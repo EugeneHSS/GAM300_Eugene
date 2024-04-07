@@ -18,7 +18,7 @@ namespace TDS
 		return ecs.getComponent<PointLightComponent>(entityID);
 	}
 
-	PointLightComponent::PointLightComponent() :m_Position(), m_color(), m_Attenuation()
+	PointLightComponent::PointLightComponent() :m_Position(), m_color(Vec4(1.0f,1.0f,1.0f,1.0f)), m_Attenuation(Vec4(1.0f, 0.045f, 0.0f, 0.0f))
 	{
 	}
 	PointLightComponent::PointLightComponent(PointLightComponent&& toMove) noexcept :m_Position(toMove.m_Position), m_color(toMove.m_color), m_Attenuation(toMove.m_Attenuation)
@@ -47,4 +47,12 @@ namespace TDS
 		z = m_Attenuation.z;
 		w = m_Attenuation.w;
 	}
+	 void PointLightComponent::SetPointLightColorAlpha(float alpha)
+	 {
+		 m_color.w = alpha;
+	 }
+	 float PointLightComponent::GetPointLightColorAlpha()
+	 {
+		 return m_color.w;
+	 }
 }

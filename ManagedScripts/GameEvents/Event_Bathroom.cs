@@ -18,7 +18,7 @@ public class EventBathroom : Script
     {
         if (doOnce)
         {
-            Console.WriteLine("Martin (Internal): The tub is still wet, but there’s no one...");
+            //Console.WriteLine("Martin (Internal): The tub is still wet, but there’s no one...");
             bathroomLight.SetActive(true);
             doOnce = false;
             gameObject.GetComponent<ColliderComponent>().SetEnabled(false);

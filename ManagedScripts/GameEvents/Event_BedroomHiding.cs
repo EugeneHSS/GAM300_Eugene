@@ -63,5 +63,7 @@ public class EventBedroomHiding : Script
                 }
             }
         }
+
+        audioPlayer.set3DCoords(audioPlayer.getListenerPos(), voClips[2]);
     }
 }

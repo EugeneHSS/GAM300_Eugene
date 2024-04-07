@@ -17,7 +17,7 @@ namespace ScriptAPI
 
 		bool isLoaded();
 		bool isit3D();
-		bool isitLoop();
+		bool isitLoop(System::String^ pathing);
 		bool isitMuted();
 		//Check if that sound file finished playing
 		bool finished(System::String^ str_path);
@@ -30,6 +30,7 @@ namespace ScriptAPI
 		unsigned int getUniqueID();
 		unsigned int getMSLength();
 		std::string getFilePath();
+		Vector3 getListenerPos();
 
 		void setFilePath(System::String^ str_path);
 
@@ -48,7 +49,7 @@ namespace ScriptAPI
 		void setSFXVol(float vol);
 		void setMSLength(unsigned int len);
 		void setState(snd setting);
-		void setLoop(bool condition);
+		void setLoop(bool condition, System::String^ pathing);
 		void set3D(bool condition);
 		void setMute(bool condition);
 
@@ -97,11 +98,11 @@ namespace ScriptAPI
 			std::string get();
 			void set(std::string value);
 		}
-		property bool isLoop
+		/*property bool isLoop
 		{
 			bool get();
 			void set(bool value);
-		}
+		}*/
 		property bool is3D
 		{
 			bool get();

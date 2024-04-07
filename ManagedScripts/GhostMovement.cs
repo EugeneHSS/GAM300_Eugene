@@ -9,6 +9,7 @@
 ****************************************************************************
 ***/
 using ScriptAPI;
+using System.Security.Cryptography;
 
 public class GhostMovement : Script
 {
@@ -138,14 +139,14 @@ public class GhostMovement : Script
     public override void Awake()
     {
         walkingSounds = new string[8];
-        walkingSounds[0] = "mon_woodstep1";
-        walkingSounds[1] = "mon_woodstep2";
-        walkingSounds[2] = "mon_woodstep3";
-        walkingSounds[3] = "mon_woodstep4";
-        walkingSounds[4] = "mon_woodstep5";
-        walkingSounds[5] = "mon_woodstep6";
-        walkingSounds[6] = "mon_woodstep7";
-        walkingSounds[7] = "mon_woodstep8";
+        walkingSounds[0] = "Monster_Footstep_Reverb_01";
+        walkingSounds[1] = "Monster_Footstep_Reverb_02";
+        walkingSounds[2] = "Monster_Footstep_Reverb_03";
+        walkingSounds[3] = "Monster_Footstep_Reverb_04";
+        walkingSounds[4] = "Monster_Footstep_Reverb_05";
+        walkingSounds[5] = "Monster_Footstep_Reverb_06";
+        walkingSounds[6] = "Monster_Footstep_Reverb_04";
+        walkingSounds[7] = "Monster_Footstep_Reverb_02";
 
         monsterPatrol = new string[8];
         monsterPatrol[0] = "mon_patrol1";
@@ -157,7 +158,7 @@ public class GhostMovement : Script
         monsterPatrol[6] = "mon_patrol7";
         monsterPatrol[7] = "mon_patrol8";
 
-        monsterAlert = new string[7];
+        monsterAlert = new string[8];
         monsterAlert[0] = "mon_alerted1";
         monsterAlert[1] = "mon_alerted2";
         monsterAlert[2] = "mon_alerted3";
@@ -165,6 +166,7 @@ public class GhostMovement : Script
         monsterAlert[4] = "mon_alerted5";
         monsterAlert[5] = "mon_alerted6";
         monsterAlert[6] = "mon_alerted7";
+        monsterAlert[7] = "mon_alerted1";
 
         voiceClips = "pc_monstergoesaway1";
         GhostTransformPosition = new Vector3();
@@ -244,6 +246,9 @@ public class GhostMovement : Script
             case GhostEvent.ChasingPlayer:
 
                 gameObject.GetComponent<AnimatedComponent>().PlayAnimation();
+                AudioComponent audio = gameObject.GetComponent<AudioComponent>();
+                audio.play("2 Seconds Before Monster Chase");
+                audio.setVolume(0.3f, "2 Seconds Before Monster Chase");
 
                 //if (!gameObject.GetComponent<RigidBodyComponent>().IsRayHit()) // If player is not in sight
                 //{
@@ -367,7 +372,7 @@ public class GhostMovement : Script
 
             case GhostEvent.DiningRoomEvent:
 
-                PlayMonsterWalkingSound();
+                //PlayMonsterWalkingSound();
 
                 DiningRoomEvent();
 
@@ -448,7 +453,7 @@ public class GhostMovement : Script
     {
         AudioComponent audio = gameObject.GetComponent<AudioComponent>();
         walkingSoundCounter = 0;
-        audio.set3DCoords(transform.GetPosition(), walkingSounds[walkingSoundCounter]);
+        audio.set3DCoords(GhostTransformPosition, walkingSounds[walkingSoundCounter]);
         audio.play(walkingSounds[walkingSoundCounter]);
         currentEvent = GhostEvent.PlayingWalkingSound;
     }
@@ -472,33 +477,25 @@ public class GhostMovement : Script
             MonsterWalkingTimer -= Time.deltaTime;
         }
 
-        //Basement or not
         if (MonsterWalkingTimer < 0)
         {
-            if (!Door_Script.basementcheck)
+            walkingSoundCounter = RandomNumberGenerator.GetInt32(7);
+
+            if (currentEvent == GhostEvent.ChasingPlayer || currentEvent == GhostEvent.FinalChasingEvent)
             {
-                audio.set3DCoords(GhostTransformPosition, walkingSounds[walkingSoundCounter]);
-                audio.set3DCoords(GhostTransformPosition, monsterPatrol[walkingSoundCounter]);
-                //Console.WriteLine("Ghost position: " + GhostTransformPosition.X + ", " + GhostTransformPosition.Y + ", " + GhostTransformPosition.Z); ;
-                //Console.WriteLine("Player position: " + player.transform.GetPosition().X + ", " + player.transform.GetPosition().Y + ", " + player.transform.GetPosition().Z);
-                audio.play(walkingSounds[walkingSoundCounter]);
-                audio.play(monsterPatrol[walkingSoundCounter]);
-                walkingSoundCounter++;
+                audio.play(monsterAlert[walkingSoundCounter]);
+                audio.set3DCoords(GhostTransformPosition, monsterAlert[walkingSoundCounter]);
             }
             else
             {
-                audio.set3DCoords(GhostTransformPosition, walkingSounds[walkingSoundCounter]);
-                audio.set3DCoords(GhostTransformPosition, monsterPatrol[walkingSoundCounter]);
-                audio.play(walkingSounds[walkingSoundCounter]);
                 audio.play(monsterPatrol[walkingSoundCounter]);
-                walkingSoundCounter++;
+                audio.set3DCoords(GhostTransformPosition, monsterPatrol[walkingSoundCounter]);
             }
 
+            audio.play(walkingSounds[walkingSoundCounter]);
+            audio.set3DCoords(GhostTransformPosition, walkingSounds[walkingSoundCounter]);
+            
             MonsterWalkingTimer = 1.0f;
-        }
-        else
-        {
-            MonsterWalkingTimer -= Time.deltaTime;
         }
 
         return true;
@@ -580,6 +577,7 @@ public class GhostMovement : Script
         Vector3 originalPosition = transform.GetPosition();
         Vector2 ghostPosition = new Vector2(originalPosition.X, originalPosition.Z);
         AudioComponent audio = gameObject.GetComponent<AudioComponent>();
+        audio.set3DCoords(gameObject.GetComponent<AudioComponent>().getListenerPos(), "pc hiding");
 
         switch (eventStep)
         {
@@ -588,6 +586,8 @@ public class GhostMovement : Script
                 if (gameObject.GetComponent<AudioComponent>().finished("door_rattle"))
                 {
                     gameObject.GetComponent<AudioComponent>().stop("door_rattle");
+                    gameObject.GetComponent<AudioComponent>().play("Horror Stinger_1_Linear");
+                    gameObject.GetComponent<AudioComponent>().setVolume(0.6f, "Horror Stinger_1_Linear");
                     ++eventStep;
                 }
 
@@ -612,8 +612,8 @@ public class GhostMovement : Script
                     ++eventStep;
                 }
 
-                audio.play("pc_afterscare_breathing");
-                audio.setVolume(0.5f, "pc_afterscare_breathing");
+                audio.play("pc hiding");
+                audio.setVolume(0.5f, "pc hiding");
                 audio.play("pc_afterscare_heartbeat");
                 audio.setVolume(0.5f, "pc_afterscare_heartbeat");
                 break;
@@ -638,14 +638,14 @@ public class GhostMovement : Script
                 transform.SetPositionZ(-379.0f);
                 transform.SetRotationY(-(float)(0.5 * Math.PI));
 
-                audio.FadeOut(2, "pc_afterscare_breathing");
+                audio.FadeOut(2, "pc hiding");
                 audio.FadeOut(2, "pc_afterscare_heartbeat");
                 audio.play(voiceClips);
                 GameplaySubtitles.counter = 11; // wth was that
 
                 break;
         }
-
+        audio.set3DCoords(audio.getListenerPos(), voiceClips);
     }
 
     public void LivingDiningRoomEvent()
@@ -677,6 +677,10 @@ public class GhostMovement : Script
                     ++eventStep;
                 }
                 livingDiningRoomStandingTimer -= Time.deltaTime;
+
+                AudioComponent audio = gameObject.GetComponent<AudioComponent>();
+                audio.play("Horror Stinger_3_Linear");
+                audio.setVolume(0.3f, "Horror Stinger_3_Linear");
 
                 break;
 
@@ -812,6 +816,7 @@ public class GhostMovement : Script
 
     public void DiningRoomEvent()
     {
+        gameObject.GetComponent<AudioComponent>().set3DCoords(player.transform.GetPosition(), "pc_movethissilently");
         if (startEvent) // Initialize variables
         {
             diningRoomTimer = ScriptAPI.Random.Range(1.0f, 3.0f);
@@ -819,8 +824,8 @@ public class GhostMovement : Script
 
             if (player.transform.GetPosition().X <= 319.0f)
             {
-                gameObject.GetComponent<AudioComponent>().play("pc_movethissilently");
-                GameplaySubtitles.counter = 46;
+                gameObject.GetComponent<AudioComponent>().play("pc_needtobecareful");
+                GameplaySubtitles.counter = 50;
                 startEvent = false;
             }
 
@@ -838,6 +843,7 @@ public class GhostMovement : Script
                 if (diningRoomTimer <= 0)
                 {
                     gameObject.GetComponent<AudioComponent>().play("mon_alerted1");
+                    gameObject.GetComponent<AudioComponent>().set3DCoords(transform.GetPosition(), "mon_alerted1");
                     ++eventStep;
                 }
                 diningRoomTimer -= Time.deltaTime;
@@ -862,13 +868,13 @@ public class GhostMovement : Script
             case 2: // "Looking" around for player (just made it wait for a while for now)
 
                 // Looking for player
-                if ((playerOriginalPosition - player.transform.GetPosition() != new Vector3(0.0f, 0.0f, 0.0f)) || // Player moved
-                    !player.GetComponent<FPS_Controller_Script>().isCrouched)
-                {
-                    currentEvent = GhostEvent.ChasingPlayer;
-                    speed = 15.0f;
-                    distance = 60.0f;
-                }
+                //if ((playerOriginalPosition - player.transform.GetPosition() != new Vector3(0.0f, 0.0f, 0.0f)) || // Player moved
+                //    !player.GetComponent<FPS_Controller_Script>().isCrouched || player.GetComponent<Flashlight_Script>().activateLight)
+                //{
+                //    currentEvent = GhostEvent.ChasingPlayer;
+                //    speed = 15.0f;
+                //    distance = 60.0f;
+                //}
 
                 if (diningRoomTimer <= 0)
                 {
@@ -898,24 +904,26 @@ public class GhostMovement : Script
             currentEvent = GhostEvent.Nothing;
             diningRoomEventDone = true;
 
-            //the below doesnt work?
-            //AudioComponent audio = gameObject.GetComponent<AudioComponent>();
-            ////play kitchen ambience
-            //if (player.transform.GetPosition().X > -1073.0f)
-            //{
-            //    audio.play("kitchen_ambience");
+            AudioComponent audio = gameObject.GetComponent<AudioComponent>();
+            //play kitchen ambience
+            if (player.transform.GetPosition().X > -1073.0f)
+            {
+                audio.play("kitchen_ambience");
 
-            //}
-            //else
-            //{
-            //    audio.stop("kitchen_ambience");
-            //}
+            }
+            else
+            {
+                audio.stop("kitchen_ambience");
+            }
         }
 
         // When player enters gallery
         if (player.transform.GetPosition().X < -1073.0f)
         {
-            
+            AudioComponent audio = gameObject.GetComponent<AudioComponent>();
+            audio.play("Horror-Unsettling_Loop_2");
+            audio.setVolume(0.6f, "Horror-Unsettling_Loop_2");
+            audio.setLoop(true, "Horror-Unsettling_Loop_2");
         }
     }
 
@@ -958,8 +966,9 @@ public class GhostMovement : Script
                     ++eventStep;
                 }
 
-                audio.play("pc_afterscare_breathing");
-                audio.setVolume(0.5f, "pc_afterscare_breathing");
+                audio.play("pc hiding");
+                audio.set3DCoords(audio.getListenerPos(), "pc hiding");
+                audio.setVolume(0.5f, "pc hiding");
                 audio.play("pc_afterscare_heartbeat");
                 audio.setVolume(0.5f, "pc_afterscare_heartbeat");
                 break;
@@ -989,7 +998,7 @@ public class GhostMovement : Script
                 galleryHidingGameObject.GetComponent<EventGalleryHiding>().GhostShouldMove = false;
                 galleryHidingGameObject.GetComponent<EventGalleryHiding>().GhostMoved = false;
 
-                audio.FadeOut(2, "pc_afterscare_breathing");
+                audio.FadeOut(2, "pc hiding");
                 audio.FadeOut(2, "pc_afterscare_heartbeat");
 
                 break;
@@ -1001,11 +1010,13 @@ public class GhostMovement : Script
                     ++eventStep;
                     leftWingDoor.GetComponent<Door_Script>().forcedLocked = false;      // Unlock door
                     audio.play("pc_timetogetout");                                      // Player audio
+                    audio.set3DCoords(audio.getListenerPos(), "pc_timetogetout");
                     GameplaySubtitles.counter = 45;                                     // Subtitles
                 }
 
-                audio.play("pc_afterscare_breathing");
-                audio.setVolume(0.5f, "pc_afterscare_breathing");
+                audio.play("pc hiding");
+                audio.set3DCoords(audio.getListenerPos(), "pc hiding");
+                audio.setVolume(0.5f, "pc hiding");
                 audio.play("pc_afterscare_heartbeat");
                 audio.setVolume(0.5f, "pc_afterscare_heartbeat");
 
@@ -1028,6 +1039,9 @@ public class GhostMovement : Script
     {
         if (startEvent) // Initialize variables
         {
+            AudioComponent audio = gameObject.GetComponent<AudioComponent>();
+            audio.stop("Horror-Unsettling_Loop_2");
+            
             transform.SetPositionX(-2840);
             transform.SetPositionZ(-300);
 
@@ -1080,6 +1094,11 @@ public class GhostMovement : Script
 
                 if (playerPosition.X >= 2600) // If player goes to basement (NOTE: to change)
                 {
+                    AudioComponent audio = gameObject.GetComponent<AudioComponent>();
+                    audio.play("Horror-Unsettling_Loop_3");
+                    audio.setLoop(true, "Horror-Unsettling_Loop_3");
+                    audio.setVolume(0.6f, "Horror-Unsettling_Loop_3");
+                    
                     ++eventStep;
                 }
 

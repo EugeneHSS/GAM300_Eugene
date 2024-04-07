@@ -21,7 +21,6 @@ public class GallerySwitch : Script
     public GameObject? _InteractUI;
     private bool isInteractUIActive = false;
     public GameObject? hidingGameObject;
-    public static bool isGallerySwitchActivated = false;
     private bool mightHaveOpened = false;
     private bool openedsomething = false;
     public override void Awake()
@@ -46,20 +45,20 @@ public class GallerySwitch : Script
                 isActivated = true;
                 isInteractUIActive = false;
                 hidingGameObject.GetComponent<EventGalleryHiding>().GhostShouldMove = true;
-                hidingGameObject.GetComponent<EventGalleryHiding>().timeLimit = 10.0f;
+                hidingGameObject.GetComponent<EventGalleryHiding>().timeLimit = 15.0f;
                 hidingGameObject.GetComponent<EventGalleryHiding>().GhostMoved = false;
                 if (GalleryLetter.isNotePicked)
                 {
-                    isGallerySwitchActivated = true;
                     mightHaveOpened = true;
                     audioPlayer.play("pc_mighthaveopened");
+                    audioPlayer.set3DCoords(audioPlayer.getListenerPos(), "pc_mighthaveopened");
                     GameplaySubtitles.counter = 43;
                 }
                 else
                 {
-                    isGallerySwitchActivated = true;
                     openedsomething = true;
                     audioPlayer.play("pc_openedsomething");
+                    audioPlayer.set3DCoords(audioPlayer.getListenerPos(), "pc_openedsomething");
 
                     GameplaySubtitles.counter = 44;
                     //gameObject.GetComponent<ColliderComponent>().SetEnabled(false);
@@ -69,12 +68,12 @@ public class GallerySwitch : Script
         if (mightHaveOpened && audioPlayer.finished("pc_mighthaveopened"))
         {
             mightHaveOpened = false;
-            isGallerySwitchActivated = false;
+            isActivated = false;
         }
         if (openedsomething && audioPlayer.finished("pc_openedsomething"))
         {
             openedsomething = false;
-            isGallerySwitchActivated = false;
+            isActivated = false;
         }
 
     }

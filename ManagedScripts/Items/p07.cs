@@ -34,6 +34,7 @@ public class p07 : Script
     public GameObject ghost;
     public static bool isPaintingCollected;
     bool once = true;
+    bool onceAgain = true;
 
     public Checkpoint checkpoint;
 
@@ -57,22 +58,22 @@ public class p07 : Script
             Console.WriteLine("p07");
             InteractUI.isShow = true;
 
-            if (once)
+            if (once && Receipt.isNotePicked)
             {
-                if(Receipt.isNotePicked)
-                {
-                    AudioPlayer.play("pc_shinelightafterreceipt"); // Looks like the receipt was right.
-                    GameplaySubtitles.counter = 40;
-                }
-                else
-                {
-                    AudioPlayer.play("pc_shinelightbeforereceipt"); // Something's behind this painting..
-                    GameplaySubtitles.counter = 20;
-                }
+               
+                AudioPlayer.play("pc_shinelightafterreceipt"); // Looks like the receipt was right.
+                GameplaySubtitles.counter = 40;
                 once = false;
 
                 checkpoint.OverrideCheckpoint(GhostMovement.GhostEvent.Nothing);
             }
+            else if (onceAgain && !Receipt.isNotePicked)
+            {
+                AudioPlayer.play("pc_shinelightbeforereceipt"); // Looks like the receipt was right.
+                GameplaySubtitles.counter = 20;
+                onceAgain = false;
+            }
+
 
             if (Input.GetKeyDown(Keycode.E))
             {
@@ -90,6 +91,7 @@ public class p07 : Script
                 // Trigger Painting Event
                 AudioPlayer.play("gallery_movepainting");
                 AudioPlayer.play("pc_stealpainting1");
+                AudioPlayer.set3DCoords(AudioPlayer.getListenerPos(), "pc_stealpainting1");
                 GameplaySubtitles.counter = 13;
 
                 // hiding event 

@@ -11,6 +11,9 @@ namespace ScriptAPI
 		Vector4 GetColor();
 		void SetColor(Vector4 value);
 
+		float GetColorAlpha();
+		void SetColorAlpha(float value);
+
 		Vector4 GetAttenuation();
 		void SetAttenuation(Vector4 value);
 

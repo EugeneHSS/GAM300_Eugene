@@ -21,7 +21,7 @@ namespace ScriptAPI
 		float x, y, z, w;
 		TDS::GetPointLightComponent(entityID)->GetPointLightColorValues(x, y, z, w);
 
-		return Vector4(x,y,w,z);
+		return Vector4(x,y,z,w);
 	}
 
 	void PointlightComponent::SetColor(Vector4 value)
@@ -34,6 +34,27 @@ namespace ScriptAPI
 		TDS::GetPointLightComponent(entityID)->SetPointLightColor(value.X, value.Y, value.Z, value.W);
 	}
 
+	float PointlightComponent::GetColorAlpha()
+	{
+		if (!TDS::GetPointLightComponent(entityID))
+		{
+			// throw error instead (not sure how)
+			return 0.0f;
+		}
+
+		return TDS::GetPointLightComponent(entityID)->GetPointLightColorAlpha();
+	}
+
+	void PointlightComponent::SetColorAlpha(float value)
+	{
+		if (!TDS::GetPointLightComponent(entityID))
+		{
+			// throw error instead (not sure how)
+			return;
+		}
+		TDS::GetPointLightComponent(entityID)->SetPointLightColorAlpha(value);
+	}
+
 	Vector4 PointlightComponent::GetAttenuation()
 	{
 		if (!TDS::GetPointLightComponent(entityID))
@@ -44,7 +65,7 @@ namespace ScriptAPI
 		float x, y, z, w;
 		TDS::GetPointLightComponent(entityID)->GetPointLightAttenuation(x, y, z, w);
 
-		return Vector4(x, y, w, z);
+		return Vector4(x, y, z, w);
 	}
 
 	void PointlightComponent::SetAttenuation(Vector4 value)
